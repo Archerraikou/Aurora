@@ -10,7 +10,12 @@ namespace Aurora.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<ApplicationUser>();
+            builder.HasDefaultSchema("identity");
+        }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

@@ -150,3 +150,4 @@ C:\School\ProiectMDS\Aurora\obj\Debug\net8.0\refint\Aurora.dll
 C:\School\ProiectMDS\Aurora\obj\Debug\net8.0\Aurora.pdb
 C:\School\ProiectMDS\Aurora\obj\Debug\net8.0\Aurora.genruntimeconfig.cache
 C:\School\ProiectMDS\Aurora\obj\Debug\net8.0\ref\Aurora.dll
+C:\School\ProiectMDS\Aurora\obj\Debug\net8.0\Aurora.sourcelink.json

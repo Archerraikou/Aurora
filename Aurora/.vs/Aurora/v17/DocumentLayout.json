@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\School\\ProiectMDS\\Aurora\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\applcationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\applcationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\dtos\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\dtos\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,20 +27,8 @@
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\dtos\\registermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\dtos\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\dtos\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407162947_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250407162947_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407165627_Test2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250407165627_Test2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407165233_Test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250407165233_Test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\applcationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\applcationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,17 +38,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAAAEgAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAFMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T16:19:45.222Z",
               "IsPinned": true,
@@ -68,39 +56,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
               "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\AuthController.cs",
               "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAQwD4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAiwCkAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T16:39:25.502Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "RegisterModel.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\RegisterModel.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\RegisterModel.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\RegisterModel.cs",
-              "RelativeToolTip": "Models\\DTOs\\RegisterModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T16:40:14.377Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ApplicationDBContext.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Data\\ApplicationDBContext.cs",
-              "RelativeDocumentMoniker": "Data\\ApplicationDBContext.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Data\\ApplicationDBContext.cs",
-              "RelativeToolTip": "Data\\ApplicationDBContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAkAAAAAAAAAA==",
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T16:19:15.525Z",
               "EditorCaption": ""
@@ -113,14 +88,27 @@
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-04-07T16:26:37.464Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
+              "Title": "RegisterModel.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\RegisterModel.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\RegisterModel.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\RegisterModel.cs",
+              "RelativeToolTip": "Models\\DTOs\\RegisterModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T16:40:14.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "ApplcationUser.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\ApplcationUser.cs",
               "RelativeDocumentMoniker": "Models\\ApplcationUser.cs",
@@ -133,54 +121,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "LoginModel.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\LoginModel.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\LoginModel.cs",
               "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\LoginModel.cs",
               "RelativeToolTip": "Models\\DTOs\\LoginModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T16:40:57.519Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "20250407162947_InitialCreate.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407162947_InitialCreate.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250407162947_InitialCreate.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407162947_InitialCreate.cs",
-              "RelativeToolTip": "Migrations\\20250407162947_InitialCreate.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T16:29:47.884Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "20250407165233_Test.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407165233_Test.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250407165233_Test.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407165233_Test.cs",
-              "RelativeToolTip": "Migrations\\20250407165233_Test.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T16:52:33.562Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "20250407165627_Test2.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407165627_Test2.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250407165627_Test2.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Migrations\\20250407165627_Test2.cs",
-              "RelativeToolTip": "Migrations\\20250407165627_Test2.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T16:56:27.35Z",
               "EditorCaption": ""
             }
           ]
