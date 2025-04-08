@@ -48,6 +48,10 @@ namespace Aurora.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -64,6 +68,15 @@ namespace Aurora.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("ProfileDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ScheduleId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -84,7 +97,291 @@ namespace Aurora.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("ScheduleId");
+
                     b.ToTable("AspNetUsers", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Category", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("CategoryDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorys", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.CategoryGroups", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("CategoryGroups", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.CategoryUser", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CategoryUsers", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Document", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Documents", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.File", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("Files", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Group", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("GroupCalendarId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("GroupDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("GroupPicture")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("IsPrivate")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupCalendarId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Groups", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Message", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("WasEdited")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages", "identity");
+
+                    b.HasDiscriminator().HasValue("Message");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Aurora.Models.Notification", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("NotificationContent")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("NotificationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("SentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.PrivateConversation", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("RefUser1Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("User1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("User2")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RefUser1Id");
+
+                    b.ToTable("PrivateConversations", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Schedule", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schedules", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.UserGroup", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<string>("Color")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool?>("IsAdmin")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserGroups", "identity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -219,6 +516,128 @@ namespace Aurora.Migrations
                     b.ToTable("AspNetUserTokens", "identity");
                 });
 
+            modelBuilder.Entity("Aurora.Models.GroupMessage", b =>
+                {
+                    b.HasBaseType("Aurora.Models.Message");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PrivateConversationId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("PrivateConversationId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("GroupMessage");
+                });
+
+            modelBuilder.Entity("Aurora.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Aurora.Models.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleId");
+
+                    b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("Aurora.Models.CategoryGroups", b =>
+                {
+                    b.HasOne("Aurora.Models.Category", "Category")
+                        .WithMany("Groups")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Aurora.Models.Group", "Group")
+                        .WithMany("GroupCategory")
+                        .HasForeignKey("GroupId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("Aurora.Models.CategoryUser", b =>
+                {
+                    b.HasOne("Aurora.Models.Category", "Category")
+                        .WithMany("Users")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Aurora.Models.ApplicationUser", "User")
+                        .WithMany("Interests")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Document", b =>
+                {
+                    b.HasOne("Aurora.Models.Group", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("GroupId");
+                });
+
+            modelBuilder.Entity("Aurora.Models.File", b =>
+                {
+                    b.HasOne("Aurora.Models.Message", "Message")
+                        .WithMany("Files")
+                        .HasForeignKey("MessageId");
+
+                    b.Navigation("Message");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Group", b =>
+                {
+                    b.HasOne("Aurora.Models.Schedule", "GroupCalendar")
+                        .WithMany()
+                        .HasForeignKey("GroupCalendarId");
+
+                    b.HasOne("Aurora.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("GroupCalendar");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Notification", b =>
+                {
+                    b.HasOne("Aurora.Models.ApplicationUser", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Aurora.Models.PrivateConversation", b =>
+                {
+                    b.HasOne("Aurora.Models.ApplicationUser", "RefUser1")
+                        .WithMany("PrivateConversations")
+                        .HasForeignKey("RefUser1Id");
+
+                    b.Navigation("RefUser1");
+                });
+
+            modelBuilder.Entity("Aurora.Models.UserGroup", b =>
+                {
+                    b.HasOne("Aurora.Models.Group", "Group")
+                        .WithMany("Users")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("Aurora.Models.ApplicationUser", "User")
+                        .WithMany("UserGroups")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -268,6 +687,66 @@ namespace Aurora.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Aurora.Models.GroupMessage", b =>
+                {
+                    b.HasOne("Aurora.Models.Group", "Group")
+                        .WithMany("Messages")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("Aurora.Models.PrivateConversation", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("PrivateConversationId");
+
+                    b.HasOne("Aurora.Models.ApplicationUser", "User")
+                        .WithMany("GroupMessages")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Aurora.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("GroupMessages");
+
+                    b.Navigation("Interests");
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("PrivateConversations");
+
+                    b.Navigation("UserGroups");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Category", b =>
+                {
+                    b.Navigation("Groups");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Group", b =>
+                {
+                    b.Navigation("Documents");
+
+                    b.Navigation("GroupCategory");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Aurora.Models.Message", b =>
+                {
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("Aurora.Models.PrivateConversation", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

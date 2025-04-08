@@ -472,6 +472,10 @@
       "Aurora.Models.DTOs.RegisterModel": {
         "type": "object",
         "properties": {
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
           "email": {
             "type": "string",
             "nullable": true

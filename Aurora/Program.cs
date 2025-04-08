@@ -61,6 +61,14 @@ builder.Services.AddSwaggerGen(o =>
     o.AddSecurityRequirement(securityRequirement);
 });
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policyBuiler =>
+    {
+        policyBuiler.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+    });
+});
+
 builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddApiEndpoints();
@@ -77,6 +85,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors("CorsPolicy");
 
 app.MapIdentityApi<ApplicationUser>();
 

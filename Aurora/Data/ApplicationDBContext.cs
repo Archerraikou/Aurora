@@ -17,5 +17,17 @@ namespace Aurora.Data
             builder.HasDefaultSchema("identity");
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Category> Categorys { get; set; }
+        public DbSet<CategoryGroups> CategoryGroups { get; set; }
+        public DbSet<CategoryUser> CategoryUsers { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<Models.File> Files { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupMessage> GroupMessages { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<PrivateConversation> PrivateConversations { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
     }
 }
