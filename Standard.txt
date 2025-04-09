@@ -1,0 +1,4 @@
+camelCase
+Functions with uppercase
+Classes with uppercase
+comentarii
