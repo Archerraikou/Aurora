@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Aurora")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35a74b6ed812eabc9802cb34ee19f0ceec00ed77")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b4765051281c1a1f86853c6d9d6842494d44c665")]
 [assembly: System.Reflection.AssemblyProductAttribute("Aurora")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Aurora")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

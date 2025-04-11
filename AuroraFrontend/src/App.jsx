@@ -6,6 +6,7 @@ import Login from './components/login/login.jsx';
 import './App.css'
 import Modal from './components/modal/modal.jsx';
 import Backdrop from './components/backdrop/backdrop.jsx';
+import Calendar from './components/calendar/calendar.jsx'
 import Outlet from 'react'
 
 function App() {
@@ -21,8 +22,10 @@ function App() {
           <Modal>
             <Login closeModal={() => setIsModalOpen(false)}></Login>
           </Modal>
+
         </>
     )}
+    <Calendar></Calendar>
     </div>
   )
 }

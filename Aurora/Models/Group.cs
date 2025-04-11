@@ -19,7 +19,7 @@ namespace Aurora.Models
         public DateTime? CreatedDate { get; set; }
         public virtual ICollection<GroupMessage>? Messages { get; set; }
         public int? GroupCalendarId {  get; set; }
-        public virtual Schedule? GroupCalendar { get; set; }
+        public virtual Event? GroupCalendar { get; set; }
         public bool? IsPrivate { get; set; }
         public virtual ICollection<Document>? Documents { get; set; }
     }
