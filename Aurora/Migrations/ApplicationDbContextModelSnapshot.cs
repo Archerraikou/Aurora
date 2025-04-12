@@ -75,9 +75,6 @@ namespace Aurora.Migrations
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ScheduleId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -201,9 +198,6 @@ namespace Aurora.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
-
                     b.Property<string>("Color")
                         .HasColumnType("text");
 
@@ -213,12 +207,15 @@ namespace Aurora.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Events", "identity");
                 });
@@ -253,9 +250,6 @@ namespace Aurora.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("GroupCalendarId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("GroupDescription")
                         .HasColumnType("text");
 
@@ -273,8 +267,6 @@ namespace Aurora.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GroupCalendarId");
 
                     b.HasIndex("UserId");
 
@@ -368,6 +360,29 @@ namespace Aurora.Migrations
                     b.HasIndex("RefUser1Id");
 
                     b.ToTable("PrivateConversations", "identity");
+                });
+
+            modelBuilder.Entity("Aurora.Models.UserEvent", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
+
+                    b.Property<int?>("EventId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserEvents", "identity");
                 });
 
             modelBuilder.Entity("Aurora.Models.UserGroup", b =>
@@ -589,9 +604,11 @@ namespace Aurora.Migrations
 
             modelBuilder.Entity("Aurora.Models.Event", b =>
                 {
-                    b.HasOne("Aurora.Models.ApplicationUser", null)
-                        .WithMany("Schedule")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("Aurora.Models.Group", "Group")
+                        .WithMany("Events")
+                        .HasForeignKey("GroupId");
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("Aurora.Models.File", b =>
@@ -605,15 +622,9 @@ namespace Aurora.Migrations
 
             modelBuilder.Entity("Aurora.Models.Group", b =>
                 {
-                    b.HasOne("Aurora.Models.Event", "GroupCalendar")
-                        .WithMany()
-                        .HasForeignKey("GroupCalendarId");
-
                     b.HasOne("Aurora.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("GroupCalendar");
 
                     b.Navigation("User");
                 });
@@ -634,6 +645,21 @@ namespace Aurora.Migrations
                         .HasForeignKey("RefUser1Id");
 
                     b.Navigation("RefUser1");
+                });
+
+            modelBuilder.Entity("Aurora.Models.UserEvent", b =>
+                {
+                    b.HasOne("Aurora.Models.Event", "Event")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("Aurora.Models.ApplicationUser", "User")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Aurora.Models.UserGroup", b =>
@@ -731,7 +757,7 @@ namespace Aurora.Migrations
 
                     b.Navigation("PrivateConversations");
 
-                    b.Navigation("Schedule");
+                    b.Navigation("UserEvents");
 
                     b.Navigation("UserGroups");
                 });
@@ -743,9 +769,16 @@ namespace Aurora.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Aurora.Models.Event", b =>
+                {
+                    b.Navigation("UserEvents");
+                });
+
             modelBuilder.Entity("Aurora.Models.Group", b =>
                 {
                     b.Navigation("Documents");
+
+                    b.Navigation("Events");
 
                     b.Navigation("GroupCategory");
 
