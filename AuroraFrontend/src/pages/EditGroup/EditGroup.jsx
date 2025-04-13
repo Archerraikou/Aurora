@@ -5,6 +5,7 @@ import './EditGroup.css';
 import {useLocation} from 'react-router-dom';
 import fetchCategories from '../../utils/utils.jsx'
 import GetRole from '../../utils/GetUserRoleInGroup';
+import Modal from '../../components/modal/modal.jsx';
 
 function EditGroup(){
     const [formFields, setFormFields] = useState({GroupName: "", GroupDescription: "", Picture: "", groupCategory:[], isPrivate: "" });
@@ -140,7 +141,7 @@ function EditGroup(){
     };
     return (
       <>
-      {(cookies.get("Roles")=="Admin" || role=="Admin") && <div className="centering">
+      {(cookies.get("Roles")=="Admin" || role=="Admin") && <Modal className="modal">
         <h1>Edit a group</h1>
             <form onSubmit={handleSubmit} className='registerForm'>
                 <label className='input-label'>Group Name</label>
@@ -164,8 +165,8 @@ function EditGroup(){
                 </select>
                 <button type="submit" className='registerButton'>Edit group</button>
             </form>
-            <button onClick={handleDelete} className='deleteButton'>Delete the group</button>
-      </div>}
+            <button onClick={handleDelete} id='deleteButton'>Delete the group</button>
+      </Modal>}
       </>
     )
 }

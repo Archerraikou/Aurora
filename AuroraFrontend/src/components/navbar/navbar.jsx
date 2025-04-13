@@ -12,7 +12,7 @@ function Navbar() {
       <hr></hr>
       <div className="sidebar-list overflow">
         {/* Nu avem grupuri propriu zis, asa ca voi hardcoda cateva */}
-        <Link to="/groups/1">
+        <Link to="/Group/Menu/1">
           <NavbarItem
             name="Grup 1"
             image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBIGFIMbph9mGT6QaZHW07QQzMD12rtFlBv_NaF6PwK2J5KJH_8XOi5lNEsAZuNR89w0Q&usqp=CAU"

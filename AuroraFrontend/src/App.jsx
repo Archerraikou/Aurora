@@ -1,7 +1,6 @@
 import MainPage from "./Pages/MainPage/MainPage.jsx";
 import Navbar from "./components/navbar/navbar.jsx";
 import SearchBar from "./components/searchBar/searchBar.jsx";
-import { Routes, Route } from "react-router-dom";
 import Auth from "./Pages/Authentification/auth.jsx";
 import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
 import './App.css'

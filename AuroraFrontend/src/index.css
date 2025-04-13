@@ -6,8 +6,35 @@
   padding: 0;
 }
 
+.sidebar {
+  width: 90px;
+  background-color: var(--secundar);
+  display: flex;
+  /* height: 100%; */
+  flex-direction: column;
+  padding-top: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.5s ease;
+  z-index: 5;
+  text-align: center;
+}
+
+input {
+  color:white;
+}
+
 a {
   text-decoration: none;
+}
+
+.overflow {
+  overflow: scroll;
+  scrollbar-color: var(--principal);
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 :root {

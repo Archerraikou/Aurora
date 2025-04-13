@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Cookies from 'universal-cookie'
 import { useNavigate } from 'react-router-dom';
+import Modal from '../../components/modal/modal';
 import './CreateGroup.css'
 import fetchCategories from '../../utils/utils';
 
@@ -15,12 +16,12 @@ function CreateGroup(){
     var auxPassRequirements = []
     useEffect(() => {
       const fetchData = async () => {
-          const categories = await fetchCategories();
-          setCategories(categories);
+          const categs = await fetchCategories();
+          setCategories(categs);
       };
   
       fetchData();
-  }, []);  
+    }, []);  
       const handleChange = (event) => {
         const { name, value, type, files, checked } = event.target;
       
@@ -76,7 +77,7 @@ function CreateGroup(){
     };
     return (
       <>
-      {cookies.get("JWT")!=null && <div className="centering">
+      {cookies.get("JWT")!=null && <Modal className ='modal'>
         <h1>Create a new group</h1>
             <form onSubmit={handleSubmit} className='registerForm'>
                 <label className='input-label'>Group Name</label>
@@ -94,13 +95,13 @@ function CreateGroup(){
                 }} className='input-field'>
                 {categories.map(category => (
                     <option key={category.id} value={category.id}>
-                    {category.name}
+                    {category.categoryName}
                     </option>
                 ))}
                 </select>
                 <button type="submit" className='registerButton'>Create group</button>
             </form>
-      </div>}
+      </Modal>}
       </>
     )
 }
