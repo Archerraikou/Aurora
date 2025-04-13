@@ -3,32 +3,20 @@
   "WorkspaceRootPath": "C:\\School\\ProiectMDS\\Aurora\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\group.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\group.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\categorygroups.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\categorygroups.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\dtos\\groupmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\dtos\\groupmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\usergroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,14 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\groupmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -66,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -83,46 +63,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "GroupsController.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\GroupsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\GroupsController.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\GroupsController.cs*",
-              "RelativeToolTip": "Controllers\\GroupsController.cs*",
-              "ViewState": "AgIAAB0AAAAAAAAAAAASwCEAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T14:58:44.842Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CategoriesController.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-13T11:19:39.572Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GroupModel.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\GroupModel.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\GroupModel.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\GroupModel.cs",
-              "RelativeToolTip": "Models\\DTOs\\GroupModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T19:27:40.932Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "CategoryGroups.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\CategoryGroups.cs",
               "RelativeDocumentMoniker": "Models\\CategoryGroups.cs",
@@ -135,7 +76,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Category.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\Category.cs",
               "RelativeDocumentMoniker": "Models\\Category.cs",
@@ -148,7 +89,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -161,7 +102,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 5,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -174,20 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ApplicationUser.cs",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\ApplicationUser.cs",
-              "RelativeDocumentMoniker": "Models\\ApplicationUser.cs",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\ApplicationUser.cs",
-              "RelativeToolTip": "Models\\ApplicationUser.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABIAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T15:23:02.559Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "UserGroup.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\UserGroup.cs",
               "RelativeDocumentMoniker": "Models\\UserGroup.cs",
@@ -200,7 +128,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 6,
               "Title": "GroupMessage.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\GroupMessage.cs",
               "RelativeDocumentMoniker": "Models\\GroupMessage.cs",
@@ -213,20 +141,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Pages\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "Pages\\_ViewImports.cshtml",
-              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Pages\\_ViewImports.cshtml",
-              "RelativeToolTip": "Pages\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-13T11:40:40.416Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 7,
               "Title": "Message.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\Message.cs",
               "RelativeDocumentMoniker": "Models\\Message.cs",
@@ -239,7 +154,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 8,
               "Title": "RegisterModel.cs",
               "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\DTOs\\RegisterModel.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\RegisterModel.cs",
