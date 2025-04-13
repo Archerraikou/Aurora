@@ -1,40 +1,23 @@
 .modal {
-    background-color: white;
-    position:absolute;
-    padding: 30px;
-    border-radius: 8px;
-    width: 300px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    z-index: 101;
-  }
-  
-  .modal h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .modal input[type="text"],
-  .modal input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .modal button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .modal button:hover {
-    background-color: #45a049;
-  }
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 20%;
+  height: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 101;
+}
+.modal button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+.modal button:hover {
+  background-color: #45a049;
+}
   

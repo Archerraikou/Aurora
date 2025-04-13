@@ -7,7 +7,6 @@ namespace Aurora.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required]
         public string? Nickname { get; set; }
         public string? ProfilePicture { get; set; }
         public string? ProfileDescription { get; set; }
