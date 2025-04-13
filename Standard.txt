@@ -2,3 +2,11 @@ camelCase
 Functions with uppercase
 Classes with uppercase
 comentarii
+
+Fiecare culoare pe care o vom folosi se gaseste in fisierul index.css sub forma a 4 variabile
+Acestea se apeleaza cu var(--principal)/ --var(secundar)/etc.
+
+Fiecare componenta trebuie sa aiba propriul ei folder cu 2 fisiere (.jsx si .css)
+
+Fiecare pagina trebuie sa aiba propriul ei folder cu 2 fisiere (.jsx si .css)
+
