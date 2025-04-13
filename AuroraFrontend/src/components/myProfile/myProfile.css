@@ -1,0 +1,13 @@
+.bottom {
+  margin-top: auto;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  border-top: 1px solid rgba(22, 153, 118, 0.5);
+
+  /* display: flex;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  white-space: nowrap; */
+}

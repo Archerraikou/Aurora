@@ -1,0 +1,44 @@
+.sidebar {
+  width: 90px;
+  background-color: var(--secundar);
+  display: flex;
+  /* height: 100%; */
+  flex-direction: column;
+  padding-top: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.5s ease;
+  z-index: 5;
+  text-align: center;
+}
+
+.home-button {
+  font-size: 24px;
+  color: var(--forth);
+  font-family: "Apple Chancery", sans-serif;
+}
+
+.home-button:hover {
+  opacity: 0.5;
+}
+
+sidebar-list {
+  width: 300px;
+  padding: 0;
+  overflow: auto;
+}
+
+.sidebar-list.overflow {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar:hover {
+  width: 300px;
+}
+
+.sidebar:hover .home-button {
+  font-size: 60px;
+  transition-duration: 0.5s;
+}

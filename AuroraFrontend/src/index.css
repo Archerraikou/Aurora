@@ -1,0 +1,32 @@
+#root {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+:root {
+  --principal: #000000;
+  --secundar: #222222;
+  --third: #1dcd9f;
+  --forth: #169976;
+  color: rgba(245, 245, 245, 0.8);
+}
+
+body {
+  background-color: var(--principal);
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--forth);
+  border-color: var(--forth);
+  width: 100%;
+  opacity: 0.3;
+}
