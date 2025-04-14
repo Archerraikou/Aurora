@@ -1,3 +1,8 @@
+import MainPage from "./Pages/MainPage/MainPage.jsx";
+import Navbar from "./components/navbar/navbar.jsx";
+import SearchBar from "./components/searchBar/searchBar.jsx";
+import Auth from "./Pages/Authentification/auth.jsx";
+import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
 import './App.css'
 import Modal from './components/modal/modal.jsx';
 import Backdrop from './components/backdrop/backdrop.jsx';
@@ -52,33 +57,21 @@ function App() {
   }Refresh()},
   [])
   return (
-    <div>
-      <div className="app-container">
-      <button className="login-button" onClick={() => setIsModalOpen(!isModalOpen)}>
-        Login
-      </button>
-      {isModalOpen && (
-          <>
-            <Backdrop onClick={() => setIsModalOpen(false)} />
-            <Modal>
-              <Login closeModal={() => setIsModalOpen(false)}></Login>
-            </Modal>
 
-          </>
-      )}
-      <Calendar></Calendar>
-      </div>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Registration" element={<Registration />} />
-          <Route path="/Group/Create" element={<CreateGroup/>}/>
-          <Route path="/Group/Edit" element={<EditGroup/>}/>
-          <Route path="/Group/Show" element={<ViewGroup/>}/>
-        </Routes>
-      </Router>
-    </div>
+    <>
+    <Navbar></Navbar>
+      <SearchBar></SearchBar>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/auth" element={<Home />} />
+        <Route path="/Registration" element={<Registration />} />
+        <Route path="/Group/Create" element={<CreateGroup/>}/>
+        <Route path="/Group/Edit" element={<EditGroup/>}/>
+        <Route path="/Group/Show" element={<ViewGroup/>}/>
+        <Route path="/Group/Menu/*" element={<GroupPage />} />
+      </Routes>
+      </>
   )
 }
 
-export default App
+export default App;

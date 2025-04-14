@@ -1,0 +1,35 @@
+.footer-mesage {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--third);
+  width: 100%;
+  padding: 10px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 5%;
+  gap: 10px;
+  z-index: 1;
+  justify-content: flex-end;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.message-bar {
+  flex-grow: 1;
+  padding: 8px;
+  background-color: var(--third);
+  border: none;
+  border-radius: 5px;
+  margin: 0;
+  color: white;
+}
+
+input:focus {
+  outline: none;
+}

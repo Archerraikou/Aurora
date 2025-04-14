@@ -1,0 +1,54 @@
+.group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-top: 3px;
+}
+
+.group:hover {
+  opacity: 0.66;
+  transition-duration: 0.2;
+  cursor: pointer;
+}
+
+.group-info {
+  display: flex;
+  align-items: center;
+}
+
+.group-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.group-details {
+  /* display: flex; */
+  flex-direction: column;
+  padding: 0;
+}
+
+.group-name {
+  font-weight: bold;
+  margin-top: 5px;
+  padding: 0;
+}
+
+.group-description {
+  font-size: 18px;
+  color: #b9bbbe;
+}
+
+.group-name-solo {
+  font-weight: bold;
+  margin-bottom: 4px;
+  transition: opacity 0.3s ease;
+}

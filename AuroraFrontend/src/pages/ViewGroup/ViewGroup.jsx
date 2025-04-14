@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './ViewGroup.css'
 import fetchCategories from '../../utils/utils';
 import {useLocation} from 'react-router-dom';
-import GetRole from '../../utils/GetUserRoleInGroup';
+import GetRole from '../../utils/GetUserRoleInGroup.jsx';
 
 function ViewGroup(){
     const [categories, setCategories] = useState([]);
