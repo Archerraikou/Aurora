@@ -8,10 +8,11 @@ import Registration from "./pages/Registration/Registration.jsx"
 import Home from "./pages/Home/Home.jsx"
 import CreateGroup from "./pages/CreateGroup/CreateGroup.jsx"
 import EditGroup from './pages/EditGroup/EditGroup.jsx';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 import ViewGroup from './pages/ViewGroup/ViewGroup.jsx';
 function App() {
+  const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
   useEffect( () => {
     async function Refresh(){
