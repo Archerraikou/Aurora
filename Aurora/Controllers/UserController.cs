@@ -98,5 +98,26 @@ namespace Aurora.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [HttpDelete("{userId}")]
+        public async Task<ActionResult<ApplicationUser>> Delete(string userId)
+        {
+            try{
+
+                var user = await _context.ApplicationUsers.FindAsync(userId);
+                if(user==null)
+                {
+                    return NotFound("User not Found");
+                }
+                _context.ApplicationUsers.Remove(user);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+
+        }
     }
 }
