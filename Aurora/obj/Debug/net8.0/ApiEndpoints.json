@@ -1,8 +1,24 @@
 [
   {
-    "ContainingType": "Aurora.Controllers.AuthController",
+    "ContainingType": "Aurora.Controllers.ApplicationUsersController",
+    "Method": "Index",
+    "RelativePath": "api/ApplicationUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.ApplicationUsersController",
     "Method": "DeleteAccount",
-    "RelativePath": "api/Auth/delete-account",
+    "RelativePath": "api/ApplicationUsers/delete-account",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -79,24 +95,8 @@
   },
   {
     "ContainingType": "Aurora.Controllers.EventsController",
-    "Method": "New",
-    "RelativePath": "api/events",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "newEvent",
-        "Type": "Aurora.Models.Event",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Aurora.Controllers.EventsController",
     "Method": "Edit",
-    "RelativePath": "api/events/{id}",
+    "RelativePath": "api/events",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -104,11 +104,11 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
-        "Name": "future",
-        "Type": "System.Text.Json.JsonElement",
+        "Name": "dto",
+        "Type": "Aurora.Models.DTOs.EventModel",
         "IsRequired": true
       }
     ],
@@ -117,7 +117,7 @@
   {
     "ContainingType": "Aurora.Controllers.EventsController",
     "Method": "Delete",
-    "RelativePath": "api/events/{id}",
+    "RelativePath": "api/events",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -125,7 +125,7 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -142,8 +142,24 @@
   },
   {
     "ContainingType": "Aurora.Controllers.EventsController",
-    "Method": "Show",
-    "RelativePath": "api/events/show/{id}",
+    "Method": "New",
+    "RelativePath": "api/events/new",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Aurora.Models.DTOs.EventModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.EventsController",
+    "Method": "GetRole",
+    "RelativePath": "api/events/role",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -151,7 +167,23 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.EventsController",
+    "Method": "Show",
+    "RelativePath": "api/events/show",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

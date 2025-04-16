@@ -63,33 +63,6 @@ namespace Aurora.Controllers
             };
             return Ok(rolesJson);
         }
-        [HttpDelete("delete-account")]
-        public async Task<IActionResult> DeleteAccount()
-        {
-            _logger.LogInformation("Delete account endpoint hit");
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                _logger.LogWarning("Delete account failed: User ID claim not found");
-                return BadRequest(new { message = "User identity not found" });
-            }
-
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                _logger.LogWarning($"Delete account failed: User with ID {userId} not found");
-                return NotFound(new { message = "User not found" });
-            }
-
-            var result = await _userManager.DeleteAsync(user);
-            if (!result.Succeeded)
-            {
-                _logger.LogError($"Error deleting user {userId}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-                return BadRequest(new { message = "Error deleting account", errors = result.Errors });
-            }
-
-            _logger.LogInformation($"User {userId} deleted successfully");
-            return Ok(new { message = "Account deleted successfully" });
-        }
+        
     }
 }

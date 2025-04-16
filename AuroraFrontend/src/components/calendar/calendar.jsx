@@ -1,4 +1,6 @@
 import './calendar.css';
+import Cookies from 'universal-cookie'
+import { useNavigate } from 'react-router-dom';
 import {eachDayOfInterval, endOfMonth, format, startOfMonth, getISODay, isToday, addMonths, subMonths} from 'date-fns';
 //Used to give more classNames to HTML elements
 import clsx from 'clsx'
@@ -39,13 +41,18 @@ function getContrastColor(color) {
 
 function Calendar(){
     //The part where all the events are grabbed
+    const navigate=useNavigate();
+    const cookies = new Cookies();
     const [SelectedDay, SetIsSelectedDay]= useState(null);
     const [events, setEvents]= useState([]);
     useEffect(()=>{
         const FetchEvents= async ()=>{
             try{
                 //Fetching the data from EventsController in the backend
-                const res= await fetch('https://localhost:7242/api/events/index');
+                const res= await fetch('https://localhost:7242/api/events/index',{
+                    headers: { 
+                    'Authorization' : cookies.get('JWT')
+                }});
                 const data= await res.json();
                 setEvents(data);
             }
@@ -139,12 +146,16 @@ function Calendar(){
                                     <button onClick={() => SetIsSelectedDay(null)}>Close</button>
                                     {events.filter(ev => format(new Date(ev.date), 'yyyy-MM-dd') === format(SelectedDay, 'yyyy-MM-dd'))
                                         .map((ev)=>{
+                                            const handlePress= ()=>{
+                                                navigate(`/Event/Edit/${ev.id}`);
+                                            };
                                             return(
                                                 <div key={'calendarTile'+ev.id} style= {{background:ev.color, color:getContrastColor(ev.color), width: 'fit-content', textAlign:'center'}}>
                                                     <div>Title: {ev.title}</div>
                                                     <div>Description: {ev.description}</div>
                                                     <div>Date: {format(ev.date,'dd MMMM yyyy')}</div>
                                                     <div>Time: {format(ev.date,'HH:mm')}</div>
+                                                    <button onClick={handlePress}>Edit event</button>
                                                 </div>
                                             );
                                         })}

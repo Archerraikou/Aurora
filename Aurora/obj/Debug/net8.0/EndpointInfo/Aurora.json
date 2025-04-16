@@ -5,6 +5,40 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/ApplicationUsers": {
+      "get": {
+        "tags": [
+          "ApplicationUsers"
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ApplicationUsers/delete-account": {
+      "delete": {
+        "tags": [
+          "ApplicationUsers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/register": {
       "post": {
         "tags": [
@@ -382,18 +416,6 @@
         }
       }
     },
-    "/api/Auth/delete-account": {
-      "delete": {
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Categories/index": {
       "get": {
         "tags": [
@@ -459,6 +481,28 @@
         }
       }
     },
+    "/api/events/role": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/events/index": {
       "get": {
         "tags": [
@@ -471,7 +515,7 @@
         }
       }
     },
-    "/api/events/show/{id}": {
+    "/api/events/show": {
       "get": {
         "tags": [
           "Events"
@@ -479,8 +523,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -494,7 +537,7 @@
         }
       }
     },
-    "/api/events/{id}": {
+    "/api/events": {
       "patch": {
         "tags": [
           "Events"
@@ -502,8 +545,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -513,13 +555,19 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { }
+              "schema": {
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.EventModel"
+              }
             },
             "text/json": {
-              "schema": { }
+              "schema": {
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.EventModel"
+              }
             },
             "application/*+json": {
-              "schema": { }
+              "schema": {
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.EventModel"
+              }
             }
           }
         },
@@ -536,8 +584,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -551,7 +598,7 @@
         }
       }
     },
-    "/api/events": {
+    "/api/events/new": {
       "post": {
         "tags": [
           "Events"
@@ -560,17 +607,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Aurora.Models.Event"
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.EventModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Aurora.Models.Event"
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.EventModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Aurora.Models.Event"
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.EventModel"
               }
             }
           }
@@ -1129,6 +1176,41 @@
           },
           "category": {
             "$ref": "#/components/schemas/Aurora.Models.Category"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Aurora.Models.DTOs.EventModel": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "groupId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
