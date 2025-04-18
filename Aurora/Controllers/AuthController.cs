@@ -193,6 +193,8 @@ namespace Aurora.Controllers
 
             return Ok(emailStatus);
         }
+
+        //
         [HttpPost("resendConfirmationEmail")]
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationRequestModel request)
         {
