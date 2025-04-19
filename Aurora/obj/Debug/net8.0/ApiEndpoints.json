@@ -361,6 +361,27 @@
   },
   {
     "ContainingType": "Aurora.Controllers.GroupsController",
+    "Method": "Search",
+    "RelativePath": "api/Groups/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "param",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.GroupsController",
     "Method": "Show",
     "RelativePath": "api/Groups/showGroup",
     "HttpMethod": "GET",

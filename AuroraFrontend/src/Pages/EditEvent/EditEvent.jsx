@@ -121,8 +121,9 @@ function CreateEvent(){
             headers: { 
                 'Authorization' : cookies.get('JWT')
             }});
-            if (!response.ok) {
-                navigate("/");
+            console.log(response);
+            if (response.ok) {
+                navigate("/auth");
             }
             else {
                 console.log("Event deletion failed");
