@@ -7,24 +7,17 @@ import './App.css'
 import Modal from './components/modal/modal.jsx';
 import Backdrop from './components/backdrop/backdrop.jsx';
 import Outlet from 'react'
+import UserPage from './Pages/UserPage/UserPage.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  return (
-    <div className="app-container">
-    <button className="login-button" onClick={() => setIsModalOpen(!isModalOpen)}>
-      Login
-    </button>
-    {isModalOpen && (
-        <>
-          <Backdrop onClick={() => setIsModalOpen(false)} />
-          <Modal>
-            <Login closeModal={() => setIsModalOpen(false)}></Login>
-          </Modal>
-        </>
-    )}
-    </div>
-  )
+  return(
+  <Router>
+    <Routes>
+      <Route path="/user/*" element ={<UserPage />} />
+    </Routes>
+  </Router> 
+  );
 }
 
 export default App
