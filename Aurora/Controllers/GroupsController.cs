@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using System.Security.Claims;
@@ -60,6 +61,46 @@ namespace Aurora.Controllers
             }
             return Ok(result);
         }
+        [Authorize]
+        [HttpGet("search")]
+
+        public async Task<IActionResult> Search(string search, int param=0)
+        {
+            var groupsId = new List<int?>();
+            var result = new List<object>();
+            if (param == 0) {
+                groupsId = db.Groups.Where(g => g.GroupName.Contains(search) || g.GroupDescription.Contains(search)).Select(g => g.Id).ToList();
+            }
+            else {
+                var categoryIds = db.Categorys.Where(c => c.CategoryName.Contains(search) || c.CategoryDescription.Contains(search)).Select( c=> c.Id).ToList();
+                foreach (var category in categoryIds){
+                    var ids= db.CategoryGroups.Where(cg => cg.CategoryId==category).Select(cg => cg.GroupId).ToList();
+                    groupsId.AddRange(ids);
+                }
+            }
+            var groups = db.Groups.Where(g => groupsId.Contains(g.Id)).Include(g => g.GroupCategory).ThenInclude(gc=> gc.Category).ToList();
+            foreach (var g in groups) {
+                var categs =new List<int?>();
+                var admin = await _userManager.FindByIdAsync(g.UserId);
+                foreach (var cg in g.GroupCategory)
+                {
+                    categs.Add((int)cg.CategoryId);
+                }
+                result.Add(new
+                {
+                    Id = g.Id,
+                    Name = g.GroupName,
+                    Description = g.GroupDescription,
+                    Picture = g.GroupPicture,
+                    Categories = categs,
+                    Admin = admin?.Nickname,
+                    Date = g.CreatedDate,
+                    isPrivate = g.IsPrivate
+                });
+            }
+            return Ok(result);
+        }
+
         [Authorize]
         [HttpGet("showGroup")]
         public async Task<IActionResult> Show(int Id)

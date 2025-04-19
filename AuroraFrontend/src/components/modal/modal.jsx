@@ -1,8 +1,8 @@
 import './modal.css';
 
-function Modal({ children }) {
+function Modal({ children, style }) {
   return (
-    <div className="modal">
+    <div className="modal" style= {{...style}}>
       {children}
     </div>
   );

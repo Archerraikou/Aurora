@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import Login from '../../components/login/login.jsx';
 import { useEffect, useState } from 'react'
 import './Home.css'
+import Calendar from '../../components/calendar/calendar.jsx';
 
 function Home(){
     const cookies = new Cookies();
@@ -33,6 +34,7 @@ function Home(){
                     </>
                 )}
             </div>
+            <Calendar></Calendar>
         </>
     )
 }

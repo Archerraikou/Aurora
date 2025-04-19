@@ -3,16 +3,23 @@ import Navbar from "./components/navbar/navbar.jsx";
 import SearchBar from "./components/searchBar/searchBar.jsx";
 import Auth from "./Pages/Authentification/auth.jsx";
 import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
+import CreateEvent from "./Pages/CreateEvent/CreateEvent.jsx";
 import './App.css'
+import Modal from './components/modal/modal.jsx';
+import Backdrop from './components/backdrop/backdrop.jsx';
+import Calendar from './components/calendar/calendar.jsx'
+import Outlet from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Registration from "./pages/Registration/Registration.jsx"
-import Home from "./pages/Home/Home.jsx"
-import CreateGroup from "./pages/CreateGroup/CreateGroup.jsx"
-import EditGroup from './pages/EditGroup/EditGroup.jsx';
-import { useEffect } from 'react';
+import Registration from "./Pages/Registration/Registration.jsx"
+import Home from "./Pages/Home/Home.jsx"
+import CreateGroup from "./Pages/CreateGroup/CreateGroup.jsx"
+import EditGroup from './Pages/EditGroup/EditGroup.jsx';
+import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
-import ViewGroup from './pages/ViewGroup/ViewGroup.jsx';
+import ViewGroup from './Pages/ViewGroup/ViewGroup.jsx';
+import EditEvent from './Pages/EditEvent/EditEvent.jsx';
 function App() {
+  const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
   useEffect( () => {
     async function Refresh(){
@@ -52,6 +59,7 @@ function App() {
   }Refresh()},
   [])
   return (
+
     <>
     <Navbar></Navbar>
       <SearchBar></SearchBar>
@@ -63,6 +71,8 @@ function App() {
         <Route path="/Group/Edit" element={<EditGroup/>}/>
         <Route path="/Group/Show" element={<ViewGroup/>}/>
         <Route path="/Group/Menu/*" element={<GroupPage />} />
+        <Route path='/Event/Create/:groupId' element={<CreateEvent/>}></Route>
+        <Route path='/Event/Edit/:id' element={<EditEvent/>}></Route>
       </Routes>
       </>
   )

@@ -21,9 +21,8 @@ namespace Aurora.Models
         public virtual ICollection<UserGroup>? Users { get; set; }
         public DateTime? CreatedDate { get; set; }
         public virtual ICollection<GroupMessage>? Messages { get; set; }
-        public int? GroupCalendarId {  get; set; }
-        public virtual Schedule? GroupCalendar { get; set; }
         public bool? IsPrivate { get; set; }
         public virtual ICollection<Document>? Documents { get; set; }
+        public virtual ICollection<Event>? Events { get; set; }
     }
 }

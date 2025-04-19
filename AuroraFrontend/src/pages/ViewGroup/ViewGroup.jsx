@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Cookies from 'universal-cookie'
 import { useNavigate } from 'react-router-dom';
 import './ViewGroup.css'
-import fetchCategories from '../../utils/utils';
+import fetchCategories from '../../utils/utils.jsx';
 import {useLocation} from 'react-router-dom';
 import GetRole from '../../utils/GetUserRoleInGroup.jsx';
 
