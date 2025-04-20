@@ -1,53 +1,58 @@
-import { useEffect, useState } from 'react';
-import Cookies from 'universal-cookie';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Registration.css';
 
 function Registration() {
-    const [formFields, setFormFields] = useState({ nickname: "", email: "", password: "" });
-    const { nickname, email, password } = formFields;
-    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        nickname: "",
+        email: "",
+        password: ""
+    });
     const [passRequirements, setPassRequirements] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
     const [showConfirmationLink, setShowConfirmationLink] = useState(false);
     const [confirmationLink, setConfirmationLink] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormFields((prevFields) => ({
-            ...prevFields,
-            [name]: value,
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
         }));
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const registerInfo = { nickname, email, password };
         setPassRequirements([]);
         
         try {
-          const response = await fetch('https://localhost:7242/api/Auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(registerInfo)
-          });
-      
-          const json = await response.json();
-      
-          if (!response.ok) {
-            if (Array.isArray(json)) {
-              setPassRequirements(json.map(item => item.description));
-            } else {
-              console.error("Unknown error format", json);
+            const response = await fetch('https://localhost:7242/api/Auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+                credentials: 'include' // Important for cookies
+            });
+    
+            const data = await response.json();
+            console.log("Registration response:", data); // Debug logging
+    
+            if (!response.ok) {
+                // Handle different error formats
+                const errors = data.errors || data.Errors || [data.message || "Registration failed"];
+                setPassRequirements(errors);
+                return;
             }
-          } else {
-            console.log("Account created:", json.message);
-            navigate("/");
-          }
+    
+            setSuccessMessage(data.Message || "Registration successful!");
+            if (data.ConfirmationLink) {
+                setConfirmationLink(data.ConfirmationLink);
+                setShowConfirmationLink(true);
+            }
         } catch (error) {
-          console.error('Error during registration:', error);
+            console.error('Registration error:', error);
+            setPassRequirements(["Network error. Please try again."]);
         }
-      };
-      
+    };
 
     return (
         <div className="centering">
@@ -68,7 +73,7 @@ function Registration() {
                     placeholder='Username' 
                     type="text" 
                     name="nickname" 
-                    value={nickname}
+                    value={formData.nickname}
                     onChange={handleChange} 
                     className='input-field'
                     required
@@ -79,7 +84,7 @@ function Registration() {
                     placeholder='Email' 
                     type="email" 
                     name="email" 
-                    value={email}
+                    value={formData.email}
                     onChange={handleChange} 
                     className='input-field'
                     required
@@ -90,12 +95,13 @@ function Registration() {
                     placeholder='Password' 
                     type="password" 
                     name="password" 
-                    value={password}
+                    value={formData.password}
                     onChange={handleChange} 
                     className='input-field'
                     required
                 />
                 
+                {/* Password requirements list */}
                 <ul>
                     {passRequirements.map((item, index) => (
                         <li key={index} className='passwordReq'>{item}</li>

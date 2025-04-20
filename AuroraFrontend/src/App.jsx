@@ -1,4 +1,4 @@
-import MainPage from "./Pages/MainPage/MainPage.jsx";
+;import MainPage from "./Pages/MainPage/MainPage.jsx";
 import Navbar from "./components/navbar/navbar.jsx";
 import SearchBar from "./components/searchBar/searchBar.jsx";
 import Auth from "./Pages/Authentification/auth.jsx";
@@ -12,6 +12,8 @@ import EditGroup from './pages/EditGroup/EditGroup.jsx';
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import ViewGroup from './pages/ViewGroup/ViewGroup.jsx';
+import Login from './components/login/login.jsx'; // Add this import
+
 function App() {
   const cookies = new Cookies();
   useEffect( () => {
@@ -57,6 +59,7 @@ function App() {
       <SearchBar></SearchBar>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/auth" element={<Home />} />
         <Route path="/Registration" element={<Registration />} />
         <Route path="/Group/Create" element={<CreateGroup/>}/>

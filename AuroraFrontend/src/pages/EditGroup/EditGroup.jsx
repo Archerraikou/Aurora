@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './EditGroup.css';
 import {useLocation} from 'react-router-dom';
 import fetchCategories from '../../utils/utils.jsx'
-import GetRole from '../../utils/GetUserRoleInGroup.jsx/index.js';
+import GetRole from '../../utils/GetUserRoleInGroup.jsx';
 import Modal from '../../components/modal/modal.jsx';
 
 function EditGroup(){
