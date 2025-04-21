@@ -1,0 +1,31 @@
+
+.home-button {
+  font-size: 24px;
+  color: var(--forth);
+  font-family: "Apple Chancery", sans-serif;
+}
+
+.home-button:hover {
+  opacity: 0.5;
+}
+
+sidebar-list {
+  width: 300px;
+  padding: 0;
+  overflow: auto;
+}
+
+.sidebar-list.overflow {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar:hover {
+  width: 300px;
+}
+
+.sidebar:hover .home-button {
+  font-size: 60px;
+  transition-duration: 0.5s;
+}

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Aurora.Models;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace Aurora.Data
 {
@@ -27,7 +28,8 @@ namespace Aurora.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<PrivateConversation> PrivateConversations { get; set; }
-        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Event> Events { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<UserEvent> UserEvents { get; set; }
     }
 }

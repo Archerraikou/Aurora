@@ -1,0 +1,39 @@
+.header {
+  padding: 10px;
+  background-color: var(--secundar);
+  display: flex;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  align-items: center;
+  height: 4.4%;
+}
+
+.search-bar {
+  flex-grow: 1;
+  background-color: var(--secundar);
+  border: none;
+  border-radius: 5px;
+  margin: 0;
+  color: white;
+}
+
+.search-bar:focus {
+  outline: none;
+}
+
+.btn {
+  display: block;
+  padding: 8px 16px;
+  height: 20px;
+  width: 20px;
+  background-color: springgreen;
+  color: white;
+}
+
+.useCategory{
+  display: flex;
+  justify-content: center; 
+  margin-top: 10px;
+  gap: 5px;
+}

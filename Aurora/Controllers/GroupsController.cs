@@ -1,0 +1,365 @@
+﻿using Aurora.Data;
+using Aurora.Models;
+using Aurora.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using System.Security.Claims;
+
+namespace Aurora.Controllers
+{
+    [ApiController]
+    [Route("/api/[controller]")]
+    public class GroupsController : Controller
+    {
+        private readonly ApplicationDbContext db;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public GroupsController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager
+        )
+        {
+            db = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
+        [HttpGet("index")]
+        public async Task<IActionResult> Index()
+        {
+            var groups = await db.Groups.Include("GroupCategory").ToListAsync();
+
+            var result = new List<object>();
+
+            foreach (var g in groups)
+            {
+                var admin = await _userManager.FindByIdAsync(g.UserId);
+                var categs = new List<int>();
+                if (g.GroupCategory != null && g.GroupCategory.Count > 0)
+                {
+                    foreach (var cg in g.GroupCategory)
+                    {
+                        categs.Add((int)cg.CategoryId);
+                    }
+                }
+                result.Add(new
+                {
+                    Id = g.Id,
+                    Name = g.GroupName,
+                    Description = g.GroupDescription,
+                    Picture = g.GroupPicture,
+                    Categories = categs,
+                    Admin = admin?.Nickname,
+                    Date = g.CreatedDate,
+                    isPrivate = g.IsPrivate
+                });
+            }
+            return Ok(result);
+        }
+        [Authorize]
+        [HttpGet("search")]
+
+        public async Task<IActionResult> Search(string search, int param=0)
+        {
+            var groupsId = new List<int?>();
+            var result = new List<object>();
+            if (param == 0) {
+                groupsId = db.Groups.Where(g => g.GroupName.Contains(search) || g.GroupDescription.Contains(search)).Select(g => g.Id).ToList();
+            }
+            else {
+                var categoryIds = db.Categorys.Where(c => c.CategoryName.Contains(search) || c.CategoryDescription.Contains(search)).Select( c=> c.Id).ToList();
+                foreach (var category in categoryIds){
+                    var ids= db.CategoryGroups.Where(cg => cg.CategoryId==category).Select(cg => cg.GroupId).ToList();
+                    groupsId.AddRange(ids);
+                }
+            }
+            var groups = db.Groups.Where(g => groupsId.Contains(g.Id)).Include(g => g.GroupCategory).ThenInclude(gc=> gc.Category).ToList();
+            foreach (var g in groups) {
+                var categs =new List<int?>();
+                var admin = await _userManager.FindByIdAsync(g.UserId);
+                foreach (var cg in g.GroupCategory)
+                {
+                    categs.Add((int)cg.CategoryId);
+                }
+                result.Add(new
+                {
+                    Id = g.Id,
+                    Name = g.GroupName,
+                    Description = g.GroupDescription,
+                    Picture = g.GroupPicture,
+                    Categories = categs,
+                    Admin = admin?.Nickname,
+                    Date = g.CreatedDate,
+                    isPrivate = g.IsPrivate
+                });
+            }
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("showGroup")]
+        public async Task<IActionResult> Show(int Id)
+        {
+            var group = await db.Groups
+                .Include(g => g.GroupCategory)
+                .ThenInclude(gc => gc.Category)
+                .Where(g => g.Id == Id)
+                .FirstOrDefaultAsync();
+            if(group == null)
+            {
+                return BadRequest();
+            }
+            var admin = await _userManager.FindByIdAsync(group.UserId);
+            var categs = new List<int>();
+            if (group.GroupCategory != null && group.GroupCategory.Count > 0)
+            {
+                foreach (var cg in group.GroupCategory)
+                {
+                    categs.Add((int)cg.CategoryId);
+                }
+            }
+            var result = new
+            {
+                Id = group.Id,
+                Name = group.GroupName,
+                Description = group.GroupDescription,
+                Picture = group.GroupPicture,
+                Categories = categs,
+                Admin = admin?.Nickname,
+                Date = group.CreatedDate,
+                IsPrivate = group.IsPrivate
+            };
+            Console.Write(result);
+            return Ok(result);
+        }
+        [Authorize]
+        [HttpGet("role")]
+        public async Task<IActionResult> GetRole(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ug = db.UserGroups.Where(ug => ug.UserId == userId && ug.GroupId == id).First();
+            if (ug == null)
+            {
+                var resp = new
+                {
+                    Role = "None"
+                };
+                return Ok(resp);
+            }
+            else
+            {
+                var resp = new
+                {
+                    Role = ug.IsAdmin == true ? "Admin" : "User"
+                };
+                return Ok(resp);
+            }
+            
+        }
+        [Authorize]
+        [HttpPost("editGroup")]
+        public async Task<IActionResult> Edit([FromForm] GroupModel groupModel, int id ,IFormFile? Picture = null)
+        {
+            var group = await db.Groups
+                .Include(g => g.GroupCategory)
+                .ThenInclude(gc => gc.Category)
+                .Where(g => g.Id == id)
+                .FirstOrDefaultAsync();
+            var admin = await _userManager.FindByIdAsync(group.UserId);
+            var adminsId = db.UserGroups.Where(ug=>ug.Id==group.Id && ug.IsAdmin==true).ToList();
+            var admins = new List<ApplicationUser>();
+            if (Picture == null || Picture.Length == 0)
+            {
+                groupModel.GroupPicture = "wwwroot/images/group-pictures/default.jpg";
+            }
+            else groupModel.GroupPicture = await UploadProfilePictureAsync(Picture);
+            foreach (var ad in adminsId)
+            {
+                ApplicationUser? item = await _userManager.FindByIdAsync(ad.UserId);
+                admins.Add(item);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user != admin && admins.IndexOf(user)==-1){
+                return StatusCode(401);
+            }
+            group.GroupDescription = groupModel.GroupDescription;
+            group.GroupName = groupModel.GroupName;
+            group.GroupPicture = groupModel.GroupPicture;
+            group.IsPrivate = groupModel.IsPrivate;
+            var groupCategs = db.CategoryGroups.Where(cg => cg.GroupId == group.Id);
+            foreach (var categs in groupCategs)
+            {
+                db.CategoryGroups.Remove(categs);
+            }
+            if (groupModel.GroupCategory != null && groupModel.GroupCategory.Count != 0)
+            {
+                foreach (var categ in groupModel.GroupCategory)
+                {
+                    var cg = new CategoryGroups
+                    {
+                        GroupId = group.Id,
+                        CategoryId = categ
+                    };
+                    db.CategoryGroups.Add(cg);
+                    group.GroupCategory.Add(cg);
+                }
+            }
+            db.Groups.Update(group);
+            db.SaveChanges();
+            return Ok();
+        }
+        [Authorize]
+        [HttpDelete("deleteGroup")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var group = db.Groups.Where(g=>g.Id==id).First();
+            var admin = await _userManager.FindByIdAsync(group.UserId);
+            var adminsId = db.UserGroups.Where(ug => ug.Id == group.Id && ug.IsAdmin == true).ToList();
+            var admins = new List<ApplicationUser>();
+            foreach (var ad in adminsId)
+            {
+                ApplicationUser? item = await _userManager.FindByIdAsync(ad.UserId);
+                admins.Add(item);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user);
+            if (user != admin && admins.IndexOf(user) == -1 && roles.IndexOf("Admin")==-1)
+            {
+                return StatusCode(401);
+            }
+            var userGroups = db.UserGroups.Where(ug => ug.GroupId == group.Id);
+            var groupCategs = db.CategoryGroups.Where(cg => cg.GroupId == group.Id);
+            var messages = db.GroupMessages.Where(m => m.GroupId == group.Id);
+            foreach (var categs in groupCategs)
+            {
+                db.CategoryGroups.Remove(categs);
+            }
+            foreach (var userG in userGroups)
+            {
+                db.UserGroups.Remove(userG);
+            }
+            foreach (var msg in messages)
+            {
+                db.GroupMessages.Remove(msg);
+            }
+            db.Groups.Remove(group);
+            db.SaveChanges();
+            return Ok("Succesfully deleted");
+        }
+        [Authorize]
+        [HttpPost("newGroup")]
+        public async Task<IActionResult> New([FromForm] GroupModel groupModel, IFormFile? Picture = null)
+        {
+            if (groupModel == null)
+            {
+                return BadRequest("Group data is required");
+            }
+            if (Picture == null || Picture.Length == 0)
+            {
+                groupModel.GroupPicture = "wwwroot/images/group-pictures/default.jpg";
+            }
+            else groupModel.GroupPicture = await UploadProfilePictureAsync(Picture);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Group group = new Group
+            {
+                GroupName = groupModel.GroupName,
+                GroupPicture = groupModel.GroupPicture,
+                GroupDescription = groupModel.GroupDescription,
+                IsPrivate = groupModel.IsPrivate,
+                GroupCategory = []
+            };
+            if (groupModel.GroupCategory != null && groupModel.GroupCategory.Count!=0)
+            {
+                foreach (var categ in groupModel.GroupCategory)
+                {
+                    var cg = new CategoryGroups
+                    {
+                        GroupId = group.Id,
+                        CategoryId = categ
+                    };
+                    db.CategoryGroups.Add(cg);
+                    group.GroupCategory.Add(cg);
+                }
+            }
+            group.CreatedDate = DateTime.UtcNow;
+            group.UserId = userId;
+            db.Groups.Add(group);
+            await db.SaveChangesAsync();
+            group = db.Groups.Where(g=>g.CreatedDate==group.CreatedDate && g.GroupName==group.GroupName).FirstOrDefault();
+            UserGroup user1 = new UserGroup
+            {
+                UserId = userId,
+                GroupId = group.Id,
+                IsAdmin = true
+            };
+            group.Users = new List<UserGroup>();
+            group.Users.Append(user1);
+            db.Groups.Update(group);
+            db.UserGroups.Add(user1);
+            db.SaveChanges();
+            return Ok();
+        }
+        [Authorize]
+        [HttpGet("join")]
+        public async Task<IActionResult> Join(int id)
+        {
+            Group group = db.Groups.Where(g => g.Id == id).First();
+            if(group.isPrivate==true)
+            {
+                return await Request(id);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            UserGroup ug = new UserGroup
+            {
+                GroupId = id,
+                UserId = userId
+            };
+            db.UserGroups.Add(ug);
+            if (user.UserGroups == null)
+            {
+                user.UserGroups = new List<UserGroup>();
+            }
+            user.UserGroups.Add(ug);
+            if (group.Users == null)
+            {
+                group.Users = new List<UserGroup>();
+            }
+            group.Users.Add(ug);
+            db.SaveChanges();
+            return Ok();
+        }
+        [Authorize]
+        [HttpGet("request")]
+        public async Task<IActionResult> Request(int id)
+        {
+            //Bafta
+            return Ok();
+        }
+
+        private async Task<string> UploadProfilePictureAsync(IFormFile file)
+        {
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
+            {
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")); 
+            }
+            if (file == null || file.Length == 0)
+                throw new Exception("No file uploaded");
+            var fileExtension = Path.GetExtension(file.FileName);
+            var fileName = $"{Guid.NewGuid()}{fileExtension}";
+            var filePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"), fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+            return Path.Combine("uploads", fileName);
+        }
+    }
+}
