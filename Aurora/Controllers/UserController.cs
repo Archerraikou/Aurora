@@ -15,21 +15,6 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 namespace Aurora.Controllers
 {
 
-    // Am facut o clasa pentru a trimite doar informatiile relevante care trebuie sa fie publice
-    // sau vizibile cand vizualizezi o pagina a unui utilizator.
-    // In caz ca lipseste ceva trebuie adaugat aici
-    public class RelevantUserInformation
-    {
-
-        public string Id {get;set;} 
-        public string? Nick{get;set;} 
-
-        public string? Email{get;set;}
-        public string? ProfilePicture{get;set;}
-        public string? ProfileDescription{get;set;}
-        public virtual ICollection<CategoryUser>? Interests {get;set;}
-
-    }
 
     [ApiController]
     [Route("api/[controller]")]
@@ -68,28 +53,43 @@ namespace Aurora.Controllers
                 ProfileDescription = u.ProfileDescription,
                 Interests = u.Interests
             });
-            var user = await query.ToListAsync();
+
+            var user = await query.SingleOrDefaultAsync();
             if(user == null)
             {
                 return NotFound();
             }
+
+            user.ProfilePicture ??= "wwwroot/images/user-pictures/defaultapp.png";
+
+            
             return Ok(user);
         }
 
-        [HttpPost("{userId}")]
-        public async Task<ActionResult<ApplicationUser>> Edit(string userId, [FromBody] RelevantUserInformation RUI)
+        [HttpPost("edit/{userId}")]
+        public async Task<ActionResult<ApplicationUser>> Edit(string userId, [FromBody] RelevantUserInformation RUI, IFormFile? Picture = null)
         {
             try
             {
                 var user = await _context.ApplicationUsers.FindAsync(userId);
                 if(user==null)
                     return NotFound("User not found");
+
+                if(Picture!=null)
+                {
+                    RUI.ProfilePicture = await UploadProfilePictureAsync(Picture);
+                }
+                if(user.ProfilePicture == null)
+                {
+                    RUI.ProfilePicture = "wwwroot/images/user-pictures/defaultpp.png";
+                }
                 // Depinde ce anume vrem sa schimbam la cont, o sa le pun pe toate si doar le scoatem pe cele care consideram ca nu trebuie sa poata fi modificate
                 user.Nickname = RUI.Nick;
                 // Maybe nu email
                 user.ProfilePicture = RUI.ProfilePicture;
                 user.ProfileDescription = RUI.ProfileDescription;
-                user.Interests = RUI.Interests;
+                // user.Interests = RUI.Interests;
+                
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -99,7 +99,7 @@ namespace Aurora.Controllers
             }
         }
 
-        [HttpDelete("{userId}")]
+        [HttpDelete("delete/{userId}")]
         public async Task<ActionResult<ApplicationUser>> Delete(string userId)
         {
             try{
@@ -118,6 +118,23 @@ namespace Aurora.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
 
+        }
+        private async Task<string> UploadProfilePictureAsync(IFormFile file)
+        {
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
+            {
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")); 
+            }
+            if (file == null || file.Length == 0)
+                throw new Exception("No file uploaded");
+            var fileExtension = Path.GetExtension(file.FileName);
+            var fileName = $"{Guid.NewGuid()}{fileExtension}";
+            var filePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"), fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+            return Path.Combine("uploads", fileName);
         }
     }
 }
