@@ -12,5 +12,7 @@ namespace Aurora.Models
         public virtual Group? Group { get; set; }
         public string? Color { get; set; }
         public bool? IsAdmin { get; set; }
+        public bool IsRequested { get; set; } // New field to track if the user has requested to join
+        public bool IsApproved { get; set; }
     }
 }

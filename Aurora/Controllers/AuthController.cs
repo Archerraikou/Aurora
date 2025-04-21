@@ -17,6 +17,7 @@ using System.ComponentModel.DataAnnotations;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 using System.Net;
 using System.Text.Json;
+using System.Security.Cryptography;
 
 namespace Aurora.Controllers
 {
@@ -30,20 +31,22 @@ namespace Aurora.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IAppEmailSender _emailSender;
         private readonly IHostEnvironment _environment;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
             ILogger<AuthController> logger,
-            IAppEmailSender emailSender, IHostEnvironment environment)
+            IAppEmailSender emailSender, IHostEnvironment environment, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _logger = logger;
             _emailSender = emailSender;
-            _environment = environment; // Store it
+            _environment = environment;
+            _roleManager = roleManager;// Store it
         }
 
         [HttpPost("register")]
@@ -121,7 +124,14 @@ namespace Aurora.Controllers
                 // Assign default role with error handling
                 try
                 {
-                    await _userManager.AddToRoleAsync(user, "User");
+                    const string defaultRole = "User";
+
+                    if (!await _roleManager.RoleExistsAsync(defaultRole))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(defaultRole));
+                    }
+
+                    await _userManager.AddToRoleAsync(user, defaultRole);
                 }
                 catch (Exception roleEx)
                 {
@@ -341,5 +351,7 @@ namespace Aurora.Controllers
             _logger.LogInformation($"User {userId} deleted successfully");
             return Ok(new { message = "Account deleted successfully" });
         }
+       
+
     }
 }

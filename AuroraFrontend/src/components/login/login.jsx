@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';  
 import './login.css';
 
 function Login({ closeModal }) {
   const [formFields, setFormFields] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const { email, password } = formFields;
+  const navigate = useNavigate(); 
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -18,11 +20,17 @@ function Login({ closeModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
+
+    if (!email || !password) {
+      setError('Please provide both email and password.');
+      return;
+    }
+
     const loginInfo = { email, password };
 
     try {
-      const loginRes = await fetch('https://localhost:7242/api/Auth/login', {
+      const loginRes = await fetch('https://localhost:7242/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginInfo),
@@ -39,36 +47,21 @@ function Login({ closeModal }) {
       }
 
       const loginData = await loginRes.json();
+      console.log('Login response data:', loginData);
+
       const cookies = new Cookies();
-      cookies.set('JWT', 'Bearer ' + loginData.accessToken, { path: '/' });
-      cookies.set('JWTRefresh', loginData.refreshToken, { path: '/' });
-      cookies.set('ExpirationDate', loginData.expiresIn * 1000 + Date.now(), { path: '/' });
+      const { accessToken, refreshToken, expiration } = loginData;
 
-      try {
-        const rolesRes = await fetch('https://localhost:7242/api/Auth/roles', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': cookies.get('JWT'),
-          },
-        });
+      cookies.set('JWT', 'Bearer ' + accessToken, { path: '/' });
+      cookies.set('JWTRefresh', refreshToken, { path: '/' });
+      cookies.set('ExpirationDate', expiration, { path: '/' });
 
-        if (rolesRes.ok) {
-          const rolesData = await rolesRes.json();
-          if (rolesData.roles && rolesData.roles.length > 0) {
-            cookies.set('Roles', rolesData.roles[0], { path: '/' });
-          }
-        } else {
-          console.log('Failed to fetch roles');
-        }
-      } catch (roleErr) {
-        console.error('Error getting roles:', roleErr);
-      }
+      localStorage.setItem("isLoggedIn", "true");
 
       if (closeModal) {
         closeModal();
       } else {
-        window.location.href = '/';
+        navigate('/');
       }
     } catch (err) {
       console.error('Login error:', err);

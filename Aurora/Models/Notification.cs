@@ -13,6 +13,6 @@ namespace Aurora.Models
         public virtual ApplicationUser? User { get; set; }
         public DateTime? NotificationDate { get; set; }
         public string? NotificationContent { get; set; }
-
+        public bool IsRead { get; set; } = false;
     }
 }

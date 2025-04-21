@@ -27,23 +27,28 @@ builder.Services.AddTransient<IAppEmailSender, AppEmailSender>();
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
     {
-        // Assuming you have a "Jwt" section in your appsettings.json
-        options.RequireHttpsMetadata = false;  // For local dev, set this to true in production
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        // Remove the Authority if you're not using an external Identity provider
+        // options.Authority = "https://localhost:7242"; // Only needed if you have an identity provider
+
+        // Set the Audience to match the 'aud' claim in the JWT
+        options.Audience = "https://localhost:7242"; // Must match the 'aud' in your token
+
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"], // typically your API base URL
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"], // typically your API base URL
-            ValidateLifetime = true,
-            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]) // your secret key from appsettings
-            )
+            ValidateAudience = true, // Ensure the audience is validated
+            ValidateIssuer = true, // Ensure the issuer is validated
+            ValidateLifetime = true, // Ensure the token lifetime is validated
+            ValidateIssuerSigningKey = true, // Ensure the signing key is validated
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey")) // Use the same secret used for signing
         };
     });
+
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
@@ -81,13 +86,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", policyBuilder =>
     {
         policyBuilder
-            .WithOrigins("http://localhost:5173")  // Frontend URL
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();  // Allow credentials to be included
+            .WithOrigins("http://localhost:5173") // Frontend URL
+            .AllowAnyHeader() // Allow all headers
+            .AllowAnyMethod() // Allow all HTTP methods (GET, POST, etc.)
+            .AllowCredentials(); // Allow cookies and credentials (like tokens)
     });
 });
-
 
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 {
@@ -99,6 +103,10 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = 401;
@@ -127,8 +135,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapIdentityApi<ApplicationUser>();
-app.UseCors("CorsPolicy");
 app.UseRouting();
+app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
