@@ -359,7 +359,7 @@ namespace Aurora.Controllers
             {
                 await file.CopyToAsync(fileStream);
             }
-            return Path.Combine("uploads", fileName);
+            return "https://localhost:7242/images/"+fileName;
         }
     }
 }

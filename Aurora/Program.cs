@@ -102,6 +102,14 @@ app.UseHttpsRedirection();
 app.MapIdentityApi<ApplicationUser>();
 app.UseCors("CorsPolicy");
 
+app.UseStaticFiles();
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine("Request path: " + context.Request.Path);
+    await next();
+});
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
