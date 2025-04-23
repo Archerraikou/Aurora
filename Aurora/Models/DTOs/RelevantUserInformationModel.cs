@@ -7,9 +7,9 @@ namespace Aurora.Models.DTOs
         public string? Nick{get;set;} 
 
         public string? Email{get;set;}
-        public string? ProfilePicture{get;set;}
+        public string? ProfilePicturePath{get;set;}
         public string? ProfileDescription{get;set;}
-        public virtual ICollection<CategoryUser>? Interests {get;set;}
+        // public virtual ICollection<CategoryUser>? Interests {get;set;}
 
     }
 }

@@ -35,9 +35,9 @@ namespace Aurora.Controllers
                 Id = u.Id,
                 Nick = u.Nickname,
                 Email = u.Email,
-                ProfilePicture = u.ProfilePicture,
-                ProfileDescription = u.ProfileDescription,
-                Interests = u.Interests
+                ProfilePicturePath = u.ProfilePicture,
+                ProfileDescription = u.ProfileDescription
+                // ,Interests = u.Interests
             });
             var users = await query.ToListAsync();
             return Ok(users);
@@ -49,9 +49,9 @@ namespace Aurora.Controllers
                 Id = u.Id,
                 Nick = u.Nickname,
                 Email = u.Email,
-                ProfilePicture = u.ProfilePicture,
-                ProfileDescription = u.ProfileDescription,
-                Interests = u.Interests
+                ProfilePicturePath = u.ProfilePicture,
+                ProfileDescription = u.ProfileDescription
+                // ,Interests = u.Interests
             });
 
             var user = await query.SingleOrDefaultAsync();
@@ -60,14 +60,14 @@ namespace Aurora.Controllers
                 return NotFound();
             }
 
-            user.ProfilePicture ??= "wwwroot/images/user-pictures/defaultapp.png";
+            user.ProfilePicturePath ??= "wwwroot/images/user-pictures/defaultapp.png";
 
             
             return Ok(user);
         }
 
         [HttpPost("edit/{userId}")]
-        public async Task<ActionResult<ApplicationUser>> Edit(string userId, [FromBody] RelevantUserInformation RUI, IFormFile? Picture = null)
+        public async Task<ActionResult<ApplicationUser>> Edit(string userId, [FromForm] RelevantUserInformation RUI, IFormFile? ProfilePicture = null)
         {
             try
             {
@@ -75,20 +75,17 @@ namespace Aurora.Controllers
                 if(user==null)
                     return NotFound("User not found");
 
-                if(Picture!=null)
+                if(ProfilePicture!=null)
                 {
-                    RUI.ProfilePicture = await UploadProfilePictureAsync(Picture);
+                    user.ProfilePicture = await UploadProfilePictureAsync(ProfilePicture);
                 }
                 if(user.ProfilePicture == null)
                 {
-                    RUI.ProfilePicture = "wwwroot/images/user-pictures/defaultpp.png";
+                    user.ProfilePicture = "wwwroot/images/user-pictures/defaultpp.png";
                 }
-                // Depinde ce anume vrem sa schimbam la cont, o sa le pun pe toate si doar le scoatem pe cele care consideram ca nu trebuie sa poata fi modificate
                 user.Nickname = RUI.Nick;
-                // Maybe nu email
-                user.ProfilePicture = RUI.ProfilePicture;
                 user.ProfileDescription = RUI.ProfileDescription;
-                // user.Interests = RUI.Interests;
+                // user.Interests = Interests;
                 
                 await _context.SaveChangesAsync();
                 return NoContent();
