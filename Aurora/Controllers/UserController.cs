@@ -4,6 +4,7 @@ using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -131,7 +132,43 @@ namespace Aurora.Controllers
             {
                 await file.CopyToAsync(fileStream);
             }
-            return Path.Combine("uploads", fileName);
+            // return Path.Combine("uploads", fileName);
+            return fileName;
+        }
+        [HttpGet("pfp/{userId}")]
+        public IActionResult GetImage(string userId)
+        {
+            var user = _context.ApplicationUsers.Find(userId);
+            if(user==null)
+                return NotFound("User not found");
+            if(user.ProfilePicture==null)
+            {
+                return PhysicalFile("E:/Aurora/Aurora/wwwroot/images/user-pictures/defaultpp.png", "image/png", enableRangeProcessing:true);
+            }
+            var basePath = Path.GetFullPath(Path.Combine("wwwroot\\images"));
+            var fullPath = Path.GetFullPath(user.ProfilePicture);
+            Console.WriteLine(fullPath);
+            if(!fullPath.StartsWith(basePath))
+            {
+
+                return BadRequest("Invalid Image Path");
+            }
+            if(!System.IO.File.Exists(fullPath))
+            {
+                return NotFound();
+            }
+            var contentType = GetContentType(fullPath);
+
+            return PhysicalFile(fullPath, contentType, enableRangeProcessing:true);
+
+        }
+        private string GetContentType(string path)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(path, out var contentType))
+                contentType = "application/octet-stream"; // Fallback type
+            
+            return contentType;
         }
     }
 }

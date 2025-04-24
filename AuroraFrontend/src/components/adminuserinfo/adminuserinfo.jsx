@@ -1,11 +1,12 @@
 import "./adminuserinfo.css";
 function AdminUserInfo({userInfo})
 {
-    {/* Momentan sunt hardcodate */}
+    
+    console.log(userInfo)
     userInfo.interests = ["Matematica", "Informatica", "Chimie"]
     return (
         <div className="AdminUserInfo">
-            <img src={userInfo.profilePicture || "../../../defaultpp.png"} alt= "Profile Picture"/>
+            <img src={"https://localhost:7242/api/User/pfp/" + userInfo.id} alt= "Profile Picture"/>
             <p>id: {userInfo.id}</p>
             <p>Nick:{userInfo.nick}</p>
             <p>Email:{userInfo.email}</p>
