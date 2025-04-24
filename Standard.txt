@@ -9,4 +9,3 @@ Acestea se apeleaza cu var(--principal)/ --var(secundar)/etc.
 Fiecare componenta trebuie sa aiba propriul ei folder cu 2 fisiere (.jsx si .css)
 
 Fiecare pagina trebuie sa aiba propriul ei folder cu 2 fisiere (.jsx si .css)
-
