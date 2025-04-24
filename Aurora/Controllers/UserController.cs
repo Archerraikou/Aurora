@@ -84,6 +84,7 @@ namespace Aurora.Controllers
                 {
                     user.ProfilePicture = "wwwroot/images/user-pictures/defaultpp.png";
                 }
+                Console.WriteLine(user.ProfilePicture);
                 user.Nickname = RUI.Nick;
                 user.ProfileDescription = RUI.ProfileDescription;
                 // user.Interests = Interests;
@@ -133,11 +134,12 @@ namespace Aurora.Controllers
                 await file.CopyToAsync(fileStream);
             }
             // return Path.Combine("uploads", fileName);
-            return fileName;
+            return filePath;
         }
         [HttpGet("pfp/{userId}")]
         public IActionResult GetImage(string userId)
         {
+
             var user = _context.ApplicationUsers.Find(userId);
             if(user==null)
                 return NotFound("User not found");
@@ -147,6 +149,7 @@ namespace Aurora.Controllers
             }
             var basePath = Path.GetFullPath(Path.Combine("wwwroot\\images"));
             var fullPath = Path.GetFullPath(user.ProfilePicture);
+            
             Console.WriteLine(fullPath);
             if(!fullPath.StartsWith(basePath))
             {
