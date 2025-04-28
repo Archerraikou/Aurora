@@ -115,7 +115,7 @@ function ViewGroup(){
       <>
       {cookies.get("JWT")!=null && <div className="group-container">
         <div className="group-header">
-          <img src={`C:/School/ProiectMDS/Aurora/${formFields.groupPicture}`} className="group-image" alt="Group" />
+          <img src={formFields.groupPicture} className="group-image" alt="Group" />
           <h1 className="group-name">{formFields.groupName}</h1>
         </div>
 
