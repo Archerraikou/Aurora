@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
+using SignalRChat.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -57,13 +59,26 @@ builder.Services.AddSwaggerGen(o =>
     o.AddSecurityRequirement(securityRequirement);
 });
 
-builder.Services.AddCors(opt =>
+// builder.Services.AddCors(opt =>
+// {
+//     opt.AddPolicy("CorsPolicy", policyBuiler =>
+//     {
+//         policyBuiler.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+//     });
+// });
+
+builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy", policyBuiler =>
+    options.AddDefaultPolicy(policy =>
     {
-        policyBuiler.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+        policy.WithOrigins("http://localhost:5173") // React app port
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
+
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -100,11 +115,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapIdentityApi<ApplicationUser>();
-app.UseCors("CorsPolicy");
+app.UseCors();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<ChatHub>("/chatHub");
+
 
 app.Run();

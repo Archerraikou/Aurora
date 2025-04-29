@@ -98,6 +98,7 @@ namespace Aurora.Controllers
             }
         }
 
+        // Shoutout Stinga, care mi-a adus aminte ca exista si tabele asociative in baza de date
         [HttpDelete("delete/{userId}")]
         public async Task<ActionResult<ApplicationUser>> Delete(string userId)
         {
@@ -108,6 +109,17 @@ namespace Aurora.Controllers
                 {
                     return NotFound("User not Found");
                 }
+                // AICI E CODUL DE STERGEREA A ELEMENTELOR DIN ALTE TABELE, DACA SE STRICA ASTA AICI SE REPARA
+                var deletedUserNotifications = _context.Notifications.Where(t=> t.UserId == userId);
+                _context.Notifications.RemoveRange(deletedUserNotifications);
+
+                var deletedUserGroups = _context.UserGroups.Where(t=> t.UserId == userId);
+                _context.UserGroups.RemoveRange(deletedUserGroups);
+
+                var deletedUserRoles = _context.UserRoles.Where(t=> t.UserId == userId);
+                _context.UserRoles.RemoveRange(deletedUserRoles);
+                // FINALUL CODULUI DE STERGEREA A ELEMENTELOR DIN ALTE TABELE
+
                 _context.ApplicationUsers.Remove(user);
                 await _context.SaveChangesAsync();
                 return NoContent();
