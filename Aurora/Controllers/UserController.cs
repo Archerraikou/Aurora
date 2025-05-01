@@ -13,9 +13,9 @@ using System.Security.Claims;
 using System.Text;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
+
 namespace Aurora.Controllers
 {
-
 
     [ApiController]
     [Route("api/[controller]")]
