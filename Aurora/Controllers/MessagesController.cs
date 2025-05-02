@@ -2,6 +2,7 @@ using Aurora.Data;
 using Aurora.Models;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurora.Controllers
 {
@@ -16,7 +17,7 @@ namespace Aurora.Controllers
             _context = context;
         }
         [HttpPost("send")]
-        public async Task<IActionResult> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
+        public async Task<ActionResult<int>> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
         {
             GroupMessage newMessage = new();
             try
@@ -34,8 +35,7 @@ namespace Aurora.Controllers
                 newMessage.GroupId = mes.GroupId;
                 _context.Messages.Add(newMessage);
                 await _context.SaveChangesAsync();
-
-                return StatusCode(200);
+                return Ok(newMessage.Id);
             }
             catch
             {

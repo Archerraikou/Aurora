@@ -6,6 +6,7 @@ import Message from "../message/message.jsx"
 const ChatComponent = ({groupId}) => {
     const [connection, setConnection] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [messageId, setMessageId] = useState();
     const [user, setUser] = useState('');
     const [messageInput, setMessageInput] = useState('');
     const [userData, setUserData] = useState(null);
@@ -100,6 +101,8 @@ const ChatComponent = ({groupId}) => {
                         else
                         {
                             console.log("Message sent!!")
+                            var messageId = await response.json();
+                            console.log(messageId);
                         }
 
                 
