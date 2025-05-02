@@ -1,35 +1,7 @@
 import React, { useState } from 'react';
-import './Quiz.css';
-
-const questions = [
-  {
-    question: "What is the capital of France?",
-    options: ["Berlin", "Madrid", "Paris", "Rome"],
-    correct: 2,
-  },
-  {
-    question: "Which language is used for web apps?",
-    options: ["Python", "JavaScript", "C++", "Java"],
-    correct: 1,
-  },
-  {
-    question: "Who wrote '1984'?",
-    options: ["Aldous Huxley", "George Orwell", "J.K. Rowling", "Mark Twain"],
-    correct: 1,
-  },
-  {
-    question: "Which planet is known as the Red Planet?",
-    options: ["Earth", "Mars", "Jupiter", "Saturn"],
-    correct: 1,
-  },
-  {
-    question: "Which element has the chemical symbol O?",
-    options: ["Oxygen", "Gold", "Silver", "Iron"],
-    correct: 0,
-  },
-];
-
-export default function Quiz( ) {
+import './quiz.css';
+export default function Quiz( questions ) {
+  questions=questions.questions
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const [submitted, setSubmitted] = useState(false);
 

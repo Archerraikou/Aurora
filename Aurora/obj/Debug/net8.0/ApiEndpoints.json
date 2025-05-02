@@ -516,6 +516,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "QuizController",
+    "Method": "GenerateQuiz",
+    "RelativePath": "api/Quiz/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Aurora.Models.DTOs.QuizModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Aurora.Controllers.TestUserController",
     "Method": "Get",
     "RelativePath": "api/TestUser/test",

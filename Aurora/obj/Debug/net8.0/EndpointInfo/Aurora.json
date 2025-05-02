@@ -1120,6 +1120,37 @@
         }
       }
     },
+    "/api/Quiz/generate": {
+      "post": {
+        "tags": [
+          "Quiz"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.QuizModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.QuizModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Aurora.Models.DTOs.QuizModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/TestUser/test": {
       "get": {
         "tags": [
@@ -1500,6 +1531,16 @@
           "groupId": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Aurora.Models.DTOs.QuizModel": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
             "nullable": true
           }
         },
