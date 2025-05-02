@@ -1,37 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Facultate\\MDS\\Aurora\\Aurora\\",
+  "WorkspaceRootPath": "C:\\School\\ProiectMDS\\Aurora\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\controllers\\usergroupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\usergroupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\controllers\\applicationuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\applicationuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\controllers\\eventscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\usergroupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\usergroupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\applicationuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\applicationuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\eventscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\eventscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\controllers\\testusercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\controllers\\testusercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:controllers\\testusercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\models\\event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\facultate\\mds\\aurora\\aurora\\models\\userevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|c:\\school\\proiectmds\\aurora\\models\\userevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4053D262-D43F-479A-A50C-42B24B57CBAE}|Aurora.csproj|solutionrelative:models\\userevent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,63 +58,61 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "UserGroupsController.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\UserGroupsController.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\UserGroupsController.cs",
               "RelativeDocumentMoniker": "Controllers\\UserGroupsController.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\UserGroupsController.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\UserGroupsController.cs",
               "RelativeToolTip": "Controllers\\UserGroupsController.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAAAFQAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-29T17:32:50.307Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "CategoriesController.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\CategoriesController.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\CategoriesController.cs",
               "RelativeDocumentMoniker": "Controllers\\CategoriesController.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\CategoriesController.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\CategoriesController.cs",
               "RelativeToolTip": "Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAAwwDYAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-29T18:17:08.229Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ApplicationUsersController.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\ApplicationUsersController.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\ApplicationUsersController.cs",
               "RelativeDocumentMoniker": "Controllers\\ApplicationUsersController.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\ApplicationUsersController.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\ApplicationUsersController.cs",
               "RelativeToolTip": "Controllers\\ApplicationUsersController.cs",
               "ViewState": "AgIAAIYAAAAAAAAAAAAAAI8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-29T13:07:07.898Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-29T13:07:07.898Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "GroupsController.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\GroupsController.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\GroupsController.cs",
               "RelativeDocumentMoniker": "Controllers\\GroupsController.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\GroupsController.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\GroupsController.cs",
               "RelativeToolTip": "Controllers\\GroupsController.cs",
               "ViewState": "AgIAAEYBAAAAAAAAAAAAAEsBAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-14T14:57:46.884Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-14T14:57:46.884Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "EventsController.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\EventsController.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\EventsController.cs",
               "RelativeDocumentMoniker": "Controllers\\EventsController.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\EventsController.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\EventsController.cs",
               "RelativeToolTip": "Controllers\\EventsController.cs",
               "ViewState": "AgIAAPgAAAAAAAAAAAAAAP4AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -124,9 +122,9 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "TestUserController.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\TestUserController.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\TestUserController.cs",
               "RelativeDocumentMoniker": "Controllers\\TestUserController.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Controllers\\TestUserController.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Controllers\\TestUserController.cs",
               "RelativeToolTip": "Controllers\\TestUserController.cs",
               "ViewState": "AgIAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -136,9 +134,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "Event.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Models\\Event.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\Event.cs",
               "RelativeDocumentMoniker": "Models\\Event.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Models\\Event.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\Event.cs",
               "RelativeToolTip": "Models\\Event.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAAA0AAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -148,9 +146,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "UserEvent.cs",
-              "DocumentMoniker": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Models\\UserEvent.cs",
+              "DocumentMoniker": "C:\\School\\ProiectMDS\\Aurora\\Models\\UserEvent.cs",
               "RelativeDocumentMoniker": "Models\\UserEvent.cs",
-              "ToolTip": "C:\\Facultate\\MDS\\Aurora\\Aurora\\Models\\UserEvent.cs",
+              "ToolTip": "C:\\School\\ProiectMDS\\Aurora\\Models\\UserEvent.cs",
               "RelativeToolTip": "Models\\UserEvent.cs",
               "ViewState": "AgIAAAIAAAAAAAAAAAAAAAoAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

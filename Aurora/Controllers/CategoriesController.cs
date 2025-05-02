@@ -42,6 +42,16 @@ namespace Aurora.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var category = db.Categorys.FirstOrDefault(c => c.Id == id);
+            var groupCategs = db.CategoryGroups.Where(cg => cg.CategoryId == id);
+            foreach(var cg in groupCategs)
+            {
+                db.CategoryGroups.Remove(cg);
+            }
+            var userCategs = db.CategoryUsers.Where(cu => cu.CategoryId == id);
+            foreach (var cu in userCategs)
+            {
+                db.CategoryUsers.Remove(cu);
+            }
             db.Categorys.Remove(category);
             db.SaveChanges();
             return Ok();
