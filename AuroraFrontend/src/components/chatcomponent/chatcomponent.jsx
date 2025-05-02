@@ -27,7 +27,6 @@ const ChatComponent = () => {
             catch (error)
             {
                 console.error("Fetch error:", error);
-                setError(error.message);
             }
             finally
             {
@@ -67,22 +66,68 @@ const ChatComponent = () => {
     }, [connection]);
     const sendMessage = async (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        console.log("This is the form data console log dumbass: ")
+        console.log(e.target[0].value)
+        formData.append("UserId", e.target[0].value)
+        console.log(e.target[1].value)
+        // Groups are not yet made
+        // formData.append("GroupId", e.target[1].value)
+        console.log(e.target[2].value)
+        formData.append("Content", e.target[2].value)
+        console.log(formData)
+        setMessageInput('');
         if (messageInput && user) {
             try {
                 await connection.invoke('SendMessage', user.nick, messageInput);
-                setMessageInput('');
+                const sendMessageToServer = async ()=>{
+                    try{
+
+                        const response = await fetch("https://localhost:7242/api/Messages/send", {
+                            method: "POST",
+                            body: formData
+                        })
+                        if(!response.ok)
+                        {
+                            console.log(response.status)
+                        }
+                        else
+                        {
+                            console.log("Message sent!!")
+                        }
+
+                
+                    }
+                    catch (e)
+                    {
+                        console.log(e.message)
+                    }
+
+                };
+                sendMessageToServer();
             } catch (err) {
                 console.error(err);
             }
         }
     };
+    const group = "iddegrupfoarteinteresant"
     if(userData && !user)
         setUser(userData.nick);
     return (
         <div>
             <h2>Chat</h2>
             {/* Messagebar */}
-            <form onSubmit={sendMessage}>
+            <form action="sendMessage" onSubmit={sendMessage}>
+                <input 
+                    hidden
+                    readOnly
+                    value="cd470e43-fa50-425c-901b-070615660d52"
+                />
+                <input
+                    hidden
+                    readOnly
+                    value={group}
+                />
                 <input
                     type="text"
                     value={messageInput}

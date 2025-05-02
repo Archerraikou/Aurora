@@ -16,9 +16,9 @@ namespace Aurora.Controllers
             _context = context;
         }
         [HttpPost("send")]
-        public async Task<ActionResult<Message>> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
+        public async Task<IActionResult> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
         {
-            Message newMessage=new();
+            GroupMessage newMessage = new();
             try
             {
                 newMessage.UserId = mes.UserId;
@@ -31,9 +31,9 @@ namespace Aurora.Controllers
                         // newMessage.AttachmentPath = uploadFile(attachment);
                 // }
                 newMessage.WasEdited = false;
+                newMessage.GroupId = mes.GroupId;
                 _context.Messages.Add(newMessage);
                 await _context.SaveChangesAsync();
-
 
                 return StatusCode(200);
             }
