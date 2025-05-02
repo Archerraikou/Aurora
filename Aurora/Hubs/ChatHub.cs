@@ -4,9 +4,19 @@ namespace SignalRChat.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+    
+        public async Task JoinGroup(string groupId)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
+        }
+
+        public async Task LeaveGroup(string groupId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
+        }
+        public async Task SendMessageToGroup(string userId, string message, string groupId)
+        {
+            await Clients.Group(groupId).SendAsync("ReceiveMessage", userId, message);
         }
     }
 }

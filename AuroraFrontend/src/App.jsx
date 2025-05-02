@@ -80,7 +80,7 @@ function App() {
         <Route path="/user/:userId" element = {<ShowUserPage />} />
         <Route path="/user/" element ={<IndexUserPage />} />
         <Route path="/user/edit/:userId" element={<EditUserPage/>}/>
-        <Route path="/messagetest/" element={<MessageTestPage/>}/>
+        <Route path="/messagetest/:groupId" element={<MessageTestPage/>}/>
       </Routes>
       </>
   )

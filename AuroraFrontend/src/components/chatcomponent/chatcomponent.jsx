@@ -3,7 +3,7 @@ import {HubConnectionBuilder} from '@microsoft/signalr'
 import "./chatcomponent.css"
 import Message from "../message/message.jsx"
 
-const ChatComponent = () => {
+const ChatComponent = ({groupId}) => {
     const [connection, setConnection] = useState(null);
     const [messages, setMessages] = useState([]);
     const [user, setUser] = useState('');
@@ -54,6 +54,7 @@ const ChatComponent = () => {
         {
             connection.start()
             .then(()=>{
+                connection.invoke("JoinGroup", groupId);
                 connection.on('ReceiveMessage', (user, message) =>{
                     setMessages(prev => [...prev, {user, message}]);
                 });
@@ -61,7 +62,12 @@ const ChatComponent = () => {
             
         }
         return () => {
-            if(connection) connection.stop();
+            if(connection)
+            {
+                connection.invoke('LeaveGroup', groupId);
+                connection.stop();
+
+            }
         };
     }, [connection]);
     const sendMessage = async (e) => {
@@ -79,7 +85,7 @@ const ChatComponent = () => {
         setMessageInput('');
         if (messageInput && user) {
             try {
-                await connection.invoke('SendMessage', user.nick, messageInput);
+                await connection.invoke('SendMessageToGroup', user.nick, messageInput, groupId);
                 const sendMessageToServer = async ()=>{
                     try{
 
@@ -110,7 +116,6 @@ const ChatComponent = () => {
             }
         }
     };
-    const group = "iddegrupfoarteinteresant"
     if(userData && !user)
         setUser(userData.nick);
     return (
@@ -126,7 +131,7 @@ const ChatComponent = () => {
                 <input
                     hidden
                     readOnly
-                    value={group}
+                    value={groupId}
                 />
                 <input
                     type="text"
