@@ -66,7 +66,7 @@ function EditUserPage()
         var updateUser = async (info) =>
         {
         try{
-            const response = await fetch(`https://localhost:7242/api/user/edit/${info.get("Id")}`,
+            const response = await fetch(`https://localhost:7242/api/ApplicationUsers/edit/${info.get("Id")}`,
                 {
                     method:"POST",
                     body: info 
@@ -98,7 +98,7 @@ function EditUserPage()
         const fetchData = async () =>{
             try
             {
-                const response = await fetch(`https://localhost:7242/api/User/${userId}`)
+                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/${userId}`)
                 if(!response.ok)
                 {
                     throw new Error(`HTTP Error! status: ${response.status}`);

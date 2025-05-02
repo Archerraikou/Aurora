@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./IndexUserPage.css"
 import AdminUserInfo from "../../components/adminuserinfo/adminuserinfo.jsx"
 import AdminButtons from "../../components/adminbuttons/adminbuttons.jsx";
+import Cookies from "universal-cookie";
 
 
 function IndexUserPage()
 {
+    var cookies= new Cookies();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,7 +15,12 @@ function IndexUserPage()
         const fetchData = async () =>{
             try
             {
-                const response = await fetch("https://localhost:7242/api/User");
+                const response = await fetch("https://localhost:7242/api/ApplicationUsers",{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization' : cookies.get('JWT')
+                    }
+                });
 
                 if(!response.ok)
                 {
@@ -49,7 +56,7 @@ function IndexUserPage()
                             userData.map((user)=> (
                                 <div>
                                     <AdminUserInfo userInfo={user}/>
-                                    <AdminButtons userId={user.id}/>
+                                    <AdminButtons userInfo={user}/>
                                     <hr/>
                                 </div>
                             ))}

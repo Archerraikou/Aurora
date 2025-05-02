@@ -1,7 +1,7 @@
 import "./adminbuttons.css"
 import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie'
-function AdminButtons({userInfo})
+function AdminButtons({userInfo} )
 {
     const cookies = new Cookies();
     const navigate = useNavigate();
@@ -9,7 +9,7 @@ function AdminButtons({userInfo})
         <div>
             <button onClick={async()=>{
                 try{
-                    const response = await fetch(`https://localhost:7242/api/ApplicationUsers/delete-account?id=${userInfo.id}`, {
+                    const response = await fetch(`https://localhost:7242/api/UserGroups?userId=${userInfo.id}&&groupId=${userInfo.groupid}`, {
                         method:"DELETE",
                         headers: {
                             'Authorization' : cookies.get('JWT')
@@ -27,8 +27,9 @@ function AdminButtons({userInfo})
             }}> Delete </button>
             {!userInfo.iscurrent && (<button onClick={async()=>{
                 try{
-                    var params= `?id=${userInfo.id}&&newrole=`+ (userInfo.role=='Admin'?'User':'Admin');
-                    const response = await fetch(`https://localhost:7242/api/ApplicationUsers/changeRole${params}`, {
+
+                    var params= `?userId=${userInfo.id}&&groupId=${userInfo.groupid}&&role=`+ (userInfo.role=='Admin'?'User':'Admin');
+                    const response = await fetch(`https://localhost:7242/api/UserGroups${params}`, {
                         method:"Patch",
                         headers: {
                             'Authorization' : cookies.get('JWT')

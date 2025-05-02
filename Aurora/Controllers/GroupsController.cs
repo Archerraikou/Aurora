@@ -33,7 +33,16 @@ namespace Aurora.Controllers
         public async Task<IActionResult> Index()
         {
             var groups = await db.Groups.Include("GroupCategory").ToListAsync();
-
+            var usId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (usId != null)
+            {
+                var us = await db.ApplicationUsers.Include(u => u.Interests).Where(u => u.Id == usId).FirstAsync();
+                var interests = us.Interests.Select(cu => cu.CategoryId).ToList();
+                var newGroups = groups.Where(g => g.GroupCategory.Any(gc => interests.Contains(gc.CategoryId))).ToList();
+                groups = groups.Except(newGroups).ToList();
+                newGroups.AddRange(groups);
+                groups = newGroups;
+            }
             var result = new List<object>();
 
             foreach (var g in groups)
@@ -263,7 +272,7 @@ namespace Aurora.Controllers
             }
             if (Picture == null || Picture.Length == 0)
             {
-                groupModel.GroupPicture = "wwwroot/images/group-pictures/default.jpg";
+                groupModel.GroupPicture = "https://localhost:7242/images/group-pictures/default.jpg";
             }
             else groupModel.GroupPicture = await UploadProfilePictureAsync(Picture);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -320,7 +329,8 @@ namespace Aurora.Controllers
             UserGroup ug = new UserGroup
             {
                 GroupId = id,
-                UserId = userId
+                UserId = userId,
+                IsAdmin= false
             };
             db.UserGroups.Add(ug);
             if (user.UserGroups == null)

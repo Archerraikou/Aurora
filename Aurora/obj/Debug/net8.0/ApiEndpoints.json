@@ -6,10 +6,51 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.ApplicationUsersController",
+    "Method": "Show",
+    "RelativePath": "api/ApplicationUsers/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
     "Parameters": [
       {
-        "Name": "groupId",
-        "Type": "System.Int32",
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Aurora.Models.ApplicationUser",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Aurora.Controllers.ApplicationUsersController",
+    "Method": "ChangeRole",
+    "RelativePath": "api/ApplicationUsers/changeRole",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "newrole",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],
@@ -22,7 +63,85 @@
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.ApplicationUsersController",
+    "Method": "Edit",
+    "RelativePath": "api/ApplicationUsers/edit/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "Id",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Nick",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicturePath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfileDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Aurora.Models.ApplicationUser",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Aurora.Controllers.ApplicationUsersController",
+    "Method": "GetImage",
+    "RelativePath": "api/ApplicationUsers/pfp/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -404,6 +523,69 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.UserGroupsController",
+    "Method": "Index",
+    "RelativePath": "api/UserGroups",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.UserGroupsController",
+    "Method": "ChangeRole",
+    "RelativePath": "api/UserGroups",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "role",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aurora.Controllers.UserGroupsController",
+    "Method": "EjectUser",
+    "RelativePath": "api/UserGroups",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

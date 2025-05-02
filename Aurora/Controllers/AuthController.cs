@@ -37,7 +37,7 @@ namespace Aurora.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Nickname = model.Nickname };
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Nickname = model.Nickname, ProfileDescription= "wwwroot/images/user-pictures/defaultpp.png" };
             user.EmailConfirmed = true;
             var result = await _userManager.CreateAsync(user, model.Password);
 

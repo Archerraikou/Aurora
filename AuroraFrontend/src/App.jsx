@@ -21,6 +21,7 @@ import IndexUserPage from './Pages/IndexUserPage/IndexUserPage.jsx';
 import ShowUserPage from './Pages/ShowUserPage/ShowUserPage.jsx';
 import EditUserPage from './Pages/EditUserPage/EditUserPage.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import IndexGroupMembers from "./Pages/IndexGroupMembers/IndexGroupMembers.jsx";
 function App() {
   const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
@@ -79,6 +80,7 @@ function App() {
         <Route path="/user/:userId" element = {<ShowUserPage />} />
         <Route path="/user/" element ={<IndexUserPage />} />
         <Route path="/user/edit/:userId" element={<EditUserPage/>}/>
+        <Route path= "/Group/Users" element={<IndexGroupMembers/>}/>
       </Routes>
       </>
   )

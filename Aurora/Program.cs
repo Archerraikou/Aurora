@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
+using Aurora.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,8 @@ builder.Services.AddCors(opt =>
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<GroupsController>();
 
 builder.Services.AddSingleton<IEmailSender, NullEmailSender>();
 
