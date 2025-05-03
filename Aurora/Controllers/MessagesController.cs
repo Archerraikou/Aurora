@@ -58,7 +58,7 @@ namespace Aurora.Controllers
         {
             //maybe this will work when we actually have everything sorted out for now its commented
             // var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include(m=>m.User).Include(m=>m.Group).FirstOrDefaultAsync();
-            var message = await _context.GroupMessages.Where(m=>m.Id == messageId).FirstOrDefaultAsync();
+            var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include("ApplicationUser").FirstOrDefaultAsync();
 
             if(message!=null)
             {

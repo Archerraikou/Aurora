@@ -140,7 +140,9 @@ const ChatComponent = ({groupId}) => {
 
                 };
                 const messageIdThatCameback = await sendMessageToServer();
-                connection.invoke('SendMessageToGroup',messageIdThatCameback, groupId)
+                console.log("De asemenea avem groupId-ul: " + groupId);
+                console.log(messageIdThatCameback);
+                connection.invoke('SendMessageToGroup', groupId, messageIdThatCameback.toString())
                 console.log("Message sent!!")
                 
             } catch (err) {

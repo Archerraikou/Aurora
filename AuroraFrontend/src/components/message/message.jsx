@@ -30,6 +30,7 @@ function Message({messageId})
         
         fetchMessage();
     },[messageId]);
+    console.log(message)
     return (
         <div>
             {messageId}
