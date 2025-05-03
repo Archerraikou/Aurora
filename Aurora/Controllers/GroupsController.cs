@@ -45,7 +45,7 @@ namespace Aurora.Controllers
                 UserId = user.Id,
 
                 // Set the SentId to the admin's Id (who is sending the notification)
-                SentId = int.TryParse(adminUserId, out var adminId) ? adminId : (int?)null,
+                SentId = adminUserId,
 
                 // Define the type of notification (e.g., "Group Request Approval")
                 Type = "Group Request Approval",  // You can make this dynamic based on the action
@@ -334,6 +334,7 @@ namespace Aurora.Controllers
             return Ok();
         }
         [Authorize]
+        [Authorize]
         [HttpGet("request")]
         public async Task<IActionResult> Request(int id)
         {
@@ -341,38 +342,58 @@ namespace Aurora.Controllers
             var group = await db.Groups.FindAsync(id);
 
             if (group == null)
-            {
                 return BadRequest("Group not found.");
-            }
 
             if (!group.IsPrivate.HasValue || !group.IsPrivate.Value)
-            {
                 return BadRequest("This group is not private.");
-            }
 
-            // Check if the user has already requested to join this group
+            // Check if the user has already requested to join
             var existingRequest = await db.UserGroups
                 .FirstOrDefaultAsync(ug => ug.UserId == userId && ug.GroupId == id && ug.IsRequested);
 
             if (existingRequest != null)
-            {
                 return BadRequest("You have already requested to join this group.");
-            }
 
-            // Create a new request for joining the private group
+            // Create the request
             var userGroupRequest = new UserGroup
             {
                 UserId = userId,
                 GroupId = id,
                 IsRequested = true,
-                IsApproved = false // Initially, it will be not approved
+                IsApproved = false
             };
 
             db.UserGroups.Add(userGroupRequest);
             await db.SaveChangesAsync();
 
+            // NOW send a notification to all admins
+            var admins = await db.UserGroups
+                .Where(ug => ug.GroupId == id && ug.IsAdmin == true)
+                .Select(ug => ug.UserId)
+                .ToListAsync();
+
+            foreach (var adminId in admins)
+            {
+                var notification = new Notification
+                {
+                    UserId = adminId, // Admin is the receiver
+                    SentId = userId,  // Requesting user is the sender
+                    Type = "Group Join Request",
+                    NotificationContent = $"User {User.Identity.Name} requested to join your group (ID: {id}).",
+                    NotificationDate = DateTime.UtcNow,
+                    IsRead = false
+                };
+
+                db.Notifications.Add(notification);
+            }
+
+            await db.SaveChangesAsync();
+
             return Ok("Request sent successfully.");
         }
+
+
+
         [HttpPost("approveRequest")]
         [Authorize]
         public async Task<IActionResult> ApproveRequest(int groupId, string userEmail, bool isApproved, string adminResponse)

@@ -57,7 +57,7 @@ function Login({ closeModal }) {
       cookies.set('ExpirationDate', expiration, { path: '/' });
 
       localStorage.setItem("isLoggedIn", "true");
-
+      
       if (closeModal) {
         closeModal();
       } else {

@@ -135,8 +135,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapIdentityApi<ApplicationUser>();
-app.UseRouting();
+
 app.UseCors("CorsPolicy");
+
+app.UseStaticFiles();
+
+
+
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
