@@ -57,8 +57,7 @@ namespace Aurora.Controllers
         public async Task<ActionResult<GroupMessage>> getMessage(int messageId)
         {
             //maybe this will work when we actually have everything sorted out for now its commented
-            // var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include(m=>m.User).Include(m=>m.Group).FirstOrDefaultAsync();
-            var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include("ApplicationUser").FirstOrDefaultAsync();
+            var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include("User").FirstOrDefaultAsync();
 
             if(message!=null)
             {

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 function Message({messageId})
 {
     const [message, setMessage] = useState(null);
+    const [loading, setLoading] = useState(true);
     // aici se poate configura sa arate bine mesajele :D
     // user - are toate informatiile utilizatorului
     // message - are mesajul
@@ -26,14 +27,22 @@ function Message({messageId})
             {
                 console.log(e.message);
             }
+            finally
+            {
+                setLoading(false);
             }
+        }
         
         fetchMessage();
     },[messageId]);
-    console.log(message)
+    if(loading)
+    {
+        return <div></div>
+    }
+    console.log(message.userId)
     return (
         <div>
-            {messageId}
+           <img src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname} </b>: {message.content};
         </div>
     );
 }
