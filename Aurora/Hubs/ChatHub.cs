@@ -14,9 +14,11 @@ namespace SignalRChat.Hubs
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
         }
-        public async Task SendMessageToGroup(string userId, string message, string groupId)
+        public async Task SendMessageToGroup(string messageId, string groupId)
         {
-            await Clients.Group(groupId).SendAsync("ReceiveMessage", userId, message);
+            Console.Write("Message ID: " + messageId);
+            Console.Write("Group ID: " + groupId);
+            await Clients.Group(groupId).SendAsync("ReceiveMessage", messageId);
         }
     }
 }

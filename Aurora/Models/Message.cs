@@ -9,7 +9,7 @@ namespace Aurora.Models
         public string? UserId { get; set; }
         public virtual ApplicationUser? User { get; set; }
         public string? Content { get; set; }
-        public ICollection<string>? AttachmentPaths {get;set;} 
+        public IList<string>? AttachmentPaths {get;set;} 
         public virtual ICollection<File>? Files { get; set; }
         public DateTime? Date { get; set; }
         public bool? WasEdited { get; set; }
