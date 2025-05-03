@@ -2,16 +2,41 @@ import React, {useState, useEffect} from 'react';
 import {HubConnectionBuilder} from '@microsoft/signalr'
 import "./chatcomponent.css"
 import Message from "../message/message.jsx"
+import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils.js';
 
 const ChatComponent = ({groupId}) => {
     const [connection, setConnection] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [messageId, setMessageId] = useState();
+    const [messageId, setMessageId] = useState(null);
     const [user, setUser] = useState('');
     const [messageInput, setMessageInput] = useState('');
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // async function getMesssages(messageId)
+    // {
+    //     try
+    //     {
+    //         const response = await fetch(`https://localhost:7242/api/Message/Show/`,{
+    //             method:"GET",
+    //             body: messageId
+    //         });
+    //         if(!response.ok)
+    //         {
+    //             console.log(response.error);
+    //         }
+    //         console.log(response);
+    //         return response;
+
+    //     }
+    //     catch(e)
+    //     {
+    //         console.log("Error:" + e.message)
+    //     }
+    //     return message;
+    // }
+
+    // PRELUAM INFORMATII DESPRE UTILIZATOR
     useEffect(()=>{
         const fetchData = async () =>{
             try
@@ -37,10 +62,11 @@ const ChatComponent = ({groupId}) => {
         if(!userData)
         {
             fetchData();
-
         }
     });
 
+
+    // NE CONECTAM LA HUB DE SIGNALR
     useEffect(() =>{
         const newConnection = new HubConnectionBuilder()
         .withUrl('https://localhost:7242/chathub')
@@ -50,14 +76,16 @@ const ChatComponent = ({groupId}) => {
         setConnection(newConnection);
     }, []);
 
+    // NE CONTECTAM LA GRUPUL DE SIGNALR SI PORNIM SA PRIMIM MESAJE DE PE GRUP
     useEffect(()=>{
         if(connection)
         {
             connection.start()
             .then(()=>{
                 connection.invoke("JoinGroup", groupId);
-                connection.on('ReceiveMessage', (user, message) =>{
-                    setMessages(prev => [...prev, {user, message}]);
+                connection.on('ReceiveMessage', (messageId) =>{
+
+                    setMessages(prev => [...prev, messageId]);
                 });
             }).catch(console.error);
             
@@ -67,43 +95,41 @@ const ChatComponent = ({groupId}) => {
             {
                 connection.invoke('LeaveGroup', groupId);
                 connection.stop();
-
             }
         };
     }, [connection]);
+
+
+    // FUNCTIA ASTA ESTE APELATA ATUNCI CAND SE FACE SUBMIT LA FORM (se trimite mesajul)
     const sendMessage = async (e) => {
         e.preventDefault();
+        // Preluam informatiile din form si le facem un formData
         const formData = new FormData();
-        console.log("This is the form data console log dumbass: ")
-        console.log(e.target[0].value)
         formData.append("UserId", e.target[0].value)
-        console.log(e.target[1].value)
-        // Groups are not yet made
-        // formData.append("GroupId", e.target[1].value)
-        console.log(e.target[2].value)
         formData.append("Content", e.target[2].value)
-        console.log(formData)
-        setMessageInput('');
+        formData.append("GroupId", e.target[1].value)
         if (messageInput && user) {
+            setMessageInput('');
             try {
-                await connection.invoke('SendMessageToGroup', user.nick, messageInput, groupId);
+                // Functia asta trimite informatiile din formData in baza de date, si apoi trimite id-ul mesajului in signalR
                 const sendMessageToServer = async ()=>{
                     try{
-
-                        const response = await fetch("https://localhost:7242/api/Messages/send", {
-                            method: "POST",
-                            body: formData
-                        })
-                        if(!response.ok)
-                        {
-                            console.log(response.status)
-                        }
-                        else
-                        {
-                            console.log("Message sent!!")
-                            var messageId = await response.json();
-                            console.log(messageId);
-                        }
+                        
+                            const response = await fetch("https://localhost:7242/api/Messages/send", {
+                                method: "POST",
+                                body: formData
+                            })
+                            if(!response.ok)
+                            {
+                                console.log(response.status)
+                            }
+                            else
+                            {
+                                const constantmessageId = await response.json();
+                                setMessageId(constantmessageId);
+                                console.log("Mesajul a fost trimis in baza de date si are id-ul: " + constantmessageId);
+                                return constantmessageId;   
+                            }
 
                 
                     }
@@ -113,7 +139,10 @@ const ChatComponent = ({groupId}) => {
                     }
 
                 };
-                sendMessageToServer();
+                const messageIdThatCameback = await sendMessageToServer();
+                connection.invoke('SendMessageToGroup',messageIdThatCameback, groupId)
+                console.log("Message sent!!")
+                
             } catch (err) {
                 console.error(err);
             }
@@ -125,7 +154,7 @@ const ChatComponent = ({groupId}) => {
         <div>
             <h2>Chat</h2>
             {/* Messagebar */}
-            <form action="sendMessage" onSubmit={sendMessage}>
+            <form onSubmit={sendMessage}>
                 <input 
                     hidden
                     readOnly
@@ -146,8 +175,8 @@ const ChatComponent = ({groupId}) => {
             </form>
             {/* Messages tab */}
             <div>
-                {messages.map((msg, index) => (
-                    <Message key={index} message={msg} user={userData}/>
+                {messages.map((msgId, index) => (
+                    <Message key={index} messageId={msgId}/>
                 ))}
             </div>
         </div>
