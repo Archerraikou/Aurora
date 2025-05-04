@@ -22,12 +22,22 @@
   margin-left: 5px;
   justify-content: flex-start;
   image-rendering: smooth;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
 .name-group {
   font-weight: bold;
   /* margin-bottom: 4px; */
   opacity: 0;
+  margin-left: 5px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.nume-group {
+  font-weight: bold;
+  /* margin-bottom: 4px; */
+
   margin-left: 5px;
   pointer-events: none;
   transition: opacity 0.3s ease;

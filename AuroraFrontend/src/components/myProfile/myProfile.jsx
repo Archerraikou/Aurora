@@ -6,8 +6,9 @@ function MyProfile(props) {
   const { name, image } = props;
   return (
     <div className="bottom">
-      {/* <hr></hr> */}
-      <NavbarItem name={name} image={image}></NavbarItem>
+      <div className="navbar-item-profile">
+        <img src={image} className="img-gr" />
+      </div>
     </div>
   );
 }

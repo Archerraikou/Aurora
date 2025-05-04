@@ -5,28 +5,33 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
+using Aurora.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Database connection
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+// Add services
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-
+builder.Services.AddSignalR(o=>o.EnableDetailedErrors = true);
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger config
 builder.Services.AddSwaggerGen(o =>
 {
     o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
@@ -40,7 +45,7 @@ builder.Services.AddSwaggerGen(o =>
         BearerFormat = "JWT"
     };
     o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-    var securityRequirement = new OpenApiSecurityRequirement
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
@@ -53,17 +58,20 @@ builder.Services.AddSwaggerGen(o =>
             },
             new string[] { }
         }
-    };
-    o.AddSecurityRequirement(securityRequirement);
-});
-
-builder.Services.AddCors(opt =>
-{
-    opt.AddPolicy("CorsPolicy", policyBuiler =>
-    {
-        policyBuiler.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
     });
 });
+
+// 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
+});
+
+// Identity
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -86,6 +94,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
+// Seed roles
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -99,20 +108,22 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapIdentityApi<ApplicationUser>();
-app.UseCors("CorsPolicy");
-
 app.UseStaticFiles();
 
-app.Use(async (context, next) =>
-{
-    Console.WriteLine("Request path: " + context.Request.Path);
-    await next();
-});
-
 app.UseRouting();
+
+app.UseCors("AllowAll");  // 
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
+
+// 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<VideoHub>("/Call");
+});
 
 app.Run();
