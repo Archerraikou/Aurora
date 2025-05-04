@@ -212,8 +212,9 @@
         "src/WebSocketTransport.ts",
         "src/XhrHttpClient.ts",
         "package.json",
-        "README.md"
-      ]
+        "README.md",
+        "dist/browser/signalr.js"
+      ] 
     }
   ]
 }

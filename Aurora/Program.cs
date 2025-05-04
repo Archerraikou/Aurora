@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
+using SignalRChat.Hubs;
 
 using Aurora.Controllers;
 
@@ -67,20 +68,31 @@ builder.Services.AddSwaggerGen(o =>
             },
             new string[] { }
         }
+
     });
 });
 
-// 
+// builder.Services.AddCors(opt =>
+// {
+//     opt.AddPolicy("CorsPolicy", policyBuiler =>
+//     {
+//         policyBuiler.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+//     });
+// });
+
+builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials());
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // React app port
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
-// Identity
+
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -121,6 +133,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
 app.UseRouting();
 
 app.UseCors("AllowAll");  // 
@@ -130,6 +143,8 @@ app.UseAuthorization();
 
 app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
+app.MapHub<ChatHub>("/chatHub");
+
 
 // 
 app.UseEndpoints(endpoints =>

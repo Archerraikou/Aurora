@@ -30,7 +30,7 @@ import IndexGroupMembers from "./Pages/IndexGroupMembers/IndexGroupMembers.jsx";
 import Categories from "./Pages/Categories/Categories.jsx";
 import QuizGenerate from "./Pages/QuizGenerate/QuizGenerate.jsx";
 import Call from "./Pages/Call/Call.jsx";
-
+import MessageTestPage from "./Pages/MessageTestPage/MessageTestPage.jsx";
 function App() {
   const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
@@ -109,6 +109,7 @@ function App() {
         <Route path="/Group/Users" element={<IndexGroupMembers/>}/>
         <Route path="/Categories" element={<Categories/>}/>
         <Route path="/Quiz" element={<QuizGenerate/>}/>
+        <Route path="/messagetest/:groupId" element={<MessageTestPage/>}/>
       </Routes>
     </>
   );
