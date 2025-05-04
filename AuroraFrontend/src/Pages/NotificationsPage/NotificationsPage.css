@@ -1,0 +1,149 @@
+/* NotificationsPage.css */
+
+.notifications-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: var(--principal);
+    min-height: 100vh;
+  }
+  
+  .notifications-title {
+    color: #333;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  .notification-card {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+  }
+  
+  .notification-card.read {
+    background-color: #f8f9fa;
+    border-left: 4px solid #adb5bd;
+  }
+  
+  .notification-card.unread {
+    background-color: #e8f4fd;
+    border-left: 4px solid #0d6efd;
+  }
+  
+  .notification-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #212529;
+  }
+  
+  .notification-status {
+    font-weight: bold;
+  }
+  
+  .notification-status.approved {
+    color: #4CAF50;
+  }
+  
+  .notification-status.rejected {
+    color: #dc3545;
+  }
+  
+  .notification-date {
+    color: #6c757d;
+    font-size: 0.9em;
+  }
+  
+  .notification-message {
+    margin: 8px 0;
+  }
+  
+  .admin-response {
+    padding: 8px;
+    margin: 10px 0;
+    border-left: 3px solid;
+  }
+  
+  .admin-response.approved {
+    border-color: #4CAF50;
+  }
+  
+  .admin-response.rejected {
+    border-color: #dc3545;
+  }
+  
+  .admin-response-text {
+    margin: 0;
+    color: #495057;
+    font-style: italic;
+  }
+  
+  .notification-footer {
+    color: #6c757d;
+    font-size: 0.9em;
+    text-align: right;
+  }
+  
+  /* Pagination styles */
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    padding: 8px 12px;
+    background-color: #0d6efd;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .pagination-button:disabled {
+    cursor: not-allowed;
+    background-color: #6c757d;
+  }
+  
+  .pagination-info {
+    color: #333;
+  }
+  .notification-message {
+    color: #333333; /* Darker text */
+    font-size: 16px;
+    font-weight: 500; /* Semi-bold */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .admin-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .accept-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .reject-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .accept-button:hover, .reject-button:hover {
+    opacity: 0.8;
+  }
+  

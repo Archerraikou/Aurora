@@ -240,6 +240,15 @@ namespace Aurora.Controllers
                 }
                 user.UserEvents.Add(userEvent);
                 db.UserEvents.Add(userEvent);
+                var notification = new Notification
+                {
+                    UserId = user.Id,
+                    NotificationContent = $"You have been added to a new event: {newEvent.Title}",
+                    NotificationDate = DateTime.UtcNow,
+                    Type = "Event",
+                    IsRead = false
+                };
+                db.Notifications.Add(notification);
             }
 
             db.Events.Add(newEvent);

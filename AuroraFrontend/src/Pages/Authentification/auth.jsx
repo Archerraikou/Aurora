@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Login from "../../components/login/login.jsx";
@@ -10,17 +11,14 @@ function Auth() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="app-container">
-      <button
-        className="login-button"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-      >
+      <button className="login-button" onClick={() => setIsModalOpen(!isModalOpen)}>
         Login
       </button>
       {isModalOpen && (
         <>
           <Backdrop onClick={() => setIsModalOpen(false)} />
           <Modal>
-            <Login closeModal={() => setIsModalOpen(false)}></Login>
+            <Login closeModal={() => setIsModalOpen(false)} />
           </Modal>
         </>
       )}

@@ -36,7 +36,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddHttpClient();
 
 
-builder.Services.AddSignalR(o=>o.EnableDetailedErrors = true);
+builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 
 builder.Services.AddEndpointsApiExplorer();
 

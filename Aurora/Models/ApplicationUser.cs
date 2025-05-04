@@ -18,6 +18,8 @@ namespace Aurora.Models
         public virtual ICollection<UserGroup>? UserGroups { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? AllRoles { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
 
     }
 }

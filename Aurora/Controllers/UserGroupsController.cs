@@ -124,24 +124,102 @@ namespace Aurora.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> EjectUser(string userId, int groupId)
+        public async Task<IActionResult> EjectUser(string userId)
         {
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUserGroup = await db.UserGroups.FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == id && ug.IsAdmin == true);
-            if (currentUserGroup == null)
+            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current admin user ID
+
+            // Find all groups where the current user is an admin
+            var adminUserGroups = await db.UserGroups
+                .Where(ug => ug.UserId == adminUserId && ug.IsAdmin == true)
+                .ToListAsync();
+
+            if (adminUserGroups.Count == 0)
+            {
+                return BadRequest(new { message = "You are not an admin of any group." });
+            }
+
+            // Find the user group association for the specified user (the one to be ejected)
+            var userGroup = await db.UserGroups
+                .Where(ug => ug.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (userGroup == null)
+            {
+                return NotFound(new { message = "User not found in any group." });
+            }
+
+            // Find the group that the user is part of
+            var group = await db.Groups
+                .Where(g => g.Id == userGroup.GroupId)
+                .Include(g => g.Users) // Include users for removal from the group
+                .FirstOrDefaultAsync();
+
+            if (group == null)
+            {
+                return NotFound(new { message = "Group not found." });
+            }
+
+            // Check if the current admin is an admin of this group
+            var isAdminOfGroup = adminUserGroups.Any(ug => ug.GroupId == group.Id);
+
+            if (!isAdminOfGroup)
             {
                 return BadRequest(new { message = "You are not the admin of this group." });
             }
-            var userGroup = db.UserGroups.Where(ug => ug.UserId == userId && ug.GroupId == groupId).FirstOrDefault();
-            if (userGroup == null) {
-                return NotFound(new { message = "There is no such user in the group or there is no such group." });
+
+            // Remove the user from the group
+            db.UserGroups.Remove(userGroup);
+
+            // Remove the user from the group's users collection
+            var groupUser = group.Users.FirstOrDefault(ug => ug.UserId == userId);
+            if (groupUser != null)
+            {
+                group.Users.Remove(groupUser);
             }
-            var user = await db.ApplicationUsers.Include("UserGroups").Where(u => u.Id == userId).FirstAsync();
-            user.UserGroups.Remove(userGroup);
-            var group= await db.Groups.Include("Users").Where(g=> g.Id==groupId).FirstAsync();
-            group.Users.Remove(userGroup);
-            db.SaveChanges();
-            return Ok();
+
+            // Send a notification to the user that they were removed from the group
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                // Check if the group ID is not null before passing it
+                int groupId = group.Id ?? 0; // Default to 0 if groupId is null. Adjust if needed.
+
+                await SendNotification(
+                    adminUserId: adminUserId,
+                    userEmail: user.Email,
+                    groupId: groupId, // Now passing a non-nullable int
+                    message: $"You have been removed from the group with ID '{group.Id}' by an administrator."
+                );
+            }
+
+            // Save changes to the database
+            await db.SaveChangesAsync();
+
+            return Ok(new { message = "User has been ejected from the group." });
         }
+
+        private async Task SendNotification(string adminUserId, string userEmail, int groupId, string message)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null) return;
+
+            var notification = new Notification
+            {
+                UserId = user.Id,
+                SentId = adminUserId,
+                Type = "Group Expulsion",
+                NotificationContent = message,
+                NotificationDate = DateTime.UtcNow,
+                IsRead = false
+            };
+
+            db.Notifications.Add(notification);
+            await db.SaveChangesAsync();
+        }
+
+
+
+
+
     }
 }

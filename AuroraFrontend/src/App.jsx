@@ -1,7 +1,7 @@
 import MainPage from "./Pages/MainPage/MainPage.jsx";
 import Navbar from "./components/navbar/navbar.jsx";
 import SearchBar from "./components/searchBar/searchBar.jsx";
-import Auth from "./Pages/Authentification/auth.jsx";
+import Auth from "./pages/Authentification/auth.jsx";
 import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
 import CreateEvent from "./Pages/CreateEvent/CreateEvent.jsx";
 
@@ -16,7 +16,11 @@ import CreateGroup from "./Pages/CreateGroup/CreateGroup.jsx"
 import EditGroup from './Pages/EditGroup/EditGroup.jsx';
 import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
-import ViewGroup from './Pages/ViewGroup/ViewGroup.jsx';
+import ViewGroup from './pages/ViewGroup/ViewGroup.jsx';
+import Login from './components/login/login.jsx';
+import NotificationsPage from './pages/NotificationsPage/NotificationsPage.jsx';
+import NotificationDetailPage from './pages/NotificationDetailPage/NotificationDetailPage.jsx';
+
 import EditEvent from './Pages/EditEvent/EditEvent.jsx';
 import IndexUserPage from './Pages/IndexUserPage/IndexUserPage.jsx';
 import ShowUserPage from './Pages/ShowUserPage/ShowUserPage.jsx';
@@ -28,59 +32,66 @@ import QuizGenerate from "./Pages/QuizGenerate/QuizGenerate.jsx";
 import Call from "./Pages/Call/Call.jsx";
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
+
   useEffect(() => {
-    async function Refresh() {
-      if (
-        cookies.get("ExpirationDate") - Date.now() < 5 * 60 * 1000 &&
-        cookies.get("JWT") != null
-      ) {
+    async function refreshToken() {
+      const exp = cookies.get("ExpirationDate");
+      const jwt = cookies.get("JWT");
+      const refreshToken = cookies.get("JWTRefresh");
+
+      if (exp && jwt && refreshToken && exp - Date.now() < 5 * 60 * 1000) {
         try {
-          var Refresh = { refreshToken: cookies.get("JWTRefresh") };
-          const response = await fetch("https://localhost:7242/refresh", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(Refresh),
+          const body = { refreshToken };
+
+          const response = await fetch('https://localhost:7242/refresh', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
           });
+
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            throw new Error('Token refresh failed');
           }
-          const json = await response.json();
-          cookies.set("JWT", "Bearer " + json.accessToken, { path: "/" });
-          cookies.set("JWTRefresh", json.refreshToken, { path: "/" });
-          cookies.set("ExpirationDate", json.expiresIn * 1000 + Date.now(), {
-            path: "/",
+
+          const data = await response.json();
+          cookies.set('JWT', `Bearer ${data.accessToken}`, { path: '/' });
+          cookies.set('JWTRefresh', data.refreshToken, { path: '/' });
+          cookies.set('ExpirationDate', data.expiresIn * 1000 + Date.now(), { path: '/' });
+
+          // Get user role after refresh
+          const roleResponse = await fetch('https://localhost:7242/api/Auth/roles', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${data.accessToken}`
+            }
           });
-          try {
-            const response = await fetch(
-              "https://localhost:7242/api/Auth/roles",
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: cookies.get("JWT"),
-                },
-              }
-            );
-            const json = await response.json();
-            cookies.set("Roles", json.roles[0], { path: "/" });
-          } catch (error) {
-            console.log("Error getting role:", error);
+
+          const roleData = await roleResponse.json();
+          if (roleData?.roles?.length > 0) {
+            cookies.set("Roles", roleData.roles[0], { path: '/' });
           }
+
         } catch (error) {
-          console.error("Error during login:", error);
+          console.error('Error during token refresh:', error);
         }
-      } else return () => {};
+      }
     }
-    Refresh();
+
+    refreshToken();
   }, []);
+
   return (
-    <>
+      <>
       <Navbar></Navbar>
       <SearchBar></SearchBar>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/auth" element={<Home />} />
         <Route path="/Registration" element={<Registration />} />
         <Route path="/Group/Create" element={<CreateGroup />} />
@@ -88,7 +99,8 @@ function App() {
         <Route path="/Group/Show" element={<ViewGroup />} />
         <Route path="/Group/Menu/*" element={<GroupPage />} />
         <Route path="/Call/*" element={<Call />}></Route>
-
+        <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/notification/:id" element={<NotificationDetailPage />} />
         <Route path='/Event/Create/:groupId' element={<CreateEvent/>}></Route>
         <Route path='/Event/Edit/:id' element={<EditEvent/>}></Route>
         <Route path="/user/:userId" element = {<ShowUserPage />} />
