@@ -3,10 +3,12 @@
   background-color: var(--secundar);
   display: flex;
   position: fixed;
-  width: 100%;
+  width: 94%;
   z-index: 10;
   align-items: center;
   height: 4.4%;
+  flex-direction: row;
+  box-shadow: 0 0 50px rgb(34, 34, 34, 0.5);
 }
 
 .search-bar {
@@ -31,9 +33,9 @@
   color: white;
 }
 
-.useCategory{
+.useCategory {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   margin-top: 10px;
   gap: 5px;
 }

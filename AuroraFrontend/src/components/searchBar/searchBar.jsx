@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "./searchBar.css";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
+import MyProfile from "../myProfile/myProfile";
 
 function SearchBar() {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
-  const [useCategory, setUseCategory]= useState(false);
+  const [useCategory, setUseCategory] = useState(false);
   const cookies = new Cookies();
 
   const handleChange = (event) => {
@@ -14,14 +15,17 @@ function SearchBar() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!useCategory){
+    if (!useCategory) {
       try {
-        const response = await fetch(`https://localhost:7242/api/Groups/search?search=${search}`, {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': cookies.get('JWT')
-          },
-        });
+        const response = await fetch(
+          `https://localhost:7242/api/Groups/search?search=${search}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: cookies.get("JWT"),
+            },
+          }
+        );
 
         if (response.ok) {
           const json = await response.json();
@@ -30,18 +34,20 @@ function SearchBar() {
           setResults([]);
         }
       } catch (error) {
-        console.error('Error during search:', error);
+        console.error("Error during search:", error);
         setResults([]);
       }
-    }
-    else{
+    } else {
       try {
-        const response = await fetch(`https://localhost:7242/api/Groups/search?search=${search}&&param=1`, {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': cookies.get('JWT')
-          },
-        });
+        const response = await fetch(
+          `https://localhost:7242/api/Groups/search?search=${search}&&param=1`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: cookies.get("JWT"),
+            },
+          }
+        );
 
         if (response.ok) {
           const json = await response.json();
@@ -50,35 +56,40 @@ function SearchBar() {
           setResults([]);
         }
       } catch (error) {
-        console.error('Error during search:', error);
+        console.error("Error during search:", error);
         setResults([]);
       }
     }
   };
 
   return (
-    <div className="Ceva">
-      <form onSubmit={handleSubmit}>
-        <div className="header">
-          <input
-            className="search-bar"
-            type="text"
-            name="search"
-            placeholder="Search"
-            value={search}
-            onChange={handleChange}
-          />
-        </div>
-        <br/>
-        <br/>
-        <br/>
+    <div>
+      <form className="header" onSubmit={handleSubmit}>
+        <input
+          className="search-bar"
+          type="text"
+          name="search"
+          placeholder="Search"
+          value={search}
+          onChange={handleChange}
+        />
+
         <div className="useCategory">
-          <input type="checkbox" name="useCategory" id="useCategory" onChange={()=>setUseCategory(!useCategory)}/>
+          <input
+            type="checkbox"
+            name="useCategory"
+            id="useCategory"
+            onChange={() => setUseCategory(!useCategory)}
+          />
           <label htmlFor="useCategory">Search by Category now</label>
         </div>
         <button className="btn" type="submit">
-            Search
-          </button>
+          Search
+        </button>
+        <MyProfile
+          name="Diocletian"
+          image="https://avatars.githubusercontent.com/u/110779745?v=4"
+        ></MyProfile>
       </form>
       <div className="search-results">
         {results.length > 0 ? (
@@ -89,13 +100,16 @@ function SearchBar() {
                 <div>
                   {group.picture && (
                     <img src={"../../../Aurora/wwwroot/images"+group.Picture} alt="Group" width="100" />
+
                   )}
                   <h3>{group.name}</h3>
                 </div>
                 <p>{group.description}</p>
                 <p>Admin: {group.admin}</p>
                 <p>Categories: {group.categories?.join(", ")}</p>
-                <p>Creation date: {new Date(group.date).toLocaleDateString()}</p>
+                <p>
+                  Creation date: {new Date(group.date).toLocaleDateString()}
+                </p>
                 <p>Private: {group.isPrivate ? "Yes" : "No"}</p>
               </li>
             ))}
