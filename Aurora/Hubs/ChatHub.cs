@@ -22,9 +22,6 @@ namespace SignalRChat.Hubs
         {
             if(message!=null && groupId !=null)
             {
-                Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                Console.WriteLine("Message ID: " + message);
-                Console.WriteLine("Group ID: " + groupId);
                 await Clients.Group(groupId).SendAsync("ReceiveMessage", message);
             }
             
