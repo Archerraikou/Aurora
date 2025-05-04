@@ -103,11 +103,13 @@ namespace Aurora.Controllers
                     });
                 }
 
+                // Create new user
                 var user = new ApplicationUser
                 {
                     UserName = email,
                     Email = email,
                     Nickname = !string.IsNullOrWhiteSpace(nickname) ? nickname : email.Split('@')[0],
+                    ProfileDescription = "wwwroot/images/user-pictures/defaultpp.png",
                     EmailConfirmed = false
                 };
 
@@ -184,6 +186,7 @@ namespace Aurora.Controllers
                 });
             }
         }
+
 
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)

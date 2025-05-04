@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using System.Security.Claims;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Aurora.Controllers
 {
@@ -69,7 +70,16 @@ namespace Aurora.Controllers
         public async Task<IActionResult> Index()
         {
             var groups = await db.Groups.Include("GroupCategory").ToListAsync();
-
+            var usId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (usId != null)
+            {
+                var us = await db.ApplicationUsers.Include(u => u.Interests).Where(u => u.Id == usId).FirstAsync();
+                var interests = us.Interests.Select(cu => cu.CategoryId).ToList();
+                var newGroups = groups.Where(g => g.GroupCategory.Any(gc => interests.Contains(gc.CategoryId))).ToList();
+                groups = groups.Except(newGroups).ToList();
+                newGroups.AddRange(groups);
+                groups = newGroups;
+            }
             var result = new List<object>();
 
             foreach (var g in groups)
@@ -260,7 +270,7 @@ namespace Aurora.Controllers
             }
             if (Picture == null || Picture.Length == 0)
             {
-                groupModel.GroupPicture = "wwwroot/images/group-pictures/default.jpg";
+                groupModel.GroupPicture = "https://localhost:7242/images/group-pictures/default.jpg";
             }
             else groupModel.GroupPicture = await UploadProfilePictureAsync(Picture);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -493,7 +503,49 @@ namespace Aurora.Controllers
         }
 
 
+        [Authorize]
+        [HttpGet("search")]
 
+        public async Task<IActionResult> Search(string search, int param = 0)
+        {
+            var groupsId = new List<int?>();
+            var result = new List<object>();
+            if (param == 0)
+            {
+                groupsId = db.Groups.Where(g => g.GroupName.Contains(search) || g.GroupDescription.Contains(search)).Select(g => g.Id).ToList();
+            }
+            else
+            {
+                var categoryIds = db.Categorys.Where(c => c.CategoryName.Contains(search) || c.CategoryDescription.Contains(search)).Select(c => c.Id).ToList();
+                foreach (var category in categoryIds)
+                {
+                    var ids = db.CategoryGroups.Where(cg => cg.CategoryId == category).Select(cg => cg.GroupId).ToList();
+                    groupsId.AddRange(ids);
+                }
+            }
+            var groups = db.Groups.Where(g => groupsId.Contains(g.Id)).Include(g => g.GroupCategory).ThenInclude(gc => gc.Category).ToList();
+            foreach (var g in groups)
+            {
+                var categs = new List<int?>();
+                var admin = await _userManager.FindByIdAsync(g.UserId);
+                foreach (var cg in g.GroupCategory)
+                {
+                    categs.Add((int)cg.CategoryId);
+                }
+                result.Add(new
+                {
+                    Id = g.Id,
+                    Name = g.GroupName,
+                    Description = g.GroupDescription,
+                    Picture = g.GroupPicture,
+                    Categories = categs,
+                    Admin = admin?.Nickname,
+                    Date = g.CreatedDate,
+                    isPrivate = g.IsPrivate
+                });
+            }
+            return Ok(result);
+        }
         private async Task<string> UploadProfilePictureAsync(IFormFile file)
         {
             if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
@@ -509,7 +561,7 @@ namespace Aurora.Controllers
             {
                 await file.CopyToAsync(fileStream);
             }
-            return Path.Combine("uploads", fileName);
+            return "https://localhost:7242/images/" + fileName;
         }
     }
 }

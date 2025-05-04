@@ -1,0 +1,23 @@
+.create-button {
+    height: 15%;
+    width: 10%;
+    position: relative;
+    bottom: -20%;
+    right: -5%;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    z-index: 20;
+}
+.categories {
+    display: flex;
+    width: 300%;
+    height: 50%;
+    position: relative;
+    top:10%;
+}

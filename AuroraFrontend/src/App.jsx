@@ -9,7 +9,6 @@ import Modal from './components/modal/modal.jsx';
 import Backdrop from './components/backdrop/backdrop.jsx';
 import Calendar from './components/calendar/calendar.jsx'
 import Outlet from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Registration from "./Pages/Registration/Registration.jsx"
 import Home from "./Pages/Home/Home.jsx"
 import CreateGroup from "./Pages/CreateGroup/CreateGroup.jsx"
@@ -22,6 +21,13 @@ import NotificationsPage from './pages/NotificationsPage/NotificationsPage.jsx';
 import NotificationDetailPage from './pages/NotificationDetailPage/NotificationDetailPage.jsx';
 
 import EditEvent from './Pages/EditEvent/EditEvent.jsx';
+import IndexUserPage from './Pages/IndexUserPage/IndexUserPage.jsx';
+import ShowUserPage from './Pages/ShowUserPage/ShowUserPage.jsx';
+import EditUserPage from './Pages/EditUserPage/EditUserPage.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import IndexGroupMembers from "./Pages/IndexGroupMembers/IndexGroupMembers.jsx";
+import Categories from "./Pages/Categories/Categories.jsx";
+import QuizGenerate from "./Pages/QuizGenerate/QuizGenerate.jsx";
 function App() {
   const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
@@ -94,6 +100,13 @@ function App() {
         <Route path="/notification/:id" element={<NotificationDetailPage />} />
         <Route path='/Event/Create/:groupId' element={<CreateEvent/>}></Route>
         <Route path='/Event/Edit/:id' element={<EditEvent/>}></Route>
+        <Route path="/user/:userId" element = {<ShowUserPage />} />
+
+        <Route path="/user/" element ={<IndexUserPage />} />
+        <Route path="/user/edit/:userId" element={<EditUserPage/>}/>
+        <Route path="/Group/Users" element={<IndexGroupMembers/>}/>
+        <Route path="/Categories" element={<Categories/>}/>
+        <Route path="/Quiz" element={<QuizGenerate/>}/>
       </Routes>
     </>
   );

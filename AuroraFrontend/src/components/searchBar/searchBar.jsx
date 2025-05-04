@@ -88,7 +88,7 @@ function SearchBar() {
                 {console.log(group)}
                 <div>
                   {group.picture && (
-                    <img src={"../../../Aurora/wwwroot/"+group.Picture} alt="Group" width="100" />
+                    <img src={"../../../Aurora/wwwroot/images"+group.Picture} alt="Group" width="100" />
                   )}
                   <h3>{group.name}</h3>
                 </div>

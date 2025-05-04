@@ -1,0 +1,19 @@
+.editUserForm
+{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.editUserForm input {
+    background-color: gray;
+}
+.editUserForm textarea {
+    background-color: gray;
+}
+
+.formInterests
+{
+    overflow-y:scroll;
+    max-height: 5em;
+}

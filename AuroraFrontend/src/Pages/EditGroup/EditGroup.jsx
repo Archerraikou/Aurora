@@ -98,14 +98,14 @@ function EditGroup(){
             headers: { 
                 'Authorization' : cookies.get('JWT')
             }});
-            if (!response.ok) {
+            if (response.ok) {
                 navigate("/");
             }
             else {
                 console.log("Group deletion failed");
             };
         } catch (error) {
-            console.error('Error during group creation:', error);
+            console.error('Error during group deletion:', error);
         }
     }
     const handleSubmit = async (e) => {

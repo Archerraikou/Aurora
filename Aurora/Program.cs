@@ -12,6 +12,8 @@ using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
 using Aurora.Services;
+using Aurora.Controllers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,7 @@ builder.Services.AddAuthentication("Bearer")
 
 
 builder.Services.AddAuthorization();
+builder.Services.AddHttpClient();
 
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
@@ -93,6 +96,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 {
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero; // Disable lockout
@@ -101,6 +105,10 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
 .AddRoles<IdentityRole>() // ? Add this line to enable roles
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+builder.Services.AddScoped<GroupsController>();
+
+//builder.Services.AddSingleton<IEmailSender, NullEmailSender>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;
