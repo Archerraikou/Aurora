@@ -25,22 +25,20 @@ namespace Aurora.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var query = _context.Notifications.AsQueryable();
-
             if (unreadOnly)
             {
-                query = query.Where(n => n.UserId == userId && !n.IsRead);
+                var notifications = await _context.Notifications.Where(n => n.UserId == userId && n.IsRead==false)
+                 .OrderByDescending(n => n.NotificationDate)
+                 .ToListAsync();
+                return Ok(notifications);
             }
             else
             {
-                query = query.Where(n => n.UserId == userId);
-            }
-
-            var notifications = await query
+                var notifications = await _context.Notifications.Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.NotificationDate)
                 .ToListAsync();
-
-            return Ok(notifications);
+                return Ok(notifications);
+            }
         }
 
         // Get and mark a single notification as read

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Cookies from 'universal-cookie'
 import { useNavigate, useLocation } from 'react-router-dom';
-import Modal from '../../components/modal/modal';
+import Modal from '../../components/Modal/modal';
 import './CreateEvent.css'
 import fetchUsers from '../../utils/fetchUsers'
 
@@ -62,6 +62,7 @@ function CreateEvent(){
             else {
                 console.log("Event created");
                 navigate(`/Group/Menu/${groupId}`);
+                location.reload();
             };
         } catch (error) {
             console.error('Error during event creation:', error);

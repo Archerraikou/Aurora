@@ -1,9 +1,32 @@
-import MyProfile from "../myProfile/myProfile";
+import Cookies from "universal-cookie";
 import NavbarItem from "../navbar-item/navbarItem";
 import "./navbar.css";
 import { Link } from "react-router";
-
+import {useState, useEffect} from 'react';
 function Navbar() {
+  const cookies = new Cookies();
+    const [groups,setGroups] = useState([])
+    useEffect(() => {
+        const fetchGroupInfo = async () => {
+            try {
+                const response = await fetch(`https://localhost:7242/api/Groups/notIndex`, {
+                    headers: {
+                        'Authorization': cookies.get('JWT')
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    setGroups(data);
+                } else {
+                    console.error('Failed to fetch group info');
+                }
+            } catch (error) {
+                console.error('Error fetching group info:', error);
+            }
+        };
+          fetchGroupInfo();
+    }, [location.search]);
   return (
     <nav className="sidebar">
       <Link to="/" className="home-button">
@@ -11,19 +34,11 @@ function Navbar() {
       </Link>
       <hr></hr>
       <div className="sidebar-list overflow">
-        {/* Nu avem grupuri propriu zis, asa ca voi hardcoda cateva */}
-        <Link to="/Group/Menu/1">
-          <NavbarItem
-            name="Grup 1"
-            image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBIGFIMbph9mGT6QaZHW07QQzMD12rtFlBv_NaF6PwK2J5KJH_8XOi5lNEsAZuNR89w0Q&usqp=CAU"
-          ></NavbarItem>
-        </Link>
-        <hr></hr>
-        <NavbarItem
-          name="Grup 2"
-          image="https://i.pinimg.com/736x/93/b7/07/93b70735dd8d5e707589ce7cbd078215.jpg"
-        ></NavbarItem>
-        <hr></hr>
+      {groups.map((group)=>{
+          return <Link to={`/Group/Menu/${group.id}`}>
+            <NavbarItem name={group.name} image={group.picture}></NavbarItem>
+            </Link>
+        })}
         <Link to="/Group/Create">
           <NavbarItem
             name="Add Group"

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams , useNavigate, Navigate} from "react-router-dom";
 import "./EditUserPage.css"
 import AdminUserInfo from "../../components/adminuserinfo/adminuserinfo.jsx"
-
+import Cookies from "universal-cookie";
 
 function InterestCheckbox({name, interestList})
 {
@@ -40,6 +40,7 @@ function InterestCheckbox({name, interestList})
 
 function EditUserPage()
 {
+    const cookies = new Cookies();
     function submitData(initialFormData)
     {
         const interestRegex = new RegExp("interest_*")
@@ -69,6 +70,9 @@ function EditUserPage()
             const response = await fetch(`https://localhost:7242/api/ApplicationUsers/edit/${info.get("Id")}`,
                 {
                     method:"POST",
+                    headers: {
+                        'Authorization': cookies.get("JWT")
+                    },
                     body: info 
                 }
             );
@@ -98,7 +102,12 @@ function EditUserPage()
         const fetchData = async () =>{
             try
             {
-                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/${userId}`)
+                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/${userId}`,{
+                    method: 'GET',
+                    headers: {
+                        'Authorization': cookies.get("JWT")
+                    }}
+                )
                 if(!response.ok)
                 {
                     throw new Error(`HTTP Error! status: ${response.status}`);
@@ -144,7 +153,7 @@ function EditUserPage()
                         <label>Profile Description</label>
                         <textarea
                             type="text"
-                            defaultValue = {userData.profileDescription ? userData.profileDescription : "No Description"}
+                            defaultValue = {userData.profileDescription}
                             name="profileDescription"
                         />
                         <label>Profile Picture</label>

@@ -50,27 +50,17 @@ namespace Aurora.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] JsonElement data)
+        public async Task<IActionResult> Register(RegisterModel formUser)
         {
             try
             {
-                // Validate incoming JSON fields with proper null checks
-                if (!data.TryGetProperty("nickname", out JsonElement nickProp) || nickProp.ValueKind == JsonValueKind.Null ||
-                    !data.TryGetProperty("email", out JsonElement emailProp) || emailProp.ValueKind == JsonValueKind.Null ||
-                    !data.TryGetProperty("password", out JsonElement passProp) || passProp.ValueKind == JsonValueKind.Null)
+                if(formUser == null)
                 {
-                    return BadRequest(new
-                    {
-                        Message = "Missing required fields",
-                        Errors = new List<string> { "nickname, email, and password are required." }
-                    });
+                    return BadRequest("All fields are required");
                 }
-
-                // Safely get string values with fallbacks
-                string nickname = nickProp.GetString()?.Trim() ?? string.Empty;
-                string email = emailProp.GetString()?.Trim() ?? string.Empty;
-                string password = passProp.GetString() ?? string.Empty;
-
+                string nickname = formUser.Nickname;
+                string email = formUser.Email;
+                string password = formUser.Password;
                 var errors = new List<string>();
 
                 if (string.IsNullOrWhiteSpace(email))
@@ -102,15 +92,16 @@ namespace Aurora.Controllers
                         Errors = new List<string> { "Email already registered." }
                     });
                 }
-
+                var basePath = Path.GetFullPath(Path.Combine("wwwroot\\images\\defaultpp.jpg"));
                 // Create new user
                 var user = new ApplicationUser
                 {
                     UserName = email,
                     Email = email,
-                    Nickname = !string.IsNullOrWhiteSpace(nickname) ? nickname : email.Split('@')[0],
-                    ProfileDescription = "wwwroot/images/user-pictures/defaultpp.png",
-                    EmailConfirmed = false
+                    Nickname = nickname,
+                    ProfileDescription = "",
+                    EmailConfirmed = false,
+                    ProfilePicture = basePath
                 };
 
                 var result = await _userManager.CreateAsync(user, password);
@@ -126,14 +117,15 @@ namespace Aurora.Controllers
                 // Assign default role with error handling
                 try
                 {
-                    const string defaultRole = "User";
-
-                    if (!await _roleManager.RoleExistsAsync(defaultRole))
+                    if (_userManager.Users.Count() == 0)
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(defaultRole));
+                        await _userManager.AddToRoleAsync(user, "Admin");
                     }
-
-                    await _userManager.AddToRoleAsync(user, defaultRole);
+                    else
+                    {
+                        const string defaultRole = "User";
+                        await _userManager.AddToRoleAsync(user, defaultRole);
+                    }
                 }
                 catch (Exception roleEx)
                 {
@@ -204,50 +196,6 @@ namespace Aurora.Controllers
                 return BadRequest("Invalid confirmation token");
 
             return Ok("Email confirmed successfully. You can now login.");
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
-        {
-            // Find user
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return Unauthorized("Invalid credentials");
-
-            // Check email confirmation
-            if (!user.EmailConfirmed)
-                return Unauthorized("Please confirm your email first");
-
-            // Check password
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-            if (!result.Succeeded)
-                return Unauthorized("Invalid credentials");
-
-            // Generate token (only if email confirmed)
-            var claims = new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, user.Id),
-                new(JwtRegisteredClaimNames.Email, user.Email)
-            };
-
-            var roles = await _userManager.GetRolesAsync(user);
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(3),
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
-                    SecurityAlgorithms.HmacSha256)
-            );
-
-            return Ok(new
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = token.ValidTo
-            });
         }
 
         [Authorize]

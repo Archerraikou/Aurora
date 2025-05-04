@@ -3,7 +3,7 @@ import Cookies from "universal-cookie";
 const GetRole = async (id)=>{
     const cookies = new Cookies();
     try {
-        const response = await fetch('https://localhost:7242/api/events/role?id='+id, {
+        const response = await fetch('https://localhost:7242/api/Groups/role?id='+id, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json',
             'Authorization': cookies.get("JWT")

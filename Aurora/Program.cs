@@ -15,6 +15,7 @@ using SignalRChat.Hubs;
 using Aurora.Controllers;
 
 using Aurora.Hubs;
+using Aurora.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,7 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
 builder.Services.AddHttpClient();
-
+builder.Services.AddTransient<IAppEmailSender, AppEmailSender>();
 
 builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 
@@ -72,23 +73,15 @@ builder.Services.AddSwaggerGen(o =>
     });
 });
 
-// builder.Services.AddCors(opt =>
-// {
-//     opt.AddPolicy("CorsPolicy", policyBuiler =>
-//     {
-//         policyBuiler.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
-//     });
-// });
-
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // React app port
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+        policy.WithOrigins("https://localhost:5173") // your frontend origin
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // IMPORTANT for SignalR
     });
 });
 
@@ -98,8 +91,6 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<GroupsController>();
-
-builder.Services.AddSingleton<IEmailSender, NullEmailSender>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -136,7 +127,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors("AllowAll");  // 
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -145,8 +136,6 @@ app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
 app.MapHub<ChatHub>("/chatHub");
 
-
-// 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<VideoHub>("/Call");

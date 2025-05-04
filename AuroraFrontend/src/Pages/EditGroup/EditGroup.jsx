@@ -5,7 +5,7 @@ import './EditGroup.css';
 import {useLocation} from 'react-router-dom';
 import fetchCategories from '../../utils/utils.jsx'
 import GetRole from '../../utils/GetUserRoleInGroup.jsx';
-import Modal from '../../components/modal/modal.jsx';
+import Modal from '../../components/Modal/modal.jsx';
 
 function EditGroup(){
     const [formFields, setFormFields] = useState({GroupName: "", GroupDescription: "", Picture: "", groupCategory:[], isPrivate: "" });
@@ -100,6 +100,7 @@ function EditGroup(){
             }});
             if (response.ok) {
                 navigate("/");
+                location.reload();
             }
             else {
                 console.log("Group deletion failed");
@@ -134,6 +135,7 @@ function EditGroup(){
             else {
                 console.log("Group edited");
                 navigate("/");
+                location.reload();
             };
         } catch (error) {
             console.error('Error during group creation:', error);

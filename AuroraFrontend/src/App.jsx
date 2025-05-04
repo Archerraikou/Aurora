@@ -6,12 +6,11 @@ import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
 import CreateEvent from "./Pages/CreateEvent/CreateEvent.jsx";
 
 import './App.css'
-import Modal from './components/modal/modal.jsx';
+import Modal from './components/Modal/modal.jsx';
 import Backdrop from './components/backdrop/backdrop.jsx';
 import Calendar from './components/calendar/calendar.jsx'
 import Outlet from 'react'
 import Registration from "./Pages/Registration/Registration.jsx"
-import Home from "./Pages/Home/Home.jsx"
 import CreateGroup from "./Pages/CreateGroup/CreateGroup.jsx"
 import EditGroup from './Pages/EditGroup/EditGroup.jsx';
 import { useEffect, useState } from 'react';
@@ -31,6 +30,7 @@ import Categories from "./Pages/Categories/Categories.jsx";
 import QuizGenerate from "./Pages/QuizGenerate/QuizGenerate.jsx";
 import Call from "./Pages/Call/Call.jsx";
 import MessageTestPage from "./Pages/MessageTestPage/MessageTestPage.jsx";
+import SearchResults from "./Pages/SearchResults/SearchResults.jsx";
 function App() {
   const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
@@ -92,7 +92,6 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/auth" element={<Home />} />
         <Route path="/Registration" element={<Registration />} />
         <Route path="/Group/Create" element={<CreateGroup />} />
         <Route path="/Group/Edit" element={<EditGroup />} />
@@ -110,6 +109,8 @@ function App() {
         <Route path="/Categories" element={<Categories/>}/>
         <Route path="/Quiz" element={<QuizGenerate/>}/>
         <Route path="/messagetest/:groupId" element={<MessageTestPage/>}/>
+        <Route path="/Search" element={<SearchResults/>}/>
+        <Route path="/Calendar" element={<Calendar/>}/>
       </Routes>
     </>
   );

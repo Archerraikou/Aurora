@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Aurora.Data;
 using Aurora.Models;
 using Aurora.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ namespace Aurora.Controllers
         {
             _context = context;
         }
+        [Authorize]
         [HttpPost("send")]
         public async Task<ActionResult<int>> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
         {
@@ -39,8 +41,7 @@ namespace Aurora.Controllers
                         // newMessage.AttachmentPath = uploadFile(attachment);
                 // }
                 newMessage.WasEdited = false;
-                // ODATA CE FAC UN GRUP DAU UNCOMMENT :]
-                // newMessage.GroupId = mes.GroupId;
+                newMessage.GroupId = mes.GroupId;
 
                 _context.GroupMessages.Add(newMessage);
                 await _context.SaveChangesAsync();
@@ -52,7 +53,7 @@ namespace Aurora.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+        [Authorize]
         [HttpGet("Show/{messageId}")]
         public async Task<ActionResult<GroupMessage>> getMessage(int messageId)
         {
@@ -70,6 +71,7 @@ namespace Aurora.Controllers
             }
 
         }
+        [Authorize]
         [HttpGet("getPage")]
         public async Task<ActionResult<List<GroupMessage>>> getPage(int groupId, int pageNumber)
         {

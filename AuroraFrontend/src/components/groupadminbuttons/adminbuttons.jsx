@@ -24,7 +24,7 @@ function AdminButtons({userInfo} )
                 {
                     console.error("Delete failed: ", error);
                 }
-            }}> Delete </button>
+            }}> Kick </button>
             {!userInfo.iscurrent && (<button onClick={async()=>{
                 try{
 

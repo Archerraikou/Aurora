@@ -48,29 +48,6 @@ function AdminButtons({ userInfo }) {
                     {userInfo.role === 'Admin' ? 'Demote' : 'Promote'}
                 </button>
             )}
-
-            {/* Eject User Button */}
-            {!userInfo.iscurrent && (
-                <button onClick={async () => {
-                    try {
-                        const response = await fetch(`https://localhost:7242/api/UserGroups?userId=${userInfo.id}`, {
-                            method: "DELETE",
-                            headers: {
-                                'Authorization': cookies.get('JWT')
-                            }
-                        });
-
-                        if (response.ok) {
-                            alert("User has been ejected from the group.");
-                            location.reload();
-                        }
-                    } catch (error) {
-                        console.error("Eject failed: ", error);
-                    }
-                }}>
-                    Eject User
-                </button>
-            )}
         </div>
     );
 }

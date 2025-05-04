@@ -2,9 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {HubConnectionBuilder} from '@microsoft/signalr'
 import "./chatcomponent.css"
 import Message from "../message/message.jsx"
+import Cookies from 'universal-cookie';
 import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils.js';
 
 const ChatComponent = ({groupId}) => {
+    const cookie = new Cookies();
     const [connection, setConnection] = useState(null);
     const [messages, setMessages] = useState([]);
     const [messageId, setMessageId] = useState(null);
@@ -42,7 +44,7 @@ const ChatComponent = ({groupId}) => {
             try
             {
                 // hardcodat id-ul userului nu stiu cum sa-l preiau din contul logat
-                const response = await fetch(`https://localhost:7242/api/User/${"cd470e43-fa50-425c-901b-070615660d52"}`)
+                const response = await fetch(`https://localhost:7242/api/User/${cookie.get("UserId")}`)
                 if(!response.ok)
                 {
                     throw new Error(`HTTP Error! status: ${response.status}`);
@@ -117,6 +119,9 @@ const ChatComponent = ({groupId}) => {
                         
                             const response = await fetch("https://localhost:7242/api/Messages/send", {
                                 method: "POST",
+                                headers:{
+                                    'Authorization': cookie.get("JWT")
+                                },
                                 body: formData
                             })
                             if(!response.ok)
@@ -160,7 +165,7 @@ const ChatComponent = ({groupId}) => {
                 <input 
                     hidden
                     readOnly
-                    value="cd470e43-fa50-425c-901b-070615660d52"
+                    value={cookie.get("UserId")}
                 />
                 <input
                     hidden

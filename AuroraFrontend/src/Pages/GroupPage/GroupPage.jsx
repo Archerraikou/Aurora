@@ -11,6 +11,7 @@ function GroupPage() {
   const groupId = location.pathname.replace("/Group/Menu/", "");
   const handleCreateEvent = () => {
     navigate(`/Event/Create/${groupId}`);
+    location.reload();
   };
   return (
     <div className="container">

@@ -1,5 +1,9 @@
 .centering {
     display: grid;
+    width: 90%;
+    height: 50%;
+    position: relative;
+    top: 10%;
     grid-template-columns: 20%;
     justify-content: center;
     align-items: center;
