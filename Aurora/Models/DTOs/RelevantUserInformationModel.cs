@@ -9,7 +9,7 @@ namespace Aurora.Models.DTOs
         public string? Email{get;set;}
         public string? ProfilePicturePath{get;set;}
         public string? ProfileDescription{get;set;}
-        // public virtual ICollection<CategoryUser>? Interests {get;set;}
+        public List<string>? Interests {get;set;}
 
     }
 }

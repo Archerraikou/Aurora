@@ -1,9 +1,11 @@
 ﻿
+using System.Security.Claims;
 using Aurora.Data;
 using Aurora.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurora.Controllers
 {
@@ -57,5 +59,28 @@ namespace Aurora.Controllers
             db.SaveChanges();
             return Ok();
         }
+        [Authorize]
+        [HttpGet("getCategories")]
+        public async Task<ActionResult<Category>> GetCategories()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var categs = db.Categorys.Include(c=>c.Users);
+            var results = new List<Category>();           
+            foreach(var cat in categs)
+            {
+                if(cat.Users!=null)
+                {
+                    foreach(var user in cat.Users)
+                    {
+                        if(user.UserId == userId)
+                        {
+                            results.Append(cat);
+                        }
+                    }
+                }
+            }
+            return Ok(results);
+        }
+
     }
 }

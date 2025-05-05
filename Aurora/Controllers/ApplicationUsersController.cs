@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Build.Framework;
 
 namespace Aurora.Controllers
 {
@@ -240,7 +241,21 @@ namespace Aurora.Controllers
                 Console.WriteLine(user.ProfilePicture);
                 user.Nickname = RUI.Nick;
                 user.ProfileDescription = RUI.ProfileDescription;
-                // user.Interests = Interests;
+
+                var deleteInterests = await db.CategoryUsers.Where(u=>u.UserId == userId).ToListAsync();
+                db.CategoryUsers.RemoveRange(deleteInterests);
+
+                if(RUI.Interests != null)
+                {
+                    var interestQueryIds = await db.Categorys.Where(u=> RUI.Interests.Contains(u.CategoryName)).Select(c=>c.Id).ToListAsync();
+                    var newUserInterests = new List<CategoryUser>();
+                    foreach(var inte in interestQueryIds)
+                    {
+                        newUserInterests.Append(new CategoryUser{UserId = userId, CategoryId = inte});
+                    }
+                    db.CategoryUsers.AddRange(newUserInterests);
+
+                }
                 
                 await db.SaveChangesAsync();
                 return NoContent();
