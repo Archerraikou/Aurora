@@ -483,7 +483,7 @@ function Call() {
           image="https://i.redd.it/rrrtcx1xq5mc1.jpeg"
         />
         <CallMember
-          name="Ma-ta"
+          name="Membru 2"
           image="https://i.pinimg.com/474x/51/e9/a5/51e9a52f8a061a560925605c816a41b8.jpg"
         />
       </div>

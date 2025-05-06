@@ -33,7 +33,7 @@ function MembersBar() {
             image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwVLdSDmgrZN7TkzbHJb8dD0_7ASUQuERL2A&s"
           ></NavbarItem>
           <NavbarItem
-            Profname="SOTD"
+            Profname="User"
             image="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740"
           ></NavbarItem>
         </div>
