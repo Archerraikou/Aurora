@@ -30,7 +30,7 @@ function InterestCheckbox({key, name, interestList})
 
 function EditUserPage()
 {
-    const cookies = new Cookies();
+    // const cookies = new Cookies()
     const {userId} = useParams();
     const [userData, setUserData] = useState(null);
     const [allInterests, setAllInterests] = useState(null);

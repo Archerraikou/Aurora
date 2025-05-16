@@ -1,3 +1,39 @@
 input {
     color:rgb(160, 50, 50);
 }
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  height: 86.9%;
+  /* width: 80%; */
+  background-color: var(--principal);
+  padding-top: 40px;
+}
+
+.message-bar {
+  flex-grow: 1;
+  padding: 8px;
+  background-color: var(--third);
+  border: none;
+  border-radius: 5px;
+  margin: 0;
+  color: white;
+}
+
+
+.form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.chatComponent{
+  height: 100%;
+  width: 100%;
+  padding-top: 77px;
+  box-sizing: border-box; /* Include padding/borders in dimensions */  
+  display: flex;
+  flex-direction: column;
+}

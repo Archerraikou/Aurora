@@ -14,6 +14,7 @@ const ChatComponent = ({groupId}) => {
     const [messageInput, setMessageInput] = useState('');
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
+    let loadedPageNumber = 1;
 
     // async function getMesssages(messageId)
     // {
@@ -38,6 +39,35 @@ const ChatComponent = ({groupId}) => {
     //     return message;
     // }
 
+
+    useEffect(()=>{
+        const fetchData = async ()=>{
+            try {
+                const params = new URLSearchParams({
+                    groupId: groupId,
+                    pageNumber: "1"
+                });
+                const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`, {
+
+                    method:"GET",
+                    headers:{
+                        "Content-Type":"application/json",
+                    }
+                })
+                if(!response.ok)
+                {
+                    console.log(response.error);
+                }
+                const data = await response.json();
+                console.log(data)
+                return data;
+            } catch (error) {
+                console.error("Fetch error: ", error)
+            }
+        };
+        fetchData().then(data=>setMessages(data));
+        
+    }, [groupId])
     // PRELUAM INFORMATII DESPRE UTILIZATOR
     useEffect(()=>{
         const fetchData = async () =>{
@@ -157,11 +187,21 @@ const ChatComponent = ({groupId}) => {
     };
     if(userData && !user)
         setUser(userData.nick);
+    if(loading)
+    {
+        return (<div> Loading </div>);
+    }
+    console.log(messages)
     return (
-        <div>
-            <h2>Chat</h2>
+        <div className='chatComponent'>
+            {/* Messages tab */}
+            <div className='messageList'>
+                {messages.map((msgId, index) => (
+                    <Message key={index} messageId={msgId}/>
+                ))}
+            </div>
             {/* Messagebar */}
-            <form onSubmit={sendMessage}>
+            <form className='form' onSubmit={sendMessage}>
                 <input 
                     hidden
                     readOnly
@@ -174,18 +214,13 @@ const ChatComponent = ({groupId}) => {
                 />
                 <input
                     type="text"
+                    className='message-bar'
                     value={messageInput}
                     onChange={e => setMessageInput(e.target.value)}
                     placeholder="Type your message"
                 />
                 <button type="submit">Send</button>
             </form>
-            {/* Messages tab */}
-            <div>
-                {messages.map((msgId, index) => (
-                    <Message key={index} messageId={msgId}/>
-                ))}
-            </div>
         </div>
     );
 

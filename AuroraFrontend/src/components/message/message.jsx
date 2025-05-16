@@ -41,7 +41,7 @@ function Message({messageId})
     }
     console.log(message.userId)
     return (
-        <div>
+        <div className="current-user-message">
            <img src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname} </b>: {message.content};
         </div>
     );

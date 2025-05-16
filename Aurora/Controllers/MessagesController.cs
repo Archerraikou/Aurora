@@ -53,12 +53,13 @@ namespace Aurora.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [Authorize]
+        // [Authorize]
         [HttpGet("Show/{messageId}")]
         public async Task<ActionResult<GroupMessage>> getMessage(int messageId)
         {
             //maybe this will work when we actually have everything sorted out for now its commented
             var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include("User").FirstOrDefaultAsync();
+            
 
             if(message!=null)
             {
@@ -67,16 +68,16 @@ namespace Aurora.Controllers
             else
             {
                 Console.Write(message);
-                return StatusCode(500);
+                return StatusCode(500); 
             }
 
         }
-        [Authorize]
+        // [Authorize]
         [HttpGet("getPage")]
-        public async Task<ActionResult<List<GroupMessage>>> getPage(int groupId, int pageNumber)
+        public async Task<ActionResult<List<int>>> getPage(int groupId, int pageNumber)
         {
             const int noMesssagesPage = 20;
-            var loadAllMessages = await _context.GroupMessages.Where(m=>m.GroupId == groupId).OrderByDescending(m=>m.Date).Skip((pageNumber-1)*noMesssagesPage).Take(noMesssagesPage).ToListAsync();
+            var loadAllMessages = await _context.GroupMessages.Where(m=>m.GroupId == groupId).OrderByDescending(m=>m.Date).Skip((pageNumber-1)*noMesssagesPage).Take(noMesssagesPage).Select(m=>m.Id).ToListAsync();
             return Ok(loadAllMessages);
 
         }

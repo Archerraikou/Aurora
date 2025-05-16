@@ -4,6 +4,9 @@ import mkcert from 'vite-plugin-mkcert'
 export default defineConfig({
   plugins: [react(),mkcert()],
   server: {
+    watch: {
+      usePolling: true, // Required for WSL/Docker
+    },
     https: true,
     host:'localhost',
     proxy: {
