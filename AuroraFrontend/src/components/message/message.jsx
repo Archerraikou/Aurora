@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import "./message.css"
 function Message({messageId})
 {
     const [message, setMessage] = useState(null);
@@ -42,7 +42,7 @@ function Message({messageId})
     console.log(message.userId)
     return (
         <div className="current-user-message">
-           <img src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname} </b>: {message.content};
+           <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname} </b>: {message.content};
         </div>
     );
 }

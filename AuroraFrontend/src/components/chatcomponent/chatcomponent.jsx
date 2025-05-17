@@ -65,7 +65,7 @@ const ChatComponent = ({groupId}) => {
                 console.error("Fetch error: ", error)
             }
         };
-        fetchData().then(data=>setMessages(data));
+        fetchData().then(data=>setMessages(data.reverse()));
         
     }, [groupId])
     // PRELUAM INFORMATII DESPRE UTILIZATOR
@@ -195,7 +195,7 @@ const ChatComponent = ({groupId}) => {
     return (
         <div className='chatComponent'>
             {/* Messages tab */}
-            <div className='messageList'>
+            <div className='message-list'>
                 {messages.map((msgId, index) => (
                     <Message key={index} messageId={msgId}/>
                 ))}
@@ -219,7 +219,7 @@ const ChatComponent = ({groupId}) => {
                     onChange={e => setMessageInput(e.target.value)}
                     placeholder="Type your message"
                 />
-                <button type="submit">Send</button>
+                <button className="send-button" type="submit">Send</button>
             </form>
         </div>
     );
