@@ -48,9 +48,9 @@ const ChatComponent = ({groupId}) => {
                     pageNumber: "1"
                 });
                 const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`, {
-
                     method:"GET",
                     headers:{
+                        'Authorization': cookie.get("JWT"),
                         "Content-Type":"application/json",
                     }
                 })

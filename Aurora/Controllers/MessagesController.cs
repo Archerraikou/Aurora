@@ -26,19 +26,19 @@ namespace Aurora.Controllers
             try
             {
                 var user = await _context.ApplicationUsers.FindAsync(mes.UserId);
-                if(user==null)
+                if (user == null)
                 {
                     return BadRequest("User Doesn't Exist");
                 }
                 newMessage.UserId = mes.UserId;
-                
+
                 newMessage.Content = mes.Content;
                 newMessage.Date = DateTime.UtcNow;
                 // O sa adaug un path la fisier in modelul de mesaje, dar trebuie vorbit
                 // also trebuie facuta o metoda care sa uploadeze fisierele care nu sunt imagini
                 // if(attachment != null)
                 // {
-                        // newMessage.AttachmentPath = uploadFile(attachment);
+                // newMessage.AttachmentPath = uploadFile(attachment);
                 // }
                 newMessage.WasEdited = false;
                 newMessage.GroupId = mes.GroupId;
@@ -47,7 +47,7 @@ namespace Aurora.Controllers
                 await _context.SaveChangesAsync();
                 return Ok(newMessage.Id);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
                 return BadRequest(e.Message);
@@ -58,17 +58,17 @@ namespace Aurora.Controllers
         public async Task<ActionResult<GroupMessage>> getMessage(int messageId)
         {
             //maybe this will work when we actually have everything sorted out for now its commented
-            var message = await _context.GroupMessages.Where(m=>m.Id == messageId).Include("User").FirstOrDefaultAsync();
-            
+            var message = await _context.GroupMessages.Where(m => m.Id == messageId).Include("User").FirstOrDefaultAsync();
 
-            if(message!=null)
+
+            if (message != null)
             {
                 return Ok(message);
             }
             else
             {
                 Console.Write(message);
-                return StatusCode(500); 
+                return StatusCode(500);
             }
 
         }
@@ -77,11 +77,24 @@ namespace Aurora.Controllers
         public async Task<ActionResult<List<int>>> getPage(int groupId, int pageNumber)
         {
             const int noMesssagesPage = 20;
-            var loadAllMessages = await _context.GroupMessages.Where(m=>m.GroupId == groupId).OrderByDescending(m=>m.Date).Skip((pageNumber-1)*noMesssagesPage).Take(noMesssagesPage).Select(m=>m.Id).ToListAsync();
+            var loadAllMessages = await _context.GroupMessages.Where(m => m.GroupId == groupId).OrderByDescending(m => m.Date).Skip((pageNumber - 1) * noMesssagesPage).Take(noMesssagesPage).Select(m => m.Id).ToListAsync();
             return Ok(loadAllMessages);
 
         }
 
+        [HttpGet("GetMessageTime/{messageId}")]
+        public async Task<ActionResult<string>> GetMessageTime(int messageId, int TimeZoneOffset)
+        {
+            DateTime? loadMessageTime = await _context.Messages.Where(m => m.Id == messageId).Select(m => m.Date).SingleAsync();
+            if (loadMessageTime == null)
+            {
+                return NotFound();
+            }
+            
+            String dateString = ((DateTime)loadMessageTime).AddMinutes(TimeZoneOffset).ToString("dd-MM-yyyy");
+            String timeString = ((DateTime)loadMessageTime).AddMinutes(TimeZoneOffset).ToString("HH:mm:ss");
+            return Ok(new { dateTime = dateString + " " + timeString });
+        }
         
     }
 }
