@@ -39,7 +39,7 @@ const ChatComponent = ({groupId}) => {
         function onScroll()
         {
             // console.log("container.scrollTop(" + -container.scrollTop +") >= container.scrollHeight(" + container.scrollHeight + ") - container.clientHeight(" + container.clientHeight + ")");
-            if(-container.scrollTop >= container.scrollHeight - container.clientHeight - 10 && hasMorePages && !loadingMessages)
+            if(-container.scrollTop >= container.scrollHeight - container.clientHeight && hasMorePages && !loadingMessages)
             {
                 scrollIntoRef.current.oldScrollHeight = container.scrollHeight;
                 scrollIntoRef.current.oldScrollTop = container.scrollTop;
@@ -216,7 +216,6 @@ const ChatComponent = ({groupId}) => {
             scrollIntoRef.current.oldScrollHeight = 0;
             scrollIntoRef.current.oldScrollTop = 0;
         }
-        // container.scrollTop = container.scrollHeight;
     }, [messages, loadingMessages]);
 
     if(userData && !user)
@@ -232,7 +231,7 @@ const ChatComponent = ({groupId}) => {
                 {messages.map((msgId, index) => (
                     <Message key={index} messageId={msgId}/>
                 ))}
-                {loadingMessages && <div> Loading Messages ... </div>}
+                {loadingMessages && <div className="current-user-message"> Loading Messages ... </div>}
                 
             </div>
             {/* Messagebar */}
