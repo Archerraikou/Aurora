@@ -1,19 +1,94 @@
-.editUserForm
+.editUserForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #2c2f33; /* dark background */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.editUserFormContainer
 {
-    display: flex;
-    flex-direction: column;
+  height: 89vh; /* full viewport height */
+  width: 175vh;
+  justify-content: center; /* center horizontally */
+  align-items: flex-start; /* align items at the top */
+  padding-top: 80px; /* push container slightly down */
+  background-color: #1a1d21; /* optional: dark background */
 }
 
-
-.editUserForm input {
-    background-color: gray;
+.editUserForm label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #a3d9a5; /* soft green */
 }
+
+.editUserForm input[type="text"],
+.editUserForm textarea,
+.editUserForm input[type="file"] {
+  background-color: #40444b;
+  border: 1.5px solid #4caf50;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #e0e0e0;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.editUserForm input[type="text"]:focus,
+.editUserForm textarea:focus,
+.editUserForm input[type="file"]:focus {
+  outline: none;
+  border-color: #81c784;
+  background-color: #4a4f57;
+}
+
 .editUserForm textarea {
-    background-color: gray;
+  resize: vertical;
+  min-height: 80px;
+  max-height: 150px;
 }
 
-.formInterests
-{
-    overflow-y:scroll;
-    max-height: 5em;
+.formInterests {
+  overflow-y: auto;
+  max-height: 6em;
+  border: 1.5px solid #4caf50;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background-color: #40444b;
+}
+
+.formInterests ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.form-header {
+  color: #a3d9a5; /* soft green */
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.editUserForm button[type="submit"] {
+  background-color: #4caf50;
+  color: #1b1b1b;
+  font-weight: 700;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.editUserForm button[type="submit"]:hover {
+  background-color: #81c784;
 }

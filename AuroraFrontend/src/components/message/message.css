@@ -1,17 +1,61 @@
-.current-user-message {
-  display:flex;
-  color: green;
-  max-height: 5vh;
-  min-height: 40px;
-  align-items: center;
-  gap: 8px;
-  padding: 0px 0px 2px 5px ;
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  max-width: 100%;
+  background-color: #2f4f2f; /* Chill dark green */
+  border-radius: 12px;
+  margin-bottom: 12px;
+  color: #c8e6c9; /* Light green text */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  border: 1.5px solid #4caf50; /* Green border for differentiation */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1.5px solid #3a6b3a; /* darker green border for subtle separation */
 }
 
-img.message-profile-picture
-{
+.message-profile-picture {
   flex-shrink: 0;
-  height:100%;
-  border-radius: 12px;
-  object-fit: contain;
+  width: 56px; /* Slightly bigger */
+  height: 56px;
+  border-radius: 4px; /* Square with slightly rounded corners */
+  object-fit: cover;
+  border: 2px solid #81c784; /* Softer green border */
+  align-self: flex-start; /* ensure image aligns to top */
+  margin-top: 4px; /* small top margin for better vertical alignment */
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1; /* Take remaining horizontal space */
+  margin-left: 8px; /* add left margin to push text more right */
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-username {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #a5d6a7; /* Softer green */
+}
+
+.message-time {
+  font-size: 0.75rem;
+  color: #9ccc65; /* Muted green */
+  font-style: italic;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.message-text {
+  font-size: 1rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
 }

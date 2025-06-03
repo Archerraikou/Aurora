@@ -88,8 +88,15 @@ function Message({messageId})
     {
 
         return (
-            <div className="current-user-message">
-                <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname}</b>:{message.content} <i> {time.dateTime} </i>
+            <div className="message">
+                <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}/>
+                <div className="message-content">
+                    <div className="message-header">
+                        <b className="message-username">{message.user.nickname}</b>
+                        <span className="message-time">{time.dateTime}</span>
+                    </div>
+                    <div className="message-text"> {message.content}</div>
+                </div>
             </div>
         );
     }

@@ -8,8 +8,12 @@ import fetchCategories from "../../utils/utils.jsx";
 
 function InterestCheckbox({key, name, interestList})
 {
+    console.log("name: ")
+    console.log(name)
+    console.log("interestList: ")
+    console.log(interestList)
     const interestListNames = interestList.map(m=>{m.categoryName});
-    
+    console.log(interestListNames)
     return (
         <div>
             <li>
@@ -17,7 +21,7 @@ function InterestCheckbox({key, name, interestList})
                     type="checkbox"
                     name={"interest_"+name.categoryName}
                     defaultValue={name.categoryName}
-                    defaultChecked={interestListNames.includes(name.categoryName)}
+                    defaultChecked={interestList.includes(name.categoryName)}
                 />
                 <label>{name.categoryName}</label>
             </li>
@@ -30,7 +34,7 @@ function InterestCheckbox({key, name, interestList})
 
 function EditUserPage()
 {
-    // const cookies = new Cookies()
+    const cookies = new Cookies()
     const {userId} = useParams();
     const [userData, setUserData] = useState(null);
     const [allInterests, setAllInterests] = useState(null);
@@ -139,7 +143,7 @@ function EditUserPage()
     useEffect(()=>{
         const fetchUserInterests = async () =>{
             try{
-                const response = await fetch(`https://localhost:7242/api/Categories/getCategories`, {
+                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/GetUserCategory/${userId}`, {
                     headers :{
                         Authorization : cookies.get("JWT")
                     }
@@ -171,10 +175,10 @@ function EditUserPage()
 //TODO: momentan si ce interse are userul sunt hardcodate si ce posibile interese sunt hardcodate
     return (
         <div>
-            <h1>Edit User Page</h1>
             <hr></hr>
                 {/* <AdminUserInfo userInfo={userData}/> */}
-                <div>
+                <div className="editUserFormContainer">
+                    <h2 className="form-header">Edit User</h2>
                     <form onSubmit={handleSubmit} className="editUserForm">
                         <input type="hidden" name="id" defaultValue={userData.id}/>
                         <input type="hidden" name="email" defaultValue={userData.email}/>
@@ -204,7 +208,7 @@ function EditUserPage()
                                         <InterestCheckbox
                                             key={i}
                                             name={d}
-                                            interestList={allInterests || []}
+                                            interestList={userInterests || []}
                                         />
                                 ))
                             }
