@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {HubConnectionBuilder} from '@microsoft/signalr'
 import "./chatcomponent.css"
 import Message from "../message/message.jsx"
@@ -65,7 +65,7 @@ const ChatComponent = ({groupId}) => {
                 console.error("Fetch error: ", error)
             }
         };
-        fetchData().then(data=>setMessages(data.reverse()));
+        fetchData().then(data=>setMessages(data));
         
     }, [groupId])
     // PRELUAM INFORMATII DESPRE UTILIZATOR
@@ -73,7 +73,6 @@ const ChatComponent = ({groupId}) => {
         const fetchData = async () =>{
             try
             {
-                // hardcodat id-ul userului nu stiu cum sa-l preiau din contul logat
                 const response = await fetch(`https://localhost:7242/api/User/${cookie.get("UserId")}`)
                 if(!response.ok)
                 {
@@ -117,7 +116,7 @@ const ChatComponent = ({groupId}) => {
                 connection.invoke("JoinGroup", groupId);
                 connection.on('ReceiveMessage', (messageId) =>{
 
-                    setMessages(prev => [...prev, messageId]);
+                    setMessages(prev => [messageId, ...prev]);
                 });
             }).catch(console.error);
             
@@ -185,13 +184,21 @@ const ChatComponent = ({groupId}) => {
             }
         }
     };
+    useEffect(() => {
+        const container = document.querySelector('.message-list')
+        if(container)
+        {
+            container.scrollTop = container.scrollHeight;
+        }
+    }, [messages]); // scroll down whenever messages change
+
+
     if(userData && !user)
         setUser(userData.nick);
     if(loading)
     {
         return (<div> Loading </div>);
     }
-    console.log(messages)
     return (
         <div className='chatComponent'>
             {/* Messages tab */}

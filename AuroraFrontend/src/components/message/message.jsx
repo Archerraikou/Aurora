@@ -79,6 +79,7 @@ function Message({messageId})
         }
         getTimeZone();
     },[messageId]);
+
     if(loading1||loading2)
     {
         return <div></div>
@@ -86,7 +87,6 @@ function Message({messageId})
     else
     {
 
-        console.log("This is the time:" + time)
         return (
             <div className="current-user-message">
             <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname} </b>: {message.content} <i> {time.dateTime} </i>

@@ -6,7 +6,7 @@ input {
   flex:1;
   display: flex;
   overflow-y:auto;
-  flex-direction: column;
+  flex-direction: column-reverse;
   min-height: 0;
   /* justify-content: flex-end;  */
   scroll-behavior: smooth;
