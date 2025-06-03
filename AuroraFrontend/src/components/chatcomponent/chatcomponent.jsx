@@ -14,12 +14,14 @@ const ChatComponent = ({groupId}) => {
     const [messageInput, setMessageInput] = useState('');
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loadingMessages, setLoadingMessages] = useState(false);
     const [page, setPage] =  useState(1);
     const [hasMorePages, setHasMorePages] = useState(true);
+    const scrollIntoRef = useRef({oldScrollHeight : 0, oldScrollTop:0});
 
     async function fetchMessages(pageNumber)
     {
-        setLoading(true);
+        setLoadingMessages(true);
         const params = new URLSearchParams({
             groupId: groupId,
             pageNumber: pageNumber
@@ -28,7 +30,7 @@ const ChatComponent = ({groupId}) => {
         const data = await response.json();
         if(data.length === 0) setHasMorePages(false);
         else setMessages(prev=>[...prev, ...data]);
-        setLoading(false);
+        setLoadingMessages(false);
     }
 
     useEffect(()=>{
@@ -36,12 +38,12 @@ const ChatComponent = ({groupId}) => {
         if(!container) return;
         function onScroll()
         {
-
-            console.log("container.scrollTop(" + -container.scrollTop +") >= container.scrollHeight(" + container.scrollHeight + ") - container.clientHeight(" + container.clientHeight + ")");
-            if(-container.scrollTop >= container.scrollHeight - container.clientHeight - 100 && hasMorePages && !loading)
+            // console.log("container.scrollTop(" + -container.scrollTop +") >= container.scrollHeight(" + container.scrollHeight + ") - container.clientHeight(" + container.clientHeight + ")");
+            if(-container.scrollTop >= container.scrollHeight - container.clientHeight - 10 && hasMorePages && !loadingMessages)
             {
-                const oldScrollHeight = container.scrollHeight;
-                const oldScrollTop = container.scrollTop;
+                scrollIntoRef.current.oldScrollHeight = container.scrollHeight;
+                scrollIntoRef.current.oldScrollTop = container.scrollTop;
+                console.log(scrollIntoRef.current)
                 const nextPage = page + 1;
                 fetchMessages(nextPage).then(()=>{
                     setPage(nextPage);
@@ -200,13 +202,22 @@ const ChatComponent = ({groupId}) => {
         }
     };
     useEffect(() => {
+        if(loadingMessages) return;
         const container = document.querySelector('.message-list')
-        if(container)
-        {
-            container.scrollTop = container.scrollHeight;
-        }
-    }, [messages]); // scroll down whenever messages change
+        if(!container) return;
 
+        const {oldScrollHeight, oldScrollTop} = scrollIntoRef.current;
+        if(oldScrollHeight && oldScrollTop)
+        {
+            const newScrollHeight = container.scrollHeight;
+            console.log(newScrollHeight + " " + oldScrollHeight + " " + oldScrollTop);
+            container.scrollTop = newScrollHeight - oldScrollHeight + oldScrollTop;
+
+            scrollIntoRef.current.oldScrollHeight = 0;
+            scrollIntoRef.current.oldScrollTop = 0;
+        }
+        // container.scrollTop = container.scrollHeight;
+    }, [messages, loadingMessages]);
 
     if(userData && !user)
         setUser(userData.nick);
@@ -221,6 +232,8 @@ const ChatComponent = ({groupId}) => {
                 {messages.map((msgId, index) => (
                     <Message key={index} messageId={msgId}/>
                 ))}
+                {loadingMessages && <div> Loading Messages ... </div>}
+                
             </div>
             {/* Messagebar */}
             <form className='form' onSubmit={sendMessage}>
