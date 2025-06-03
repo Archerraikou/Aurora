@@ -14,30 +14,43 @@ const ChatComponent = ({groupId}) => {
     const [messageInput, setMessageInput] = useState('');
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
-    let loadedPageNumber = 1;
+    const [page, setPage] =  useState(1);
+    const [hasMorePages, setHasMorePages] = useState(true);
 
-    // async function getMesssages(messageId)
-    // {
-    //     try
-    //     {
-    //         const response = await fetch(`https://localhost:7242/api/Message/Show/`,{
-    //             method:"GET",
-    //             body: messageId
-    //         });
-    //         if(!response.ok)
-    //         {
-    //             console.log(response.error);
-    //         }
-    //         console.log(response);
-    //         return response;
+    async function fetchMessages(pageNumber)
+    {
+        setLoading(true);
+        const params = new URLSearchParams({
+            groupId: groupId,
+            pageNumber: pageNumber
+        })
+        const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`);
+        const data = await response.json();
+        if(data.length === 0) setHasMorePages(false);
+        else setMessages(prev=>[...prev, ...data]);
+        setLoading(false);
+    }
 
-    //     }
-    //     catch(e)
-    //     {
-    //         console.log("Error:" + e.message)
-    //     }
-    //     return message;
-    // }
+    useEffect(()=>{
+        const container = document.querySelector('.message-list');
+        if(!container) return;
+        function onScroll()
+        {
+
+            console.log("container.scrollTop(" + -container.scrollTop +") >= container.scrollHeight(" + container.scrollHeight + ") - container.clientHeight(" + container.clientHeight + ")");
+            if(-container.scrollTop >= container.scrollHeight - container.clientHeight - 100 && hasMorePages && !loading)
+            {
+                const oldScrollHeight = container.scrollHeight;
+                const oldScrollTop = container.scrollTop;
+                const nextPage = page + 1;
+                fetchMessages(nextPage).then(()=>{
+                    setPage(nextPage);
+                });
+            }
+        }
+        container.addEventListener('scroll', onScroll);
+        return () => container.removeEventListener('scroll', onScroll);
+    }, [page, hasMorePages, loading, groupId]);
 
 
     useEffect(()=>{
@@ -65,6 +78,8 @@ const ChatComponent = ({groupId}) => {
                 console.error("Fetch error: ", error)
             }
         };
+        setPage(1);
+        setHasMorePages(true);
         fetchData().then(data=>setMessages(data));
         
     }, [groupId])
@@ -105,7 +120,7 @@ const ChatComponent = ({groupId}) => {
         .build();
 
         setConnection(newConnection);
-    }, []);
+    }, [groupId]);
 
     // NE CONTECTAM LA GRUPUL DE SIGNALR SI PORNIM SA PRIMIM MESAJE DE PE GRUP
     useEffect(()=>{

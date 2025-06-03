@@ -76,7 +76,7 @@ namespace Aurora.Controllers
         [HttpGet("getPage")]
         public async Task<ActionResult<List<int>>> getPage(int groupId, int pageNumber)
         {
-            const int noMesssagesPage = 20;
+            const int noMesssagesPage = 30;
             var loadAllMessages = await _context.GroupMessages.Where(m => m.GroupId == groupId).OrderByDescending(m => m.Date).Skip((pageNumber - 1) * noMesssagesPage).Take(noMesssagesPage).Select(m => m.Id).ToListAsync();
             return Ok(loadAllMessages);
 

@@ -89,7 +89,7 @@ function Message({messageId})
 
         return (
             <div className="current-user-message">
-            <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname} </b>: {message.content} <i> {time.dateTime} </i>
+            <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}></img><b>{message.user.nickname}</b>:{message.content} <i> {time.dateTime} </i>
             </div>
         );
     }
