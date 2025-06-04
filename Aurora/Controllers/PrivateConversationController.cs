@@ -32,7 +32,7 @@ namespace Aurora.Controllers
             _roleManager = roleManager;
         }
 
-        [HttpGet("/checkPM")]
+        [HttpGet("checkPM")]
         public async Task<ActionResult<int>> PMExists(string userId1, string userId2)
         {
             string userFirst, userSecond;
@@ -63,7 +63,7 @@ namespace Aurora.Controllers
             return Ok(pmId);
         }
 
-        [HttpPost("/new")]
+        [HttpPost("new")]
         public async Task<ActionResult> NewPM(string userId1, string userId2)
         {
             string userFirst, userSecond;

@@ -19,6 +19,43 @@ namespace Aurora.Controllers
             _context = context;
         }
         [Authorize]
+        [HttpPost("privateSend")]
+
+        public async Task<ActionResult<int>> SendPrivateMessage([FromForm] PrivateMessageModel mes, IFormFile? attachment)
+        {
+            PrivateMessage newPMessage = new();
+            try
+            {
+                var user = await _context.ApplicationUsers.FindAsync(mes.UserId);
+                if (user == null)
+                {
+                    return BadRequest("User Doesn't Exist");
+                }
+                newPMessage.UserId = mes.UserId;
+
+                newPMessage.Content = mes.Content;
+                newPMessage.Date = DateTime.UtcNow;
+                // O sa adaug un path la fisier in modelul de mesaje, dar trebuie vorbit
+                // also trebuie facuta o metoda care sa uploadeze fisierele care nu sunt imagini
+                // if(attachment != null)
+                // {
+                // newMessage.AttachmentPath = uploadFile(attachment);
+                // }
+                newPMessage.WasEdited = false;
+                newPMessage.pmId = mes.PMId;
+
+                _context.PrivateMessages.Add(newPMessage);
+                await _context.SaveChangesAsync();
+                return Ok(newPMessage.Id);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+
+        }
+        [Authorize]
         [HttpPost("send")]
         public async Task<ActionResult<int>> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
         {
@@ -55,7 +92,7 @@ namespace Aurora.Controllers
         }
         [Authorize]
         [HttpGet("Show/{messageId}")]
-        public async Task<ActionResult<GroupMessage>> getMessage(int messageId)
+        public async Task<ActionResult<GroupMessage>> GetMessage(int messageId)
         {
             //maybe this will work when we actually have everything sorted out for now its commented
             var message = await _context.GroupMessages.Where(m => m.Id == messageId).Include("User").FirstOrDefaultAsync();
@@ -73,14 +110,44 @@ namespace Aurora.Controllers
 
         }
         [Authorize]
+        [HttpGet("privateShow/{messageId}")]
+        public async Task<ActionResult<PrivateMessage>> PrivateGetMessage(int messageId)
+        {
+            //maybe this will work when we actually have everything sorted out for now its commented
+            var message = await _context.PrivateMessages.Where(m => m.Id == messageId).Include("User").FirstOrDefaultAsync();
+
+
+            if (message != null)
+            {
+                return Ok(message);
+            }
+            else
+            {
+                Console.Write(message);
+                return StatusCode(500);
+            }
+
+        }
+        [Authorize]
         [HttpGet("getPage")]
-        public async Task<ActionResult<List<int>>> getPage(int groupId, int pageNumber)
+        public async Task<ActionResult<List<int>>> GetPage(int groupId, int pageNumber)
         {
             const int noMesssagesPage = 30;
             var loadAllMessages = await _context.GroupMessages.Where(m => m.GroupId == groupId).OrderByDescending(m => m.Date).Skip((pageNumber - 1) * noMesssagesPage).Take(noMesssagesPage).Select(m => m.Id).ToListAsync();
             return Ok(loadAllMessages);
 
         }
+
+        [Authorize]
+        [HttpGet("privateGetPage")]
+        public async Task<ActionResult<List<int>>> PrivateGetPage(int PmId, int pageNumber)
+        {
+            const int noMesssagesPage = 30;
+            var loadAllMessages = await _context.PrivateMessages.Where(m => m.pmId == PmId).OrderByDescending(m => m.Date).Skip((pageNumber - 1) * noMesssagesPage).Take(noMesssagesPage).Select(m => m.Id).ToListAsync();
+            return Ok(loadAllMessages);
+
+        }
+
 
         [Authorize]
         [HttpGet("GetMessageTime/{messageId}")]
