@@ -53,17 +53,26 @@ function PrivateMembersBar() {
 
   console.log(user)
   return (
-    <div className="members-list">
-      <img className="profile-picture" src={"https://localhost:7242/api/User/pfp/" + othersId || "https://localhost:7242/images/defaultpp.jpg"}/>
-      <div className="align">
-        <h3>{user.nick}</h3>
-        <h3>Description</h3>
-        <hr></hr>
-        <div className="description">
-          {user.profileDescription || "No Description"}
-        </div>
+  <div className="members-list">
+    <img
+      className="profile-picture"
+      src={`https://localhost:7242/api/User/pfp/${othersId}`}
+      alt={user?.nick ? `${user.nick}'s profile picture` : 'User profile picture'}
+      onError={(e) => {
+        e.target.onerror = null; // Prevent infinite loop if default also fails
+        e.target.src = 'https://localhost:7242/images/defaultpp.jpg';
+      }}
+    />
+    <div className="align">
+      {/* Ensure user object is available before accessing its properties */}
+      <h3>{user?.nick || 'Loading Nickname...'}</h3>
+      <h3>Description</h3>
+      <hr />
+      <div className="description">
+        {user?.profileDescription || 'No Description Available.'}
       </div>
     </div>
+  </div>
   );
 }
 

@@ -1,30 +1,60 @@
+/* Your existing .members-list styles, with additions for centering */
 .members-list {
-  width: 20%;
-  background-color: var(--secundar);
+  width: 20%; /* Or your preferred width */
+  background-color: var(--secundar); /* Assuming var(--secundar) is defined */
   display: flex;
-  /* max-height: 100%; */
   flex-direction: column;
-  /* align-items: center; */
-  padding-top: 20px;
+  align-items: center; /* This will center the image and the .align div */
+  padding-top: 20px; /* Your existing padding */
+  padding-bottom: 20px; /* Added for symmetry */
   overflow-y: auto;
-  /* text-wrap: ; */
-  padding-top: 40px;
   z-index: 5;
+  box-sizing: border-box; /* Good practice */
+  padding-top: 10vh;
+}
+
+.profile-picture {
+  width: 120px; /* Adjust size as needed */
+  height: 120px; /* Must be same as width for a circle */
+  border-radius: 50%; /* Makes the image round */
+  object-fit: cover; /* Prevents image distortion, crops if necessary */
+  margin-bottom: 15px; /* Space below the image */
+  /* Fallback background color in case image is transparent or slow to load */
+  background-color: #ccc;
 }
 
 .align {
-  margin-left: 15px;
-  margin-right: 15px;
+  width: 90%; /* Allow the text block to use most of the sidebar width */
+  margin-left: auto; /* Centers the block if its parent isn't flex centering it */
+  margin-right: auto; /* Centers the block if its parent isn't flex centering it */
+  text-align: left; /* Keep text within this block left-aligned */
 }
 
 .description {
   margin-top: 10px;
   margin-bottom: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  /* Removed margin-left and margin-right as .align handles overall centering */
+  word-break: break-word; /* Helps prevent text overflow */
 }
 
+/* Keep your existing .members style if used elsewhere, or remove if not */
 .members {
   display: flex;
   flex-direction: column;
+}
+
+/* Basic styling for hr to look a bit cleaner */
+.members-list hr {
+  width: 100%;
+  border: 0;
+  height: 1px;
+  background-color: #555; /* Adjust color as needed */
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.members-list h3 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  word-break: break-word; /* Helps prevent text overflow */
 }
