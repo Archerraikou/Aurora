@@ -52,20 +52,18 @@ function Message({messageId})
             {
 
                 const timeZoneOffSet = -new Date().getTimezoneOffset();
-                const response = await fetch(`https://localhost:7242/api/Messages/GetMessageTime/${messageId}?TimeZoneOffset=${timeZoneOffSet}`);
+                const response = await fetch(`https://localhost:7242/api/Messages/GetMessageTime/${messageId}?TimeZoneOffset=${timeZoneOffSet}`, {
+                    method: 'GET',
+                    headers:{
+                        'Authorization': cookie.get("JWT")
+                    },
+                });
                 if(!response.ok)
                 {
                     return response.status;
                 }
                 const Time = await response.json();
                 setTime(Time);
-                // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                // const dateWithTimeZone = {
-                //     date: Message.date,
-                //     timezone: userTimeZone
-                // };
-                // console.log("This is the dateWithTimeZone: " + dateWithTimeZone);
-                // setTime(dateWithTimeZone);
 
             }
             catch(e)
@@ -89,7 +87,7 @@ function Message({messageId})
 
         return (
             <div className="message">
-                <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId}/>
+                <img className="message-profile-picture" src={"https://localhost:7242/api/User/pfp/" + message.userId || "https://localhost:7242/images/defaultpp.jpg"}/>
                 <div className="message-content">
                     <div className="message-header">
                         <b className="message-username">{message.user.nickname}</b>

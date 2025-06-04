@@ -53,7 +53,7 @@ namespace Aurora.Controllers
                 return BadRequest(e.Message);
             }
         }
-        // [Authorize]
+        [Authorize]
         [HttpGet("Show/{messageId}")]
         public async Task<ActionResult<GroupMessage>> getMessage(int messageId)
         {
@@ -72,7 +72,7 @@ namespace Aurora.Controllers
             }
 
         }
-        // [Authorize]
+        [Authorize]
         [HttpGet("getPage")]
         public async Task<ActionResult<List<int>>> getPage(int groupId, int pageNumber)
         {
@@ -82,6 +82,7 @@ namespace Aurora.Controllers
 
         }
 
+        [Authorize]
         [HttpGet("GetMessageTime/{messageId}")]
         public async Task<ActionResult<string>> GetMessageTime(int messageId, int TimeZoneOffset)
         {

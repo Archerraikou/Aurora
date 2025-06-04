@@ -8,7 +8,6 @@ namespace Aurora.Models
         public int? Id { get; set; }
         public string? User1 { get; set; }
         public string? User2 { get; set; }
-        public virtual ApplicationUser? RefUser1 { get; set; }
-        public virtual ICollection<GroupMessage>? Messages { get; set; }
+        public virtual ICollection<PrivateMessage>? Messages { get; set; }
     }
 }

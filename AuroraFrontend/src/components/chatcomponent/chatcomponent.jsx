@@ -26,7 +26,12 @@ const ChatComponent = ({groupId}) => {
             groupId: groupId,
             pageNumber: pageNumber
         })
-        const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`);
+        const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': cookie.get("JWT"),
+            }
+        });
         const data = await response.json();
         if(data.length === 0) setHasMorePages(false);
         else setMessages(prev=>[...prev, ...data]);
@@ -43,7 +48,7 @@ const ChatComponent = ({groupId}) => {
             {
                 scrollIntoRef.current.oldScrollHeight = container.scrollHeight;
                 scrollIntoRef.current.oldScrollTop = container.scrollTop;
-                console.log(scrollIntoRef.current)
+                // console.log(scrollIntoRef.current)
                 const nextPage = page + 1;
                 fetchMessages(nextPage).then(()=>{
                     setPage(nextPage);
@@ -210,7 +215,7 @@ const ChatComponent = ({groupId}) => {
         if(oldScrollHeight && oldScrollTop)
         {
             const newScrollHeight = container.scrollHeight;
-            console.log(newScrollHeight + " " + oldScrollHeight + " " + oldScrollTop);
+            // console.log(newScrollHeight + " " + oldScrollHeight + " " + oldScrollTop);
             container.scrollTop = newScrollHeight - oldScrollHeight + oldScrollTop;
 
             scrollIntoRef.current.oldScrollHeight = 0;

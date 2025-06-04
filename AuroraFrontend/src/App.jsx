@@ -4,7 +4,7 @@ import SearchBar from "./components/searchBar/searchBar.jsx";
 import Auth from "./pages/Authentification/auth.jsx";
 import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
 import CreateEvent from "./Pages/CreateEvent/CreateEvent.jsx";
-
+import PrivateMessage from "./Pages/PrivateMessage/PrivateMessage.jsx"
 import './App.css'
 import Modal from './components/Modal/modal.jsx';
 import Backdrop from './components/backdrop/backdrop.jsx';
@@ -111,7 +111,7 @@ function App() {
         <Route path="/messagetest/:groupId" element={<MessageTestPage/>}/>
         <Route path="/Search" element={<SearchResults/>}/>
         <Route path="/Calendar" element={<Calendar/>}/>
-
+        <Route path="/PM/:userId" element={<PrivateMessage/>}/>
       </Routes>
     </>
   );
