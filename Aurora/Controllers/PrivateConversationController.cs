@@ -55,12 +55,18 @@ namespace Aurora.Controllers
                 userSecond = userId1;
             }
 
-            var pmId = await db.PrivateConversations.Where(m => m.User1 == userFirst && m.User2 == userSecond).Select(m => m.Id).FirstOrDefaultAsync();
-            if (pmId == null)
+            var pmId = await db.PrivateConversations.Where(m => m.User1 == userFirst && m.User2 == userSecond).Select(m => m.Id).ToListAsync();
+            if (pmId.Count == 0)
             {
                 return Ok(-1);
             }
-            return Ok(pmId);
+            if (pmId.Count > 1)
+            {
+                var pmIdFake = await db.PrivateConversations.Where(m => m.Id == pmId[1]).FirstOrDefaultAsync();
+                db.PrivateConversations.Remove(pmIdFake);
+                db.SaveChanges();
+            }
+            return Ok(pmId[0]);
         }
 
         [HttpPost("new")]
