@@ -2,6 +2,7 @@ import Cookies from 'universal-cookie';
 import React, {useState, useEffect, useRef} from 'react';
 import { useParams } from "react-router-dom";
 import PrivateChatComponent from "../../components/privatechatcomponent/privatechatcomponent.jsx"
+import PrivateMembersBar from "../../components/privatemembersbar/privatemembersbar";
 function PrivateMessage()
 {
     // Mesajele private sunt niste grupuri practic.
@@ -85,6 +86,7 @@ function PrivateMessage()
         <div className="flex">
             <PrivateChatComponent pmId={pmId}/>
         </div>
+        <PrivateMembersBar/>
     </div>
     );
 }
