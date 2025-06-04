@@ -11,6 +11,8 @@ using Microsoft.Identity.Web;
 using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Aurora.Migrations;
+using NuGet.Protocol.Core.Types;
+using System.Xml;
 
 namespace Aurora.Controllers
 {
@@ -35,6 +37,15 @@ namespace Aurora.Controllers
         [HttpGet("checkPM")]
         public async Task<ActionResult<int>> PMExists(string userId1, string userId2)
         {
+
+            // Verificam daca userid2 este id-ul unui user
+
+            var user2 = db.ApplicationUsers.Find(userId2);
+            if (user2 == null)
+            {
+                return BadRequest();
+            }
+
             string userFirst, userSecond;
             int res = string.Compare(userId1, userId2);
             if (res == 0)
