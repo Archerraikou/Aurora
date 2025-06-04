@@ -58,13 +58,13 @@ namespace Aurora.Controllers
             var pmId = await db.PrivateConversations.Where(m => m.User1 == userFirst && m.User2 == userSecond).Select(m => m.Id).FirstOrDefaultAsync();
             if (pmId == null)
             {
-                return NotFound(-1);
+                return Ok(-1);
             }
             return Ok(pmId);
         }
 
         [HttpPost("new")]
-        public async Task<ActionResult> NewPM(string userId1, string userId2)
+        public async Task<ActionResult<int>> NewPM(string userId1, string userId2)
         {
             string userFirst, userSecond;
             int res = string.Compare(userId1, userId2);
@@ -100,7 +100,11 @@ namespace Aurora.Controllers
             db.PrivateConversations.Add(pm);
             db.SaveChanges();
 
-            return Ok();
+            // si acuma luam id-ul pm-ului
+
+            var nouPmId = await db.PrivateConversations.Where(m => m.User1 == userFirst && m.User2 == userSecond).Select(m => m.Id).FirstOrDefaultAsync();
+
+            return Ok(nouPmId);
         }
 
 

@@ -20,12 +20,12 @@ function PrivateMessage()
     useEffect(()=>{
         const fetchPMId = async () =>
         {
+            let idPMfinal = null;
             try {
                 const params = new URLSearchParams({
                     userId1: currentUsersId,
                     userId2: otherUsersId
-                })
-                console.log("Params:")
+                });
                 console.log(params)
                 const response = await fetch(`https://localhost:7242/api/PrivateConversation/checkPM?${params}`,
                     {
@@ -37,10 +37,31 @@ function PrivateMessage()
                 )
                 if(!response.ok)
                 {
-                    throw new Error('Failed to fetch pmID: ' + response.error);
+                    throw new Error('Failed to fetch pmID: ' + response.message);
                 }
                 const data = await response.json();
-                setPmId(data);
+                if(data === -1)
+                {
+                    const createResponse = await fetch(`https://localhost:7242/api/PrivateConversation/new?${params}`, 
+                        {
+                            method: 'POST',
+                            headers: {
+                                Authorization: cookies.get('JWT'),
+                            }
+                        }
+                    )
+                    if(!createResponse.ok)
+                    {
+                        throw new Error("Gresit la crearea grupului");
+                    }
+                     
+                    idPMfinal = await createResponse.json();
+                }
+                else if(data !== null && data !== undefined)
+                {
+                    idPMfinal = data;
+                }
+                setPmId(idPMfinal);
             } catch (e) {
                     console.log(e.message) ;
             } finally
@@ -51,6 +72,7 @@ function PrivateMessage()
         }
         fetchPMId();
     },[currentUsersId, otherUsersId, cookies])
+    
 
     if(loading === true)
     {
