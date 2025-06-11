@@ -50,11 +50,11 @@ function Login({ closeModal }) {
       console.log('Login response data:', loginData);
 
       const cookies = new Cookies();
-      const { accessToken, refreshToken, expiration } = loginData;
+      const { accessToken, refreshToken, expiresIn } = loginData;
 
       cookies.set('JWT', 'Bearer ' + accessToken, { path: '/' });
       cookies.set('JWTRefresh', refreshToken, { path: '/' });
-      cookies.set('ExpirationDate', expiration, { path: '/' });
+      cookies.set('ExpirationDate', expiresIn*1000 + Date.now(), { path: '/' });
 
       localStorage.setItem("isLoggedIn", "true");
       const roleResponse = await fetch('https://localhost:7242/api/Auth/roles', {
