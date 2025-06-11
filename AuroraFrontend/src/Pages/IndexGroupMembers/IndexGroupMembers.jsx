@@ -8,6 +8,8 @@ import Cookies from "universal-cookie";
 
 function IndexGroupMembers()
 {
+    // Declaring the cookies and the reactive variables used for showing the users
+    //  in the group with the id received from the URL
     var cookies= new Cookies();
     const queryParams = new URLSearchParams(location.search);
     const groupId= queryParams.get('id');
@@ -16,6 +18,7 @@ function IndexGroupMembers()
     const [error, setError] = useState(null);
     useEffect(()=>{
         const fetchData = async () =>{
+            // Getting all the users that are part of the group
             try
             {
                 const response = await fetch(`https://localhost:7242/api/UserGroups?groupId=${groupId}`,{
@@ -51,6 +54,7 @@ function IndexGroupMembers()
     var remainingUsers = userData.slice(1);
     
     return (
+        // In this area the details are showed
         <div>
             <h1>Index User Page</h1>
             <hr></hr>
@@ -60,6 +64,7 @@ function IndexGroupMembers()
                                 remainingUsers.map((user)=> (
                                     <div>
                                         <AdminUserInfo userInfo={user} />
+                                        {/* If the user is an admin of the group, he has buttons that affect the others */}
                                         {userType=="Admin" && <AdminButtons userInfo={user} />}
                                         <hr/>
                                     </div>

@@ -8,7 +8,7 @@ function AdminButtons({ userInfo }) {
 
     return (
         <div>
-            {/* Delete Button */}
+            {/* Delete Buttonm that send a request towards the backend to delete the account */}
             <button onClick={async () => {
                 try {
                     const response = await fetch(`https://localhost:7242/api/ApplicationUsers/delete-account?id=${userInfo.id}`, {
@@ -26,7 +26,7 @@ function AdminButtons({ userInfo }) {
                 }
             }}>Delete</button>
 
-            {/* Change Role Button */}
+            {/* Change Role Button, if the user is an Admin */}
             {!userInfo.iscurrent && (
                 <button onClick={async () => {
                     try {

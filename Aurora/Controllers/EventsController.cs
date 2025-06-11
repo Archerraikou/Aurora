@@ -61,7 +61,9 @@ namespace Aurora.Controllers
         {
             var events = await db.Events.Include("UserEvents").Include("Group").ToListAsync();
             var result = new List<object>();
+            // Getting current's user id
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Adding all the Events in which the current user has to take part into and return them
             var ue = db.UserEvents.Where(ug => ug.UserId == userId);
             foreach (var variable in events)
             {
@@ -80,6 +82,7 @@ namespace Aurora.Controllers
         [HttpGet("show")]
         public async Task<IActionResult> Show(int id)
         {
+            // Getting current user
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Get event + user events
@@ -93,6 +96,8 @@ namespace Aurora.Controllers
                 return BadRequest(new { message = "There is no event that has the id " + id });
             }
 
+            // Getting the id of the event with the id received as parameter
+            // if ther eis no such entry, throws BadRequest
             var isPartOfEvent = await db.UserEvents.AnyAsync(ue => ue.EventId == id && ue.UserId == userId);
             if (!isPartOfEvent)
             {
@@ -103,7 +108,7 @@ namespace Aurora.Controllers
             if (events.UserEvents != null && events.UserEvents.Count > 0)
             {
                 var userIds = events.UserEvents.Select(ue => ue.UserId).ToList();
-
+                // Getting the list with all the users that take part in the event
                 var users = await db.ApplicationUsers
                     .Where(u => userIds.Contains(u.Id))
                     .Select(u => new { u.Id, u.Nickname })
@@ -111,7 +116,7 @@ namespace Aurora.Controllers
 
                 us.AddRange(users);
             }
-
+            // Set result
             var result = new
             {
                 Id = events.Id,
@@ -126,7 +131,6 @@ namespace Aurora.Controllers
             return Ok(result);
         }
 
-
         [Authorize]
         [HttpPatch]
         public async Task<IActionResult> Edit(int id, [FromBody] EventModel dto)
@@ -136,6 +140,7 @@ namespace Aurora.Controllers
                 return BadRequest(new { message = "Invalid request." });
             }
 
+            // Searching for the specific event
             var eventToUpdate = await db.Events
                 .Include(e => e.UserEvents)
                 .Include(e => e.Group)
@@ -147,6 +152,7 @@ namespace Aurora.Controllers
             }
 
             var creatorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Separating all the received data and putting it into the new event
             eventToUpdate.Title = dto.Title;
             eventToUpdate.Description = dto.Description;
             eventToUpdate.Color = dto.Color;
@@ -156,7 +162,8 @@ namespace Aurora.Controllers
             db.UserEvents.RemoveRange(oldUserEvents);
 
             eventToUpdate.UserEvents = new List<UserEvent>();
-
+            
+            // Getting all the userEvents that the old event had to add them into the new one
             var allUserIds = dto.UserIds?.Distinct().ToList() ?? new List<string>();
             if (!allUserIds.Contains(creatorId))
                 allUserIds.Add(creatorId);
@@ -192,6 +199,7 @@ namespace Aurora.Controllers
             {
                 return BadRequest(new { message = "Invalid request." });
             }
+            // Getting current user
             var creatorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var group = await db.Groups
@@ -204,7 +212,7 @@ namespace Aurora.Controllers
             }
 
             var date = dto.Date == null ? DateTime.UtcNow : dto.Date;
-
+            // Creating the body of the new event
             var newEvent = new Event
             {
                 Title = dto.Title,
@@ -215,6 +223,7 @@ namespace Aurora.Controllers
                 UserEvents = new List<UserEvent>()
             };
 
+            //Adding the event into the group's ICollection
             if (group.Events == null)
             {
                 group.Events = new List<Event>();
@@ -229,7 +238,8 @@ namespace Aurora.Controllers
                 .Include(u => u.UserEvents)
                 .Where(u => allUserIds.Contains(u.Id))
                 .ToListAsync();
-
+            //  Creating the necessary entries in UserGroups and also sending
+                //  the notifications for being added into a group 
             foreach (var user in users)
             {
                 var userEvent = new UserEvent { UserId = user.Id, Event = newEvent };
@@ -261,9 +271,11 @@ namespace Aurora.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
+            // Getting the event with said id and also the id of the current user plus the UserEvent entry
             var events = await db.Events.Include(e => e.UserEvents).Include(e=> e.Group).FirstOrDefaultAsync(e => e.Id == id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ue = db.UserEvents.Where(ug => ug.UserId == userId && ug.EventId == id).First();
+            // If events or ue are empty, then it means that the DELETE request should not be allowed
             if (events == null)
             {
                 return BadRequest(new { message = "There is no event that has the id " + id.ToString() });
@@ -272,6 +284,8 @@ namespace Aurora.Controllers
             {
                 return BadRequest(new { message = "There is no event in the user's event list that has the id " + id.ToString() });
             }
+            // Deleting the entries from the ICollections from the group and the users.
+            // Plus the entries from UserGroups
             var userEvents = await db.UserEvents.Where(u => u.EventId == id).ToListAsync();
             var users = await db.ApplicationUsers.ToListAsync();
             foreach (var userEvent in userEvents) { 

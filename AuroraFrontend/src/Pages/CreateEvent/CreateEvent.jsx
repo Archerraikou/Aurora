@@ -6,6 +6,7 @@ import './CreateEvent.css'
 import fetchUsers from '../../utils/fetchUsers'
 
 function CreateEvent(){
+    // Declaring formFields collectors, the id of the group using the URL and cookies
     const [formFields, setFormFields] = useState({Title: "", Date: "", Description: "", Color: "#ff0000" });
     const location = useLocation();
     const groupId = location.pathname.replace("/Event/Create/", "");
@@ -19,6 +20,7 @@ function CreateEvent(){
     useEffect(() => {
         if(groupId)
         {
+            // Getting the users that are in said group
             const fetchData = async () => {
             const users = await fetchUsers(groupId);
             setUsers(users);
@@ -35,7 +37,8 @@ function CreateEvent(){
           [name]: value,
         }));
       };
-
+    
+    // Handler for submiting the form
     const handleSubmit= async (e)=>{
         e.preventDefault();
         const formData = {
@@ -47,6 +50,7 @@ function CreateEvent(){
             groupId: groupId
         };
         console.log("Form data before sending:", JSON.stringify(formData));
+        // Calling the backend method to send the data
         try {
             const response = await fetch('https://localhost:7242/api/events/new', {
             method: 'POST',
@@ -70,6 +74,7 @@ function CreateEvent(){
     };
 
     return (
+        // The Create Event form itself
         <>
         {cookies.get("JWT")!=null && <Modal className ='modal'>
           <h1>Create a new event</h1>

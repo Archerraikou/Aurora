@@ -7,6 +7,7 @@ import fetchUsers from '../../utils/fetchUsers';
 import GetRole from '../../utils/GetUserRoleInGroup.jsx';
 
 function CreateEvent(){
+    // Declaring formFields collectors, the id of the group using the URL and cookies
     const [formFields, setFormFields] = useState({Title: "", Date: "", Description: "", Color: "#ff0000", Users: [] });
     const [role, setRole] = useState(null);
     const [users, setUsers] = useState([]);
@@ -25,6 +26,7 @@ function CreateEvent(){
       useEffect(() => {
           const id = location.pathname.replace("/Event/Edit/", "");
           const  fetchEventInfo = async () => {
+            // Getting the current data of the Event so that the fields can be filled by default
             try {
               const response = await fetch(`https://localhost:7242/api/events/show?id=${id}`, {
                 headers: {
@@ -34,6 +36,7 @@ function CreateEvent(){
               });
               
               if (response.ok) {
+                // Parsing and setting the data from the response in the fields
                 const data = await response.json();
                 setInitialDesc(data.description);
                 setInitialTitle(data.title);
@@ -65,6 +68,7 @@ function CreateEvent(){
     useEffect(() => {
         if(groupId)
         {
+            // Grabbing the users from the group
             const fetchData = async () => {
             const users = await fetchUsers(groupId);
             setUsers(users);
@@ -83,6 +87,7 @@ function CreateEvent(){
 
     const handleSubmit= async (e)=>{
         e.preventDefault();
+        // Prepering the json that will be sent
         const formData = {
             title: title,
             date: date,
@@ -92,6 +97,7 @@ function CreateEvent(){
             groupId: groupId
         };
         console.log("Form data before sending:", JSON.stringify(formData));
+        // Sending the Edit request
         try {
             const response = await fetch(`https://localhost:7242/api/events?id=${id}`, {
             method: 'PATCH',
@@ -115,6 +121,7 @@ function CreateEvent(){
 
     const handleDelete = async (e) =>{
         e.preventDefault();
+        // Handling the deletion of the event by sending the request towards the backend
         try {
             const response = await fetch(`https://localhost:7242/api/events?id=${id}`, {
             method: 'DELETE',
@@ -135,6 +142,7 @@ function CreateEvent(){
     }
 
     return (
+        // The form itself + the delete button
         <>
         {cookies.get("JWT")!=null && <Modal className ='modal'>
           <h1>Edit an event</h1>

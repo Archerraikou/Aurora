@@ -40,6 +40,7 @@ namespace Aurora.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int groupId)
         {
+            // Getting the current user and also verify if they are in the group that has said id
             var usId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var us = await db.ApplicationUsers.Include("UserGroups").Where(u => u.Id == usId).FirstAsync();
             var usGroup = us.UserGroups.Where(ug => ug.GroupId == groupId && ug.UserId == usId).FirstOrDefault();
@@ -49,8 +50,10 @@ namespace Aurora.Controllers
             }
             var users = await db.ApplicationUsers.Include(u => u.UserGroups).ToListAsync();
             var result = new List<object>();
-            
+            //  Firstly add the role in the group of the currnet user
             result.Add(usGroup.IsAdmin==true?"Admin":"User");
+            // Then gather all the users that are in the group with the id
+                // that was received as parameter
             foreach (var user in users)
             {
                 if (user.UserGroups != null)
@@ -82,15 +85,18 @@ namespace Aurora.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeRole(string userId, int groupId, string role)
         {
+            // Get the id of the current user and stop them if the id parameter is identical
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == id)
                 return BadRequest(new { message = "You are not allowed to change your own role!" });
             var user = await _userManager.FindByIdAsync(id);
             var ceva = groupId;
+            // Verify if the current user is an admin of the group
             var currentUserGroup= await db.UserGroups.FirstOrDefaultAsync(ug=> ug.GroupId== groupId && ug.UserId== id && ug.IsAdmin== true);
             if (currentUserGroup == null) {
                 return BadRequest(new {message= "You are not the admin of this group." });
             }
+            // Making sure that during the change of the role there are no mishaps
             var userGroup = db.UserGroups.Where(ug => ug.UserId == userId && ug.GroupId == groupId).FirstOrDefault();
             if (userGroup != null)
             {
@@ -119,6 +125,7 @@ namespace Aurora.Controllers
                 db.SaveChanges();
                 return Ok();
             }
+            // If userGroup is empty, then there is no actual entry like it in the db
             return NotFound(new { message = "There is no such user in the group or there is no such group." });
         }
 
@@ -128,11 +135,13 @@ namespace Aurora.Controllers
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentUserGroup = await db.UserGroups.FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == id && ug.IsAdmin == true);
+            // Only an admin has the right to kick a member
             if (currentUserGroup == null)
             {
                 return BadRequest(new { message = "You are not the admin of this group." });
             }
             var userGroup = db.UserGroups.Where(ug => ug.UserId == userId && ug.GroupId == groupId).FirstOrDefault();
+            // No entry that match in the db
             if (userGroup == null)
             {
                 return NotFound(new { message = "There is no such user in the group or there is no such group." });
@@ -142,11 +151,11 @@ namespace Aurora.Controllers
             var group = await db.Groups.Include("Users").Where(g => g.Id == groupId).FirstAsync();
             group.Users.Remove(userGroup);
             if (user != null)
-            {
+            { // Sending the notification of being kicked
                 await SendNotification(
                     adminUserId: id,
                     userEmail: user.Email,
-                    groupId: groupId, // Now passing a non-nullable int
+                    groupId: groupId,
                     message: $"You have been removed from the group with ID '{group.Id}' by an administrator."
                 );
             }
@@ -161,7 +170,7 @@ namespace Aurora.Controllers
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null) return;
-
+            // Adding the notification entry in the db
             var notification = new Notification
             {
                 UserId = user.Id,
@@ -175,10 +184,5 @@ namespace Aurora.Controllers
             db.Notifications.Add(notification);
             await db.SaveChangesAsync();
         }
-
-
-
-
-
     }
 }

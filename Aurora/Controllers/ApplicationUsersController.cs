@@ -40,14 +40,16 @@ namespace Aurora.Controllers
             _configuration = configuration;
             _logger = logger;
         }
+
         [Authorize]
         [HttpGet("currentUser")]
         public async Task<IActionResult> GetCurrentUser()
         {
+            // Function to obtain the id of the current user. It is greatly used in the frontend.
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
             {
-                _logger.LogWarning("Delete account failed: User ID claim not found");
+                _logger.LogWarning("Getting user failed");
                 return BadRequest(new { message = "User identity not found" });
             }
             var user = await _userManager.FindByIdAsync(userId);
@@ -61,6 +63,7 @@ namespace Aurora.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            // Showing the details of all the users that are registered
             var users= _userManager.Users.ToList();
             var usId= User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = new List<Object>();
@@ -72,6 +75,7 @@ namespace Aurora.Controllers
                     Pic= user.ProfilePicture,
                     Role= (await _userManager.GetRolesAsync(user)).FirstOrDefault(),
                     Email= user.Email,
+                    // Another verification that helps in the frontend
                     Iscurrent= usId==user.Id
                 });
             };
@@ -82,6 +86,10 @@ namespace Aurora.Controllers
         [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccount(string? id)
         {
+            // If the function doesn't receive any parameter, then it means that
+                // the current user is trying to delete theire own account, otherwise,
+                // verify if the the current user is an Admin,
+                // because only admins are allowed to delete other people's accounts 
             _logger.LogInformation("Delete account endpoint hit");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
@@ -107,6 +115,9 @@ namespace Aurora.Controllers
                                 Where(x => x.UserId == user.Id).ToListAsync();
             foreach (var group in groups)
             {
+                // In this area is solved the problem of whether there any more admins in the groups.
+                    // If there are not, then make a random member an admin. If there are
+                    // no more members, then delete that group.
                 var otherAdmins = group.Users?.Where(ug => ug.UserId != user.Id && ug.IsAdmin == true).ToList();
                 if (otherAdmins != null && otherAdmins.Count!=0)
                 {
@@ -123,11 +134,13 @@ namespace Aurora.Controllers
                     }
                     else
                     {
+                        _groupsController.ControllerContext = this.ControllerContext;
                         await _groupsController.Delete(group.Id.Value);
                     }
                 }
             }
 
+            // Delete all the entries of this user from all ICollections that they were in
             var interests = db.CategoryUsers.Where(x => x.UserId == user.Id);
             db.CategoryUsers.RemoveRange(interests);
             var privateConversations = db.PrivateConversations.Where(x => x.User1 == user.Id || x.User2 == user.Id);
@@ -157,12 +170,15 @@ namespace Aurora.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPatch("changeRole")]
         public async Task<IActionResult> ChangeRole(string id, string newrole) {
+            // Getting the current user so that it is verified that they don't change their own role
             var usId= User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (usId == id)
                 return BadRequest(new {message= "You are not allowed to demote yourself!" });
             var user = db.Users.Find(id);
             if (user != null)
             {
+                // Get all roles that that user has (normaly just one), delete them, and replace it
+                    // with an entry of the opposite role
                 user.AllRoles = GetAllRoles();
                 var roles = db.Roles.ToList();
                 foreach (var role in roles)
@@ -183,6 +199,7 @@ namespace Aurora.Controllers
         [NonAction]
         public IEnumerable<SelectListItem> GetAllRoles()
         {
+            // Method to get all the possible roles on the platform
             var selectList = new List<SelectListItem>();
             var roles = from role in db.Roles select role;
             foreach (var role in roles)
@@ -199,6 +216,8 @@ namespace Aurora.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<ApplicationUser>> Show(string userId)
         {
+            // Showing the details of a specific user account. Usually, used in a view profile
+                // type situation 
             var query = db.ApplicationUsers.Where(u=> u.Id == userId).Select(u=> new RelevantUserInformation{ 
                 Id = u.Id,
                 Nick = u.Nickname,
@@ -215,14 +234,14 @@ namespace Aurora.Controllers
             }
 
             user.ProfilePicturePath ??= "wwwroot/images/user-pictures/defaultapp.png";
-
-            
             return Ok(user);
         }
+
         [Authorize]
         [HttpPost("edit/{userId}")]
         public async Task<ActionResult<ApplicationUser>> Edit(string userId, [FromForm] RelevantUserInformation RUI, IFormFile? ProfilePicture = null)
         {
+            // Editing an user (it should only be allowed to be capable to edit just one's own profile)
             try
             {
                 var user = await db.ApplicationUsers.FindAsync(userId);
@@ -252,6 +271,7 @@ namespace Aurora.Controllers
         }
         private async Task<string> UploadProfilePictureAsync(IFormFile file)
         {
+            // Saving the profile picture of a user
             if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")))
             {
                 Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"));
@@ -267,10 +287,11 @@ namespace Aurora.Controllers
             }
             return filePath;
         }
+
         [HttpGet("pfp/{userId}")]
         public IActionResult GetImage(string userId)
         {
-
+            // Getting the profile picture of a user
             var user = db.ApplicationUsers.Find(userId);
             if (user == null)
                 return NotFound("User not found");
@@ -298,6 +319,7 @@ namespace Aurora.Controllers
         }
         private string GetContentType(string path)
         {
+            // Method useful when there are differnt type of files sent or used
             var provider = new FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(path, out var contentType))
                 contentType = "application/octet-stream"; // Fallback type

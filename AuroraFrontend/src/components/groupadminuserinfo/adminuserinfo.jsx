@@ -4,6 +4,7 @@ function AdminUserInfo({userInfo})
     
     console.log(userInfo)
     userInfo.interests = ["Matematica", "Informatica", "Chimie"]
+    // Showing the details of a member
     return (
         <div className="AdminUserInfo">
             <img src={"https://localhost:7242/api/ApplicationUsers/pfp/" + userInfo.id} alt= "Profile Picture"/>

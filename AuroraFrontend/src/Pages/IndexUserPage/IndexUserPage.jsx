@@ -7,11 +7,13 @@ import Cookies from "universal-cookie";
 
 function IndexUserPage()
 {
+    // Declaring the cookies and the reactive variables used for showing the users in the group
     var cookies= new Cookies();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(()=>{
+        // Getting all the users that are registered
         const fetchData = async () =>{
             try
             {
@@ -47,6 +49,7 @@ function IndexUserPage()
 
     
     return (
+        // In this area the details are showed
         <div>
             <h1>Index User Page</h1>
             <hr></hr>

@@ -5,6 +5,7 @@ function AdminButtons({userInfo} )
 {
     const cookies = new Cookies();
     const navigate = useNavigate();
+    // Handling the kicking command of an account from a group
     return (
         <div>
             <button onClick={async()=>{
@@ -27,7 +28,7 @@ function AdminButtons({userInfo} )
             }}> Kick </button>
             {!userInfo.iscurrent && (<button onClick={async()=>{
                 try{
-
+                    // Changing the role of a member if the current user is an Admin of said group
                     var params= `?userId=${userInfo.id}&&groupId=${userInfo.groupid}&&role=`+ (userInfo.role=='Admin'?'User':'Admin');
                     const response = await fetch(`https://localhost:7242/api/UserGroups${params}`, {
                         method:"Patch",

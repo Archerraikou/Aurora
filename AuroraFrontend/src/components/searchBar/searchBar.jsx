@@ -5,7 +5,11 @@ import Backdrop from "../backdrop/backdrop.jsx";
 import  Modal  from "../Modal/modal.jsx";
 import Login from "../login/login.jsx"
 import { useNavigate } from 'react-router-dom'; 
+
 function SearchBar() {
+  // Declaring all the cookies and necessary reactive variables for creating
+  //  the Logged In and not Logged In states, searching groups after the category
+  //  or only after the name and description
   const cookies = new Cookies();
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
@@ -33,8 +37,10 @@ function SearchBar() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Sending search request towards the backend depending on the useCategory reactive variable
     if (!useCategory) {
       try {
+        // Search just in the name and description of the group
         const response = await fetch(
           `https://localhost:7242/api/Groups/search?search=${search}`,
           {
@@ -56,6 +62,7 @@ function SearchBar() {
         setResults([]);
       }
     } else {
+      // Search in the categories of the group
       try {
         const response = await fetch(
           `https://localhost:7242/api/Groups/search?search=${search}&&param=1`,
@@ -83,6 +90,7 @@ function SearchBar() {
   return (
     <>
     <div>
+      {/* The search bar */}
       <form className="header" onSubmit={handleSubmit}>
         <input
           className="search-bar"
@@ -105,6 +113,8 @@ function SearchBar() {
         <button className="btn" type="submit">
           Search
         </button>
+        {/* The reactive part that depends on the login state of the user. */}
+        {/* If they are logged in, then their profile pic appears. It is a dropdown menu. */}
         {loggedIn == true && (
           <>
             <div className="bottom">
@@ -112,6 +122,9 @@ function SearchBar() {
                 <img src={"https://localhost:7242/api/ApplicationUsers/pfp/" + cookies.get("UserId")} alt= "Profile Picture" className="img-gr" onClick={() => setIsOpen(!isOpen)}/>
               </div>
             </div>
+            {/* If their picture is pressed, then there appears a menu with some options.
+              There are the buttons that redirect the user towards: their calendar, their notifications, 
+              their profile edit area and logout.*/}
             {isOpen && (
               <div className="dropdown-menu">
                 <button className="dropdown-item" onClick={(e)=>{e.preventDefault();navigate('/user/edit/'+cookies.get("UserId"))}}>Profile</button>
@@ -131,12 +144,13 @@ function SearchBar() {
             )}
           </>
         )}
-
+        {/* If the user is not logged in, the login button appears */}
         {loggedIn==false&&<button className="login-button" onClick={(e) => {e.preventDefault();setIsModalOpen(!isModalOpen)}}>
             Login
             </button>}
       </form>
     </div>
+    {/* The login modal appears if the login button is pressed */}
     {isModalOpen && (
       <>
         <Backdrop onClick={() => setIsModalOpen(false)} />

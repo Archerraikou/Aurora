@@ -276,9 +276,9 @@ namespace Aurora.Controllers
         [HttpDelete("deleteGroup")]
         public async Task<IActionResult> Delete(int id)
         {
-            var group = db.Groups.Where(g => g.Id == id).First();
+            var group = await db.Groups.Where(g => g.Id == id).FirstAsync();
             var admin = await _userManager.FindByIdAsync(group.UserId);
-            var adminsId = db.UserGroups.Where(ug => ug.GroupId == group.Id && ug.IsAdmin == true).ToList();
+            var adminsId = await  db.UserGroups.Where(ug => ug.GroupId == group.Id && ug.IsAdmin == true).ToListAsync();
             var admins = new List<ApplicationUser>();
             foreach (var ad in adminsId)
             {
@@ -292,9 +292,10 @@ namespace Aurora.Controllers
             {
                 return StatusCode(401);
             }
-            var userGroups = db.UserGroups.Where(ug => ug.GroupId == group.Id);
-            var groupCategs = db.CategoryGroups.Where(cg => cg.GroupId == group.Id);
-            var messages = db.GroupMessages.Where(m => m.GroupId == group.Id);
+            var userGroups = await db.UserGroups.Where(ug => ug.GroupId == group.Id).ToListAsync();
+            var groupCategs = await db.CategoryGroups.Where(cg => cg.GroupId == group.Id).ToListAsync();
+            var messages = await db.GroupMessages.Where(m => m.GroupId == group.Id).ToListAsync();
+            var events = await db.Events.Where(e=> e.GroupId== group.Id).ToListAsync();
             foreach (var categs in groupCategs)
             {
                 db.CategoryGroups.Remove(categs);
@@ -306,6 +307,14 @@ namespace Aurora.Controllers
             foreach (var msg in messages)
             {
                 db.GroupMessages.Remove(msg);
+            }
+            foreach (var ev in events){
+                var userEvents= await  db.UserEvents.Where(ue=> ue.EventId== ev.Id).ToListAsync();
+                foreach(var userEvent in userEvents)
+                {
+                    db.UserEvents.Remove(userEvent);
+                }
+                db.Events.Remove(ev);
             }
             db.Groups.Remove(group);
             db.SaveChanges();
