@@ -3,7 +3,7 @@ import { useParams , useNavigate, Navigate} from "react-router-dom";
 import "./EditUserPage.css"
 import AdminUserInfo from "../../components/adminuserinfo/adminuserinfo.jsx"
 import Cookies from "universal-cookie";
-
+import Modal from "../../components/Modal/modal.jsx"
 function InterestCheckbox({name, interestList})
 {
     if(interestList.includes(name))
@@ -40,6 +40,7 @@ function InterestCheckbox({name, interestList})
 
 function EditUserPage()
 {
+    const navigate = useNavigate();
     const cookies = new Cookies();
     function submitData(initialFormData)
     {
@@ -92,6 +93,7 @@ function EditUserPage()
         }
         }
         updateUser(formInfo)
+        navigate("/")
     } 
 
     const {userId} = useParams();
@@ -135,9 +137,29 @@ function EditUserPage()
     userData.Interests = ["Matematica", "Informatica", "Fizica"];
     var possibleInteresets = ["Matematica", "Informatica", "Fizica", "Chimie", "Biologie"];
 
-    
+    const deleteAccount=async ()=>{
+        try
+        {
+            const response = await fetch(`https://localhost:7242/api/Auth/delete-account`,{
+                method: 'DELETE',
+                headers: {
+                    'Authorization': cookies.get("JWT")
+                }}
+            )
+            if(!response.ok)
+            {
+                throw new Error(`HTTP Error! status: ${response.status}`);
+            }
+        }
+        catch (error)
+        {
+            console.error("Fetch error:", error);
+            setError(error.message);
+        }
+    }
+
     return (
-        <div>
+        <Modal className="modal">
             <h1>Edit User Page</h1>
             <hr></hr>
                 {/* <AdminUserInfo userInfo={userData}/> */}
@@ -149,18 +171,21 @@ function EditUserPage()
                         <input 
                             type="text"
                             defaultValue={userData.nick}
-                            name="username"/>
+                            name="username"
+                            className='input-field'/>
                         <label>Profile Description</label>
                         <textarea
                             type="text"
                             defaultValue = {userData.profileDescription}
                             name="profileDescription"
+                            className='input-field'
                         />
                         <label>Profile Picture</label>
                         <input
                             type="file"
                             accept="image/png, image/jpeg"
                             name = "image"
+                            className='input-field'
                         />
 
                         <label>Interests</label>
@@ -180,12 +205,11 @@ function EditUserPage()
 
                         </div>
                         <button type="submit">Edit Account Info</button>
+                        <button onClick={deleteAccount} className="deleteButton">Delete Account</button>
 
                     </form>
                 </div>
-
-
-        </div>
+        </Modal>
     );
 }
      

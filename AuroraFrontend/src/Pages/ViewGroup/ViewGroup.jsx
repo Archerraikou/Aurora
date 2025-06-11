@@ -21,7 +21,6 @@ function ViewGroup() {
     });
     const cookies = new Cookies();
     const navigate = useNavigate();
-    const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get('id');
 

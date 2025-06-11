@@ -2,10 +2,11 @@ import NavbarItem from "../navbar-item/navbarItem";
 import "./MembersBar.css";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 function MembersBar() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const cookies = new Cookies();
   const groupId = location.pathname.replace("/Group/Menu/", "");
   console.log(groupId)
   const handleCreateEvent = () => {
@@ -15,8 +16,29 @@ function MembersBar() {
   const joinCall = () => {
     navigate(`/Call/${groupId}`);
   };
+  const leaveGroup=async ()=>{
+      try {
+          const response = await fetch(`https://localhost:7242/api/Groups/leave?id=${groupId}`, {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': cookies.get("JWT")
+              }
+          });
 
-  return (
+          if (!response.ok) {
+              throw new Error('The owner cannot leave the group');
+          }
+          else {
+              navigate("/");
+              location.reload();
+          }
+      } catch (error) {
+          console.error('Error during group join/request:', error);
+          alert("The owner cannot leave the group.");
+      }
+  };
+return (
     <div className="members-list">
       <div className="align">
         <h3>Numele Grupului</h3>
@@ -40,6 +62,7 @@ function MembersBar() {
         <button onClick={handleCreateEvent}>Create Event</button>
         <button onClick={joinCall}>Join Call</button>
         {<button onClick={()=>{navigate(`/Group/Show?id=${groupId}`)}}>Show group</button>}
+        <button className="leaveButton" onClick={leaveGroup}>Leave group</button>
       </div>
     </div>
   );

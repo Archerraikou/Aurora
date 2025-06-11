@@ -46,6 +46,7 @@ function Registration() {
                 setConfirmationLink(data.ConfirmationLink);
                 setShowConfirmationLink(true);
             }
+            navigate("/")
         } catch (error) {
             console.error('Registration error:', error);
             setPassRequirements(["Network error. Please try again."]);

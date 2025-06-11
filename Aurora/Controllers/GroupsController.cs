@@ -126,6 +126,7 @@ namespace Aurora.Controllers
                 newGroups.AddRange(groups);
                 groups = newGroups;
             }
+            else return Ok();
             var result = new List<object>();
 
             foreach (var g in groups)
@@ -408,6 +409,21 @@ namespace Aurora.Controllers
             return Ok();
         }
         [Authorize]
+        [HttpDelete("leave")]
+        public async Task<IActionResult> Leave(int id)
+        {
+            Group group = db.Groups.Where(g => g.Id == id).First();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            var userGroup = db.UserGroups.Where(ug=>ug.GroupId == id && ug.UserId == userId).FirstOrDefault();
+            if (userGroup != null && group.UserId!=userId)
+            {
+                db.UserGroups.Remove(userGroup);
+                db.SaveChanges();
+                return Ok();
+            }
+            return BadRequest(405);
+        }
         [Authorize]
         [HttpGet("request")]
         public async Task<IActionResult> Request(int id)

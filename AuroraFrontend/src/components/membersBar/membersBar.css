@@ -28,3 +28,17 @@
   display: flex;
   flex-direction: column;
 }
+.leaveButton {
+  background-color:red;
+  position: absolute;
+  bottom: 2%;
+  width: 5%;
+  height: 5%;
+  color:white;
+  border-radius: 10%;
+  border-color:red;
+}
+.leaveButton:hover {
+  background-color: brown;
+  border-color: brown;
+}
