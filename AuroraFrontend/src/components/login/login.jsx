@@ -56,6 +56,7 @@ function Login({ closeModal }) {
       cookies.set('JWTRefresh', refreshToken, { path: '/' });
       cookies.set('ExpirationDate', expiresIn*1000+ Date.now(), { path: '/' });
 
+
       localStorage.setItem("isLoggedIn", "true");
       const roleResponse = await fetch('https://localhost:7242/api/Auth/roles', {
         method: 'GET',
