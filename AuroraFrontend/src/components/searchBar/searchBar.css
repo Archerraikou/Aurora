@@ -105,3 +105,8 @@
   opacity: 0.66;
   transition: opacity 0.3s ease;
 }
+.categoryButton {
+  color: red;
+  margin-right: 2%;
+  padding:1%
+}

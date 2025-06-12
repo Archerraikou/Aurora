@@ -108,6 +108,7 @@ function Registration() {
                 </ul>
                 
                 <button type="submit" className='registerButton'>Create account</button>
+                <button className="Google" onClick={()=>{window.location.href="https://localhost:7242/api/Auth/login/google"}}>Sign in with google</button>
             </form>
             <p>{successMessage}</p>
         </div>

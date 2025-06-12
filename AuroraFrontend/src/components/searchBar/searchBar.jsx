@@ -90,8 +90,10 @@ function SearchBar() {
   return (
     <>
     <div>
+
       {/* The search bar */}
       <form className="header" onSubmit={handleSubmit}>
+        <a class="categoryButton" onClick={()=>{navigate('/Categories')}}>Categories</a>
         <input
           className="search-bar"
           type="text"
@@ -154,8 +156,8 @@ function SearchBar() {
     {isModalOpen && (
       <>
         <Backdrop onClick={() => setIsModalOpen(false)} />
-        <Modal>
-        <Login closeModal={() => {setLoggedIn(true);setIsModalOpen(false)}}></Login>
+        <Modal className="logalModal">
+          <Login closeModal={() => {setLoggedIn(true);setIsModalOpen(false)}}></Login>
         </Modal>
       </>
     )}

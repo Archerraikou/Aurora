@@ -6,7 +6,7 @@ import fetchCategories from '../../utils/utils.jsx';
 import {useLocation} from 'react-router-dom';
 import GetRole from '../../utils/GetUserRoleInGroup.jsx';
 import Backdrop from '../../components/backdrop/backdrop.jsx';
-import Modal from '../../components/modal/modal.jsx';
+import Modal from '../../components/Modal/modal.jsx';
 import InfoCategory from '../../components/infoCategory/infoCategory.jsx';
 
 function Categories(){
@@ -64,7 +64,6 @@ function Categories(){
                     Create new category
                     </button>}
             </div>
-            <div className="app-container">
                 {isModalOpen && (
                     <>
                     <Backdrop onClick={() => setIsModalOpen(false)} />
@@ -79,7 +78,6 @@ function Categories(){
                     </Modal>
                     </>
                 )}
-            </div>
         </>
     )
 }

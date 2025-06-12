@@ -13,11 +13,12 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Aurora.Services;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
-
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 using System.Net;
 using System.Text.Json;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace Aurora.Controllers
 {
@@ -32,13 +33,17 @@ namespace Aurora.Controllers
         private readonly IAppEmailSender _emailSender;
         private readonly IHostEnvironment _environment;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _config;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
             ILogger<AuthController> logger,
-            IAppEmailSender emailSender, IHostEnvironment environment, RoleManager<IdentityRole> roleManager)
+            IAppEmailSender emailSender, IHostEnvironment environment, RoleManager<IdentityRole> roleManager,
+            IHttpClientFactory factory,
+            IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -46,7 +51,9 @@ namespace Aurora.Controllers
             _logger = logger;
             _emailSender = emailSender;
             _environment = environment;
-            _roleManager = roleManager;// Store it
+            _roleManager = roleManager;
+            _httpClientFactory = factory;
+            _config = config;
         }
 
         [HttpPost("register")]
@@ -277,7 +284,6 @@ namespace Aurora.Controllers
         [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccount()
         {
-            _logger.LogInformation("Delete account endpoint hit");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
             {
@@ -302,8 +308,19 @@ namespace Aurora.Controllers
             _logger.LogInformation($"User {userId} deleted successfully");
             return Ok(new { message = "Account deleted successfully" });
         }
-       
 
-        
+        [HttpGet("login/google")]
+        public IActionResult LoginGoogle()
+        {
+            var props = _signInManager.ConfigureExternalAuthenticationProperties("Google", "/Auth/callback");
+            return Challenge(props, "Google");
+        }
+
+        [HttpGet("callback")]
+        public async Task<IActionResult> Callback()
+        {
+            return Ok();
+        }
+
     }
 }

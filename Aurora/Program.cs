@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Aurora.Models;
 using Aurora.Data;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +11,13 @@ using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
 using SignalRChat.Hubs;
-
 using Aurora.Controllers;
-
 using Aurora.Hubs;
 using Aurora.Services;
+using System.Security.Claims;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authentication;
+using Azure;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,9 +34,21 @@ builder.Services.AddControllers()
     .AddJsonOptions(x =>
         x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthentication()
+     .AddGoogle("Google", options =>
+     {
+         options.ClientId = builder.Configuration["Authorization:Google:ClientId"];
+         options.ClientSecret = builder.Configuration["Authorization:Google:ClientSecret"];
+         options.CallbackPath = "/api/Auth/callback";
+     });
 
+builder.Services.AddAuthorization();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+});
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IAppEmailSender, AppEmailSender>();
 

@@ -31,6 +31,7 @@ import QuizGenerate from "./Pages/QuizGenerate/QuizGenerate.jsx";
 import Call from "./Pages/Call/Call.jsx";
 import MessageTestPage from "./Pages/MessageTestPage/MessageTestPage.jsx";
 import SearchResults from "./Pages/SearchResults/SearchResults.jsx";
+import OAuth from "./Pages/OAuth/OAuth.jsx";
 function App() {
   const [isModalOpen,setIsModalOpen]= useState(false);
   const cookies = new Cookies();
@@ -111,6 +112,7 @@ function App() {
         <Route path="/messagetest/:groupId" element={<MessageTestPage/>}/>
         <Route path="/Search" element={<SearchResults/>}/>
         <Route path="/Calendar" element={<Calendar/>}/>
+        <Route path="/OAuth" element={<OAuth/>}/>
       </Routes>
     </>
   );

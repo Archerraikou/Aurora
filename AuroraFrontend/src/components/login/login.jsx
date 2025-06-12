@@ -50,11 +50,11 @@ function Login({ closeModal }) {
       console.log('Login response data:', loginData);
 
       const cookies = new Cookies();
-      const { accessToken, refreshToken, expiration } = loginData;
+      const { accessToken, refreshToken, expiresIn } = loginData;
 
       cookies.set('JWT', 'Bearer ' + accessToken, { path: '/' });
       cookies.set('JWTRefresh', refreshToken, { path: '/' });
-      cookies.set('ExpirationDate', expiration, { path: '/' });
+      cookies.set('ExpirationDate', expiresIn*1000+ Date.now(), { path: '/' });
 
       localStorage.setItem("isLoggedIn", "true");
       const roleResponse = await fetch('https://localhost:7242/api/Auth/roles', {
@@ -118,10 +118,9 @@ function Login({ closeModal }) {
         /><br />
 
         <a href="/Registration">Create an account</a><br /><br />
-
         {error && <div className="error-message">{error}</div>}
-
         <button type="submit">Login</button>
+        <button className="Google" onClick={()=>{window.location.href="https://localhost:7242/api/Auth/login/google"}}>Sign in with google</button>
       </form>
     </>
   );

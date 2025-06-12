@@ -140,7 +140,7 @@ function EditUserPage()
     const deleteAccount=async ()=>{
         try
         {
-            const response = await fetch(`https://localhost:7242/api/Auth/delete-account`,{
+            const response = await fetch(`https://localhost:7242/api/ApplicationUsers/delete-account`,{
                 method: 'DELETE',
                 headers: {
                     'Authorization': cookies.get("JWT")
