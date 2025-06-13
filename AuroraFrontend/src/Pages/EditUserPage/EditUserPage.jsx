@@ -3,49 +3,51 @@ import { useParams , useNavigate, Navigate} from "react-router-dom";
 import "./EditUserPage.css"
 import AdminUserInfo from "../../components/adminuserinfo/adminuserinfo.jsx"
 import Cookies from "universal-cookie";
-import Modal from "../../components/Modal/modal.jsx"
-function InterestCheckbox({name, interestList})
+import fetchCategories from "../../utils/utils.jsx";
+function InterestCheckbox({key, name, interestList})
 {
-    if(interestList.includes(name))
-    {
-        return (
-            <div>
-                <li>
-                    <input 
-                        type="checkbox"
-                        name={"interest_"+name}
-                        defaultValue={name}
-                        defaultChecked={true}
-                    />
-                    <label>{name}</label>
-                </li>
-            </div>
-        )
-    }
-    else 
-        return (
-            <div>
-                <li>
-                    <input 
-                        type="checkbox"
-                        name={"interest_"+name}
-                        defaultValue={name}
-                    />
-                    <label>{name}</label>
-                </li>
-            </div>
-        )
+    console.log("name: ")
+    console.log(name)
+    console.log("interestList: ")
+    console.log(interestList)
+    const interestListNames = interestList.map(m=>{m.categoryName});
+    console.log(interestListNames)
+    return (
+        <div>
+            <li>
+                <input 
+                    type="checkbox"
+                    name={"interest_"+name.categoryName}
+                    defaultValue={name.categoryName}
+                    defaultChecked={interestList.includes(name.categoryName)}
+                />
+                <label>{name.categoryName}</label>
+            </li>
+        </div>
+    );
 }
+    
+
 
 
 function EditUserPage()
 {
-    const navigate = useNavigate();
-    const cookies = new Cookies();
+    const cookies = new Cookies()
+    const {userId} = useParams();
+    const [userData, setUserData] = useState(null);
+    const [allInterests, setAllInterests] = useState(null);
+    const [userInterests, setUsersInterests] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        const formData = new FormData(e.target)
+        submitData(formData);
+    }
     function submitData(initialFormData)
     {
         const interestRegex = new RegExp("interest_*")
-        
         
         var formInfo = new FormData();
         formInfo.append("Id", initialFormData.get("id"));
@@ -53,19 +55,19 @@ function EditUserPage()
         formInfo.append("Email", initialFormData.get("email"));
         formInfo.append("ProfilePicture", initialFormData.get("image"));
         formInfo.append("ProfileDescription",initialFormData.get("profileDescription"));
-        //TODO: Sa facem categoriile normale
-        // var selectedInterests = [];
-        // for(const key of initialFormData.keys()) 
-        // {
-        //     if(interestRegex.test(key))
-        //     {
-        //         selectedInterests.push(key.slice(9));
-        //     }
-        // }
-        // formInfo.append("Interests", selectedInterests);
+        // TODO: Sa facem categoriile normale
+        var selectedInterests = [];
+        for(const key of initialFormData.keys()) 
+        {
+            if(interestRegex.test(key))
+            {
+                selectedInterests.push(key.slice(9));
+            }
+        }
+        formInfo.append("Interests", selectedInterests);
         console.log(formInfo);
         
-        var updateUser = async (info) =>
+        const updateUser = async (info) =>
         {
         try{
             const response = await fetch(`https://localhost:7242/api/ApplicationUsers/edit/${info.get("Id")}`,
@@ -96,15 +98,12 @@ function EditUserPage()
         navigate("/")
     } 
 
-    const {userId} = useParams();
-    const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     useEffect(()=>{
         const fetchData = async () =>{
             try
             {
-                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/${userId}`,{
+                // nu merge cu ApplicationsUsers, moment il las cu metoda din controllerul celalalt ca ala merge, probabil o problem cu autorizatiile pe care nu pot sa o rezolv
+                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/${userId}`,{ 
                     method: 'GET',
                     headers: {
                         'Authorization': cookies.get("JWT")
@@ -122,49 +121,64 @@ function EditUserPage()
                 console.error("Fetch error:", error);
                 setError(error.message);
             }
-            finally
-            {
-                setLoading(false);
-            }
+            
         };
         fetchData();
     },[userId]);
+
+    useEffect(()=>{
+        const getInterests = async ()=>{
+            try{
+                const bruh = await fetchCategories();
+                setAllInterests(bruh);
+            }
+            catch{
+                setError("Failed to load interests");
+            }
+        }
+        getInterests();
+    },[])
+
+    useEffect(()=>{
+        const fetchUserInterests = async () =>{
+            try{
+                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/GetUserCategory/${userId}`, {
+                    headers :{
+                        Authorization : cookies.get("JWT")
+                    }
+                })
+                if(!response.ok)
+                {
+                    throw new Error("Issue with fetching user interests");
+                }
+                setUsersInterests(await response.json());
+            }
+            catch(e){
+                console.log(e.message);
+            }
+        }
+        fetchUserInterests();
+    },[])
+
+    useEffect(()=>{
+        if(allInterests && userData&& userInterests) setLoading(false);
+    },[allInterests, userData, userInterests]);
+   
+    console.log(allInterests);
+    console.log(userInterests);
+
     if(loading) return <div>Loading...</div>;
     if(error) return <div>Error: {error}</div>;
     if(!userData) return <div>No User Data Found</div>;
 
 //TODO: momentan si ce interse are userul sunt hardcodate si ce posibile interese sunt hardcodate
-    userData.Interests = ["Matematica", "Informatica", "Fizica"];
-    var possibleInteresets = ["Matematica", "Informatica", "Fizica", "Chimie", "Biologie"];
-
-    const deleteAccount=async ()=>{
-        try
-        {
-            const response = await fetch(`https://localhost:7242/api/ApplicationUsers/delete-account`,{
-                method: 'DELETE',
-                headers: {
-                    'Authorization': cookies.get("JWT")
-                }}
-            )
-            if(!response.ok)
-            {
-                throw new Error(`HTTP Error! status: ${response.status}`);
-            }
-        }
-        catch (error)
-        {
-            console.error("Fetch error:", error);
-            setError(error.message);
-        }
-    }
-
     return (
-        <Modal className="modal">
-            <h1>Edit User Page</h1>
+        <div>
             <hr></hr>
                 {/* <AdminUserInfo userInfo={userData}/> */}
-                <div>
-                    <form action={submitData} className="editUserForm">
+                <div className="editUserFormContainer">
+                    <h2 className="form-header">Edit User</h2>
+                    <form onSubmit={handleSubmit} className="editUserForm">
                         <input type="hidden" name="id" defaultValue={userData.id}/>
                         <input type="hidden" name="email" defaultValue={userData.email}/>
                         <label>Username</label>
@@ -175,7 +189,6 @@ function EditUserPage()
                             className='input-field'/>
                         <label>Profile Description</label>
                         <textarea
-                            type="text"
                             defaultValue = {userData.profileDescription}
                             name="profileDescription"
                             className='input-field'
@@ -193,11 +206,11 @@ function EditUserPage()
 
                             <ul>
                             {
-                                possibleInteresets.map(d=> (
+                                allInterests.map((d,i)=> (
                                         <InterestCheckbox
-                                            key={d}
+                                            key={i}
                                             name={d}
-                                            interestList={userData.Interests}
+                                            interestList={userInterests || []}
                                         />
                                 ))
                             }

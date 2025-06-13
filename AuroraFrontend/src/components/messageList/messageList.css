@@ -1,13 +1,13 @@
-.message-list {
-  display: flex;
-  flex-direction: column;
-  height: 86.9%;
-  /* width: 80%; */
-  background-color: var(--principal);
-  padding-top: 40px;
-}
+/* .message-list { */
+  /* display: flex; */
+  /* flex-direction: column;
+  /* height: 86.9%; */
+  /* width: 80%;  */
+  /* background-color: var(--principal); */
+  /* padding-top: 40px; */
+/* } */
 
-.current-user-message {
-  margin-left: auto;
-  color: green;
-}
+/* .current-user-message { */
+  /* margin-left: auto; */
+  /* color: green; */
+/* }  */ 

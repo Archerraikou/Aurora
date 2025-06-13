@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./message.css"
+import "./privatemessage.css"
 import Cookies from 'universal-cookie';
-function Message({messageId})
+function PrivateMessage({messageId})
 {
     var offset = new Date().getTimezoneOffset();
     // console.log(offset);
@@ -20,7 +20,7 @@ function Message({messageId})
         const fetchMessage = async ()=>{
 
             try {
-                const response = await fetch(`https://localhost:7242/api/Messages/Show/${messageId}`,{
+                const response = await fetch(`https://localhost:7242/api/Messages/privateShow/${messageId}`,{
                     method:"GET", 
                     headers:
                     {
@@ -31,7 +31,7 @@ function Message({messageId})
                 {
                     return response.status;
                 }
-                Message = await response.json();
+                const Message = await response.json();
                 setMessage(Message);
             }
             catch(e)
@@ -101,4 +101,4 @@ function Message({messageId})
 
 }
 
-export default Message;
+export default PrivateMessage;

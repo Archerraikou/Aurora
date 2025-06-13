@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Aurora.Models.DTOs;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Build.Framework;
 
 namespace Aurora.Controllers
 {
@@ -259,7 +260,22 @@ namespace Aurora.Controllers
                 Console.WriteLine(user.ProfilePicture);
                 user.Nickname = RUI.Nick;
                 user.ProfileDescription = RUI.ProfileDescription;
-                // user.Interests = Interests;
+
+                var deleteInterests = await db.CategoryUsers.Where(u=>u.UserId == userId).ToListAsync();
+                db.CategoryUsers.RemoveRange(deleteInterests);
+
+                if(RUI.Interests[0] != null)
+                {
+                    string[] result = RUI.Interests[0].Split(',');
+                    var interestQueryIds = await db.Categorys.Where(u=> result.Contains(u.CategoryName)).Select(c=>c.Id).ToListAsync();
+                    var newUserInterests = new List<CategoryUser>();
+                    foreach(var inte in interestQueryIds)
+                    {
+                        newUserInterests.Add(new CategoryUser{UserId = userId, CategoryId = inte});
+                    }
+                    db.CategoryUsers.AddRange(newUserInterests);
+
+                }
                 
                 await db.SaveChangesAsync();
                 return NoContent();
@@ -316,6 +332,26 @@ namespace Aurora.Controllers
 
             return PhysicalFile(fullPath, contentType, enableRangeProcessing: true);
 
+        }
+
+        [Authorize]
+        [HttpGet("GetUserCategory/{userId}")]
+
+        public async Task<ActionResult<List<string>>> GetUserCategories(string userId)
+        {
+
+            var user = db.ApplicationUsers.Find(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var categories = await db.CategoryUsers.Where(m => m.UserId == userId).Select(m => m.Category.CategoryName).ToListAsync();
+
+            if (categories == null)
+            {
+                return NotFound();
+            }
+            return Ok(categories);
         }
         private string GetContentType(string path)
         {

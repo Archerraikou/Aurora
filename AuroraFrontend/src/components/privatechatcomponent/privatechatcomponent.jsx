@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {HubConnectionBuilder} from '@microsoft/signalr'
-import "./chatcomponent.css"
-import Message from "../message/message.jsx"
+import "./privatechatcomponent.css"
+import PrivateMessage from "../privatemessage/privatemessage.jsx"
 import Cookies from 'universal-cookie';
 import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils.js';
 
-const ChatComponent = ({groupId}) => {
+const PrivateChatComponent = ({pmId}) => {
     const cookie = new Cookies();
     const [connection, setConnection] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -23,10 +23,10 @@ const ChatComponent = ({groupId}) => {
     {
         setLoadingMessages(true);
         const params = new URLSearchParams({
-            groupId: groupId,
+            PmId: pmId,
             pageNumber: pageNumber
         })
-        const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`, {
+        const response = await fetch(`https://localhost:7242/api/Messages/privateGetPage?${params}`, {
             method: 'GET',
             headers:{
                 'Authorization': cookie.get("JWT"),
@@ -57,17 +57,17 @@ const ChatComponent = ({groupId}) => {
         }
         container.addEventListener('scroll', onScroll);
         return () => container.removeEventListener('scroll', onScroll);
-    }, [page, hasMorePages, loading, groupId]);
+    }, [page, hasMorePages, loading, pmId]);
 
 
     useEffect(()=>{
         const fetchData = async ()=>{
             try {
                 const params = new URLSearchParams({
-                    groupId: groupId,
+                    PmId: pmId,
                     pageNumber: "1"
                 });
-                const response = await fetch(`https://localhost:7242/api/Messages/getPage?${params}`, {
+                const response = await fetch(`https://localhost:7242/api/Messages/privateGetPage?${params}`, {
                     method:"GET",
                     headers:{
                         'Authorization': cookie.get("JWT"),
@@ -89,7 +89,7 @@ const ChatComponent = ({groupId}) => {
         setHasMorePages(true);
         fetchData().then(data=>setMessages(data));
         
-    }, [groupId])
+    }, [pmId])
     // PRELUAM INFORMATII DESPRE UTILIZATOR
     useEffect(()=>{
         const fetchData = async () =>{
@@ -127,7 +127,7 @@ const ChatComponent = ({groupId}) => {
         .build();
 
         setConnection(newConnection);
-    }, [groupId]);
+    }, [pmId]);
 
     // NE CONTECTAM LA GRUPUL DE SIGNALR SI PORNIM SA PRIMIM MESAJE DE PE GRUP
     useEffect(()=>{
@@ -135,7 +135,7 @@ const ChatComponent = ({groupId}) => {
         {
             connection.start()
             .then(()=>{
-                connection.invoke("JoinGroup", groupId);
+                connection.invoke("JoinGroup", "P"+pmId);
                 connection.on('ReceiveMessage', (messageId) =>{
 
                     setMessages(prev => [messageId, ...prev]);
@@ -146,7 +146,7 @@ const ChatComponent = ({groupId}) => {
         return () => {
             if(connection)
             {
-                connection.invoke('LeaveGroup', groupId);
+                connection.invoke('LeaveGroup', "P"+pmId);
                 connection.stop();
             }
         };
@@ -160,7 +160,7 @@ const ChatComponent = ({groupId}) => {
         const formData = new FormData();
         formData.append("UserId", e.target[0].value)
         formData.append("Content", e.target[2].value)
-        formData.append("GroupId", e.target[1].value)
+        formData.append("PMId", e.target[1].value)
         if (messageInput && user) {
             setMessageInput('');
             try {
@@ -168,7 +168,7 @@ const ChatComponent = ({groupId}) => {
                 const sendMessageToServer = async ()=>{
                     try{
                         
-                            const response = await fetch("https://localhost:7242/api/Messages/send", {
+                            const response = await fetch("https://localhost:7242/api/Messages/privateSend", {
                                 method: "POST",
                                 headers:{
                                     'Authorization': cookie.get("JWT")
@@ -196,9 +196,9 @@ const ChatComponent = ({groupId}) => {
 
                 };
                 const messageIdThatCameback = await sendMessageToServer();
-                console.log("De asemenea avem groupId-ul: " + groupId);
+                console.log("De asemenea avem pmId-ul: " + pmId);
                 console.log(messageIdThatCameback);
-                connection.invoke('SendMessageToGroup', groupId, messageIdThatCameback.toString())
+                connection.invoke('SendMessageToGroup', "P" + pmId, messageIdThatCameback.toString())
                 console.log("Message sent!!")
                 
             } catch (err) {
@@ -234,7 +234,7 @@ const ChatComponent = ({groupId}) => {
             {/* Messages tab */}
             <div className='message-list'>
                 {messages.map((msgId, index) => (
-                    <Message key={index} messageId={msgId}/>
+                    <PrivateMessage key={index} messageId={msgId}/>
                 ))}
                 {loadingMessages && <div className="current-user-message"> Loading Messages ... </div>}
                 
@@ -249,7 +249,7 @@ const ChatComponent = ({groupId}) => {
                 <input
                     hidden
                     readOnly
-                    value={groupId}
+                    value={pmId}
                 />
                 <input
                     type="text"
@@ -265,4 +265,4 @@ const ChatComponent = ({groupId}) => {
 
 };
 
-export default ChatComponent;
+export default PrivateChatComponent;
