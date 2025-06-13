@@ -506,14 +506,6 @@ function Call() {
             ></CallMember>
           )
         )}
-        <CallMember
-          name="Membru1"
-          image="https://i.redd.it/rrrtcx1xq5mc1.jpeg"
-        />
-        <CallMember
-          name="Membru 2"
-          image="https://i.pinimg.com/474x/51/e9/a5/51e9a52f8a061a560925605c816a41b8.jpg"
-        />
       </div>
       <div className="controller">
         <button className="controller-button" onClick={toggleAudio}>

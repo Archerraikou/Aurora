@@ -171,6 +171,26 @@ function EditUserPage()
     if(error) return <div>Error: {error}</div>;
     if(!userData) return <div>No User Data Found</div>;
 
+    const deleteAccount=async ()=>{
+            try
+            {
+                const response = await fetch(`https://localhost:7242/api/ApplicationUsers/delete-account`,{
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': cookies.get("JWT")
+                    }}
+                )
+                if(!response.ok)
+                {
+                    throw new Error(`HTTP Error! status: ${response.status}`);
+                }
+            }
+            catch (error)
+            {
+                console.error("Fetch error:", error);
+                setError(error.message);
+            }
+        }
 //TODO: momentan si ce interse are userul sunt hardcodate si ce posibile interese sunt hardcodate
     return (
         <div>
@@ -222,7 +242,7 @@ function EditUserPage()
 
                     </form>
                 </div>
-        </Modal>
+            </div>
     );
 }
      

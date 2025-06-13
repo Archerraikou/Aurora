@@ -6,7 +6,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import Cookies from 'universal-cookie';
 
 function MembersBar() {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const groupId = location.pathname.replace("/Group/Menu/", "");
@@ -113,7 +112,7 @@ function MembersBar() {
           {
             members.map((membru)=>{
               console.log(membru.nickname)
-              if(membru !== "Admin")
+              if(membru !== "Admin" && membru!=="User")
               {
                 return(
                 <NavbarItem 
