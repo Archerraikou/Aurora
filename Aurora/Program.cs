@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Aurora.Models;
 using Aurora.Data;
 using Microsoft.EntityFrameworkCore;
@@ -134,11 +134,11 @@ app.UseAuthorization();
 
 app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
-app.MapHub<ChatHub>("/chatHub");
-
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapHub<ChatHub>("/chatHub");
     endpoints.MapHub<VideoHub>("/Call");
+    endpoints.MapHub<DocumentHub>("/documentHub");
 });
 
 app.Run();
