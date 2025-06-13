@@ -84,6 +84,57 @@ namespace Aurora.Controllers
 
             foreach (var g in groups)
             {
+                if (usId != null)
+                {
+                    var inGroup = db.UserGroups.Where(ug => ug.GroupId == g.Id && ug.UserId == usId).FirstOrDefault();
+                    if (inGroup != null && inGroup.IsApproved==true) continue;
+                }
+                var admin = await _userManager.FindByIdAsync(g.UserId);
+                var categs = new List<int>();
+                if (g.GroupCategory != null && g.GroupCategory.Count > 0)
+                {
+                    foreach (var cg in g.GroupCategory)
+                    {
+                        categs.Add((int)cg.CategoryId);
+                    }
+                }
+                result.Add(new
+                {
+                    Id = g.Id,
+                    Name = g.GroupName,
+                    Description = g.GroupDescription,
+                    Picture = g.GroupPicture,
+                    Categories = categs,
+                    Admin = admin?.Nickname,
+                    Date = g.CreatedDate,
+                    isPrivate = g.IsPrivate
+                });
+            }
+            return Ok(result);
+        }
+        [HttpGet("notIndex")]
+        public async Task<IActionResult> NotIndex()
+        {
+            var groups = await db.Groups.Include("GroupCategory").ToListAsync();
+            var usId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (usId != null)
+            {
+                var us = await db.ApplicationUsers.Include(u => u.Interests).Where(u => u.Id == usId).FirstAsync();
+                var interests = us.Interests.Select(cu => cu.CategoryId).ToList();
+                var newGroups = groups.Where(g => g.GroupCategory.Any(gc => interests.Contains(gc.CategoryId))).ToList();
+                groups = groups.Except(newGroups).ToList();
+                newGroups.AddRange(groups);
+                groups = newGroups;
+            }
+            var result = new List<object>();
+
+            foreach (var g in groups)
+            {
+                if (usId != null)
+                {
+                    var inGroup = db.UserGroups.Where(ug => ug.GroupId == g.Id && ug.UserId == usId).FirstOrDefault();
+                    if (!(inGroup != null && inGroup.IsApproved == true)) continue;
+                }
                 var admin = await _userManager.FindByIdAsync(g.UserId);
                 var categs = new List<int>();
                 if (g.GroupCategory != null && g.GroupCategory.Count > 0)
@@ -148,7 +199,7 @@ namespace Aurora.Controllers
         public async Task<IActionResult> GetRole(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ug = db.UserGroups.Where(ug => ug.UserId == userId && ug.GroupId == id).First();
+            var ug = db.UserGroups.Where(ug => ug.UserId == userId && ug.GroupId == id).FirstOrDefault();
             if (ug == null)
             {
                 var resp = new
@@ -270,7 +321,7 @@ namespace Aurora.Controllers
             }
             if (Picture == null || Picture.Length == 0)
             {
-                groupModel.GroupPicture = "https://localhost:7242/images/group-pictures/default.jpg";
+                groupModel.GroupPicture = "https://localhost:7242/images/defaultgp.jpg";
             }
             else groupModel.GroupPicture = await UploadProfilePictureAsync(Picture);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -304,7 +355,9 @@ namespace Aurora.Controllers
             {
                 UserId = userId,
                 GroupId = group.Id,
-                IsAdmin = true
+                IsAdmin = true,
+                IsApproved= true,
+                IsRequested= false
             };
             group.Users = new List<UserGroup>();
             group.Users.Add(user1);
@@ -327,7 +380,9 @@ namespace Aurora.Controllers
             UserGroup ug = new UserGroup
             {
                 GroupId = id,
-                UserId = userId
+                UserId = userId,
+                IsApproved= true,
+                IsRequested=false
             };
             db.UserGroups.Add(ug);
             if (user.UserGroups == null)
@@ -506,8 +561,9 @@ namespace Aurora.Controllers
         [Authorize]
         [HttpGet("search")]
 
-        public async Task<IActionResult> Search(string search, int param = 0)
+        public async Task<IActionResult> Search(string ?search, int param = 0)
         {
+            if (search == null) return await Index();
             var groupsId = new List<int?>();
             var result = new List<object>();
             if (param == 0)

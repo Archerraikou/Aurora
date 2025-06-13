@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import Cookies from 'universal-cookie'
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../components/modal/modal';
+import Modal from '../../components/Modal/modal';
 import './CreateGroup.css'
 import fetchCategories from '../../utils/utils';
 
 function CreateGroup(){
-    const [formFields, setFormFields] = useState({GroupName: "", GroupDescription: "", Picture: "", isPrivate: "" });
+    const [formFields, setFormFields] = useState({GroupName: "", GroupDescription: "", Picture: "", isPrivate: false });
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const { groupName, groupDescription, Picture, groupCategory, isPrivate  } = formFields;
@@ -44,7 +44,7 @@ function CreateGroup(){
       };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        var IsPrivate = isPrivate=="on"?true:false
+        var IsPrivate = isPrivate
         const formData = new FormData();
         formData.append("groupName", groupName);
         formData.append("groupDescription", groupDescription);
@@ -70,6 +70,7 @@ function CreateGroup(){
             else {
                 console.log("Group created");
                 navigate("/");
+                location.reload();
             };
         } catch (error) {
             console.error('Error during group creation:', error);

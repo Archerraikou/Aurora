@@ -57,11 +57,36 @@ function Login({ closeModal }) {
       cookies.set('ExpirationDate', expiration, { path: '/' });
 
       localStorage.setItem("isLoggedIn", "true");
-      
+      const roleResponse = await fetch('https://localhost:7242/api/Auth/roles', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loginData.accessToken}`
+        }
+      });
+
+      const roleData = await roleResponse.json();
+      if (roleData?.roles?.length > 0) {
+        cookies.set("Roles", roleData.roles[0], { path: '/' });
+      }
+      const response = await fetch(`https://localhost:7242/api/ApplicationUsers/currentUser`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loginData.accessToken}`
+        }
+      });
+      if (response.ok) {
+          const data = await response.json();
+          cookies.set("UserId",data.id, { path: '/' });
+      } else {
+          console.error('Failed to fetch group info');
+      }
       if (closeModal) {
+        location.reload()
         closeModal();
       } else {
         navigate('/');
+        location.reload();
       }
     } catch (err) {
       console.error('Login error:', err);
@@ -92,7 +117,7 @@ function Login({ closeModal }) {
           className="input-field"
         /><br />
 
-        <Link to="/Registration">Create an account</Link><br /><br />
+        <a href="/Registration">Create an account</a><br /><br />
 
         {error && <div className="error-message">{error}</div>}
 

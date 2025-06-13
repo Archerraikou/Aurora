@@ -29,13 +29,11 @@ function Registration() {
             const response = await fetch('https://localhost:7242/api/Auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-                credentials: 'include' // Important for cookies
+                body: JSON.stringify(formData)
             });
     
             const data = await response.json();
             console.log("Registration response:", data); // Debug logging
-    
             if (!response.ok) {
                 // Handle different error formats
                 const errors = data.errors || data.Errors || [data.message || "Registration failed"];
@@ -43,7 +41,7 @@ function Registration() {
                 return;
             }
     
-            setSuccessMessage(data.Message || "Registration successful!");
+            setSuccessMessage(data || "Registration successful!");
             if (data.ConfirmationLink) {
                 setConfirmationLink(data.ConfirmationLink);
                 setShowConfirmationLink(true);
@@ -110,6 +108,7 @@ function Registration() {
                 
                 <button type="submit" className='registerButton'>Create account</button>
             </form>
+            <p>{successMessage}</p>
         </div>
     );
 }

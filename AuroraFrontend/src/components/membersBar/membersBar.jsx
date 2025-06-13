@@ -7,6 +7,7 @@ function MembersBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const groupId = location.pathname.replace("/Group/Menu/", "");
+  console.log(groupId)
   const handleCreateEvent = () => {
     navigate(`/Event/Create/${groupId}`);
   };
@@ -38,6 +39,7 @@ function MembersBar() {
         </div>
         <button onClick={handleCreateEvent}>Create Event</button>
         <button onClick={joinCall}>Join Call</button>
+        {<button onClick={()=>{navigate(`/Group/Show?id=${groupId}`)}}>Show group</button>}
       </div>
     </div>
   );

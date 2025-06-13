@@ -6,7 +6,7 @@ function NavbarItem(props) {
   const nav = useNavigate();
   return (
     // Va trebui modificata 100% ca sa fie "wraped" intr-un <a>
-
+    <>
     <div className="navbar-item">
       <img src={image} className="img-group"></img>
       {Profname ? (
@@ -15,6 +15,8 @@ function NavbarItem(props) {
         <p className="name-group">{name}</p>
       )}
     </div>
+    <hr></hr>
+    </>
   );
 }
 

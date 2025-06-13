@@ -6,7 +6,7 @@ import {eachDayOfInterval, endOfMonth, format, startOfMonth, getISODay, isToday,
 import clsx from 'clsx'
 import { useEffect, useState } from 'react';
 import Backdrop from '../backdrop/backdrop';
-import Modal from '../modal/modal.jsx';
+import Modal from '../Modal/modal.jsx';
 
 //Array with all the days of the week
 const week= ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -86,7 +86,7 @@ function Calendar(){
     //Obtaining the current month and year
     const [month, year]= format(currentDay,'MMMM yyyy').split(' ');
     return (
-        <div>
+        <div className="calendar">
             <div className='Title'>
                 <button className='Buttons' onClick={PrevMonth}>{'\u2190'}</button>
                 <h2 className='text-center'> {month} {year}</h2>

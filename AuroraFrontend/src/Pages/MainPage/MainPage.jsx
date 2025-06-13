@@ -1,25 +1,40 @@
 import React from "react";
 import Group from "../../components/group/group";
 import "./MainPage.css";
-
+import {useState, useEffect} from 'react';
+import Cookies from "universal-cookie";
 function MainPage() {
+  const cookies = new Cookies();
+  const [groups,setGroups] = useState([])
+  useEffect(() => {
+      const fetchGroupInfo = async () => {
+          try {
+              const response = await fetch(`https://localhost:7242/api/Groups/index`, {
+                  headers: {
+                      'Authorization': cookies.get('JWT')
+                  }
+              });
+              if (response.ok) {
+                  const data = await response.json();
+                  console.log(data);
+                  setGroups(data);
+              } else {
+                  console.error('Failed to fetch group info');
+              }
+          } catch (error) {
+              console.error('Error fetching group info:', error);
+          }
+      };
+        fetchGroupInfo();
+  }, [location.search]);
   // Cand voi avea la ce sa dau fetch, atunci voi comenta
   return (
     <div className="main-container">
       <div className="group-list overflow">
         <h2>Toate grupurile:</h2>
-        {/* Aici in mod normal am face fetch la grupuri, dar pt ele inca nu exista, voi crea unele hardcodate, doar de design */}
-        <Group
-          name="Ceva"
-          image="https://m.media-amazon.com/images/M/MV5BNWE2MjYwZGUtZGJlNS00MWZkLTg1OGQtNzI4YzQ3ZmYxZmY5XkEyXkFqcGc@._V1_.jpg"
-          description="Grup de fraieri"
-        ></Group>
-        <hr></hr>
-        <Group
-          name="Altceva"
-          image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYx_otcHXRu_qWv6JNzHWx9M3tbS8RrcngDg&s"
-          description="Grup de frauda economica asupra statului roman"
-        ></Group>
+        {groups.map((group)=>{
+          return <Group name={group.name} image={group.picture} description={group.description} id={group.id} key={group.id}></Group>
+        })}
       </div>
     </div>
   );

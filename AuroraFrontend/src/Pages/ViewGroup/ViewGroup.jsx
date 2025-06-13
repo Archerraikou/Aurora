@@ -53,6 +53,7 @@ function ViewGroup() {
 
             if (!formFields.isPrivate) {
                 navigate("/");
+                location.reload();
             } else {
                 alert("Request to join sent successfully!");
             }
@@ -141,10 +142,12 @@ function ViewGroup() {
                     <p className="group-date">{new Date(formFields.dateCreated).toLocaleDateString()}</p>
                 </div>
 
-                {role === "None" && <button className="join-button" onClick={handleJoin}>
+                {role == 'None' && <button className="join-button" onClick={handleJoin}>
                     {!formFields.isPrivate ? "Join the group" : "Request to join the group"}
                 </button>}
+                {(role=='Admin'||cookies.get("Roles")=='Admin')&&<button className="login-button" onClick={()=>{navigate('/Group/Edit?id='+id)}}>Edit Group</button>}
             </div>}
+            
         </>
     )
 }

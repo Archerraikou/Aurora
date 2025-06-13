@@ -49,7 +49,6 @@ function AdminButtons({ userInfo }) {
                 </button>
             )}
 
-            
         </div>
     );
 }

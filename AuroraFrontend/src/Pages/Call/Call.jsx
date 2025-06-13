@@ -44,7 +44,7 @@ function Call() {
         // Get local stream
         const localStream = await navigator.mediaDevices.getUserMedia({
           video: true,
-          audio: true,
+          audio: true
         });
 
         localStreamRef.current = localStream;

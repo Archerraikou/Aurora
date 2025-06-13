@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Modal from '../../components/modal/modal';
+import Modal from '../../components/Modal/modal';
 import './EditEvent.css';
 import fetchUsers from '../../utils/fetchUsers';
 import GetRole from '../../utils/GetUserRoleInGroup.jsx';
@@ -124,6 +124,7 @@ function CreateEvent(){
             console.log(response);
             if (response.ok) {
                 navigate("/auth");
+                location.reload();
             }
             else {
                 console.log("Event deletion failed");

@@ -20,17 +20,39 @@
   color: white;
 }
 
+.login-button {
+  margin-left: 20px;
+  position: relative;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  z-index: 20;
+}
+
+.login-button:hover {
+  background-color: #45a049;
+}
+
 .search-bar:focus {
   outline: none;
 }
 
 .btn {
   display: block;
-  padding: 8px 16px;
-  height: 20px;
-  width: 20px;
-  background-color: springgreen;
+  height: 30px;
+  width: 100px;
+  margin-left: 50px;
+  background-color: rgb(37, 83, 60);
   color: white;
+  border-color:var(--secundar);
+}
+.btn:hover {
+  background-color: #196b1d;
 }
 
 .useCategory {
@@ -38,4 +60,48 @@
   justify-content: center;
   margin-top: 10px;
   gap: 5px;
+}
+.bottom {
+  margin-left: 30px;
+  padding-top: 10px;
+  border-left: 0.5px solid rgba(22, 153, 118, 0.5);
+  margin-right: 10px;
+  justify-content: flex-end;
+  /* display: flex;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  white-space: nowrap; */
+}
+
+.img-gr {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  cursor: pointer;
+  margin-left: 5px;
+  justify-content: flex-start;
+  image-rendering: smooth;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+}
+
+.navbar-item-profile {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: rgba(245, 245, 245, 0.8);
+}
+
+.navbar-item-profile:hover {
+  opacity: 0.66;
+  transition: opacity 0.3s ease;
 }

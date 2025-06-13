@@ -40,6 +40,23 @@ namespace Aurora.Controllers
             _configuration = configuration;
             _logger = logger;
         }
+        [Authorize]
+        [HttpGet("currentUser")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                _logger.LogWarning("Delete account failed: User ID claim not found");
+                return BadRequest(new { message = "User identity not found" });
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            var result = new
+            {
+                Id = user.Id
+            };
+            return Ok(result);
+        }
         [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -178,6 +195,7 @@ namespace Aurora.Controllers
             }
             return selectList;
         }
+        [Authorize]
         [HttpGet("{userId}")]
         public async Task<ActionResult<ApplicationUser>> Show(string userId)
         {
@@ -201,7 +219,7 @@ namespace Aurora.Controllers
             
             return Ok(user);
         }
-
+        [Authorize]
         [HttpPost("edit/{userId}")]
         public async Task<ActionResult<ApplicationUser>> Edit(string userId, [FromForm] RelevantUserInformation RUI, IFormFile? ProfilePicture = null)
         {
