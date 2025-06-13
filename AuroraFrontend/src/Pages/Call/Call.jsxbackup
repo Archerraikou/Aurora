@@ -5,6 +5,7 @@ import * as signalR from "@microsoft/signalr";
 import Cookies from 'universal-cookie'
 
 function Call() {
+  const cookies = new Cookies();
   const localVideoRef = useRef(null);
   const screenShareRef = useRef(null);
   const connectionRef = useRef(null);
@@ -14,12 +15,19 @@ function Call() {
   const [participants, setParticipants] = useState([]);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [mainVideo, setMainVideo] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const cookies = new Cookies();
-  const roomId = location.pathname.replace("/Call/", "");
+  const [userId, setUserId] = useState("awaiting allowance");
+ // const roomId = location.pathname.replace("/Call/", "");
+  const roomId = 1;
   // Use a persistent userId that won't change on refresh
-  useEffect(()=>{
+
+  // Store userId in localStorage to keep it persistent across refreshes
+  // useEffect(() => {
+  //   if (!localStorage.getItem("callUserId")) {
+  //     localStorage.setItem("callUserId", userId);
+  //   }
+  // }, [userId]);
+
+  useEffect(() => {
   const token = cookies.get("JWT");
   const cookieId = cookies.get("UserId");
   fetch(`https://localhost:7242/api/User/${cookieId}`, {
@@ -35,21 +43,10 @@ function Call() {
         .then((data) => {
           console.log(data)
           setUserId(data.nick);
-          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching user:", error);
         });
-  },[])
-    
-  // Store userId in localStorage to keep it persistent across refreshes
-  useEffect(() => {
-    if (!localStorage.getItem("callUserId")) {
-      localStorage.setItem("callUserId", userId);
-    }
-  }, [userId]);
-
-  useEffect(() => {
     const startCall = async () => {
       try {
         //Cream Conexiunea cu SignalR
@@ -297,37 +294,36 @@ function Call() {
       }
     };
 
-      if(userId != null)
-        startCall();
+    startCall();
 
-      return () => {
-        // Inchidem conexiunile
-        Object.values(peersRef.current).forEach((peer) => {
-          if (peer && peer.close) {
-            peer.close();
-          }
-        });
-
-        // Parasim camera in care ne aflam
-        if (
-          connectionRef.current &&
-          connectionRef.current.state === "Connected"
-        ) {
-          connectionRef.current.invoke("LeaveRoom", roomId).catch(console.error);
-          connectionRef.current.stop().catch(console.error);
+    return () => {
+      // Inchidem conexiunile
+      Object.values(peersRef.current).forEach((peer) => {
+        if (peer && peer.close) {
+          peer.close();
         }
+      });
 
-        // Oprim stream-urile
-        if (localStreamRef.current) {
-          localStreamRef.current.getTracks().forEach((track) => track.stop());
-        }
+      // Parasim camera in care ne aflam
+      if (
+        connectionRef.current &&
+        connectionRef.current.state === "Connected"
+      ) {
+        connectionRef.current.invoke("LeaveRoom", roomId).catch(console.error);
+        connectionRef.current.stop().catch(console.error);
+      }
 
-        // Oprim screen share-ul
-        if (screenStreamRef.current) {
-          screenStreamRef.current.getTracks().forEach((track) => track.stop());
-        }
-      };
-  }, [userId]);
+      // Oprim stream-urile
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+
+      // Oprim screen share-ul
+      if (screenStreamRef.current) {
+        screenStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   // Buton camera
   const toggleVideo = () => {
@@ -442,10 +438,6 @@ function Call() {
     }
   };
 
-  if(loading)
-  {
-    return (<div>loading</div>)
-  }
   return (
     <div className="container-call">
       <div id="main-video">
@@ -490,7 +482,7 @@ function Call() {
                   }
                 }}
               ></video>
-              <div className="call-member-name">{participant.name.split(" ")[1]}</div>
+              <div className="call-member-name">{participant.name}</div>
             </div>
           ) : (
             <CallMember
@@ -506,7 +498,14 @@ function Call() {
             ></CallMember>
           )
         )}
-       
+        <CallMember
+          name="Membru1"
+          image="https://i.redd.it/rrrtcx1xq5mc1.jpeg"
+        />
+        <CallMember
+          name="Ma-ta"
+          image="https://i.pinimg.com/474x/51/e9/a5/51e9a52f8a061a560925605c816a41b8.jpg"
+        />
       </div>
       <div className="controller">
         <button className="controller-button" onClick={toggleAudio}>

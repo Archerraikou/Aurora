@@ -15,7 +15,7 @@
 .editUserFormContainer
 {
   height: 89vh; /* full viewport height */
-  width: 175vh;
+  width: 526%;
   justify-content: center; /* center horizontally */
   align-items: flex-start; /* align items at the top */
   padding-top: 80px; /* push container slightly down */
