@@ -19,7 +19,7 @@ import ViewGroup from './pages/ViewGroup/ViewGroup.jsx';
 import Login from './components/login/login.jsx';
 import NotificationsPage from './pages/NotificationsPage/NotificationsPage.jsx';
 import NotificationDetailPage from './pages/NotificationDetailPage/NotificationDetailPage.jsx';
-
+import GroupDocument from './Pages/GroupDocument/GroupDocument.jsx';  // or wherever your GroupDocument component is
 import EditEvent from './Pages/EditEvent/EditEvent.jsx';
 import IndexUserPage from './Pages/IndexUserPage/IndexUserPage.jsx';
 import ShowUserPage from './Pages/ShowUserPage/ShowUserPage.jsx';
@@ -98,6 +98,8 @@ function App() {
         <Route path="/Group/Edit" element={<EditGroup />} />
         <Route path="/Group/Show" element={<ViewGroup />} />
         <Route path="/Group/Menu/*" element={<GroupPage />} />
+        <Route path="/GroupDocument" element={<GroupDocument />} />
+
         <Route path="/Call/*" element={<Call />}></Route>
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/notification/:id" element={<NotificationDetailPage />} />

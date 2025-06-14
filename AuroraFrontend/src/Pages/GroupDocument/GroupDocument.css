@@ -1,0 +1,49 @@
+.doc-container {
+  padding: 2rem;
+  max-width: 1100px; /* increased max width */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 95vw; /* responsive width */
+  box-sizing: border-box;
+}
+
+.doc-editor {
+  width: 100%; /* full width of container */
+  height: 450px;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  min-width: 800px; /* minimum width to avoid shrinking too much */
+  max-width: 1100px; /* limit max width */
+}
+
+
+.doc-preview {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    background: #fafafa;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+  
+button {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
