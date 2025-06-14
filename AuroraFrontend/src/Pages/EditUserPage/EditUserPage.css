@@ -5,7 +5,7 @@
   max-width: 500px;
   margin: 0 auto;
   padding: 24px;
-  background-color: #2c2f33; /* dark background */
+  background-color: var(--secundar); /* dark background */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   color: #e0e0e0;
@@ -19,7 +19,7 @@
   justify-content: center; /* center horizontally */
   align-items: flex-start; /* align items at the top */
   padding-top: 80px; /* push container slightly down */
-  background-color: #1a1d21; /* optional: dark background */
+  background-color: var(--principal); /* optional: dark background */
 }
 
 .editUserForm label {
@@ -91,4 +91,19 @@
 
 .editUserForm button[type="submit"]:hover {
   background-color: #81c784;
+}
+.deleteButton {
+  background-color: red;
+  color: #1b1b1b;
+  font-weight: 700;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.deleteButton:hover {
+  background-color: red;
 }

@@ -124,7 +124,7 @@ namespace Aurora.Controllers
                 // Assign default role with error handling
                 try
                 {
-                    if (_userManager.Users.Count() == 0)
+                    if (_userManager.Users.Count() == 1)
                     {
                         await _userManager.AddToRoleAsync(user, "Admin");
                     }

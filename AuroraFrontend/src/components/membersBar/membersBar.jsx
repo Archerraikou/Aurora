@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import React, {useState, useEffect, useRef} from 'react';
 import Cookies from 'universal-cookie';
+import { Link } from "react-router-dom";
 
 function MembersBar() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ function MembersBar() {
     {
       console.log(e.message)
     }
-  },[])
+  },[groupId])
 
   useEffect(()=>
   {
@@ -115,10 +116,12 @@ function MembersBar() {
               if(membru !== "Admin" && membru!=="User")
               {
                 return(
-                <NavbarItem 
-                  Profname= {membru.nickname}
-                  image = {"https://localhost:7242/api/ApplicationUsers/pfp/" + membru.id}
-                ></NavbarItem>)
+                <Link to={"/PM/"+membru.id}>
+                  <NavbarItem
+                    Profname= {membru.nickname}
+                    image = {"https://localhost:7242/api/ApplicationUsers/pfp/" + membru.id}
+                  ></NavbarItem>
+                </Link>)
               }
               else
               {
