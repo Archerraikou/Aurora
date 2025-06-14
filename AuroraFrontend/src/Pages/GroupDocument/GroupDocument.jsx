@@ -7,26 +7,25 @@ import * as signalR from '@microsoft/signalr';
 export default function GroupDocument() {
   const cookies = new Cookies();
   const location = useLocation();
-  const groupId = new URLSearchParams(location.search).get('id');
+  const groupId = new URLSearchParams(location.search).get('id');   // Preluăm ID-ul grupului din query string (ex: ?id=123)
   const [document, setDocument] = useState(null);
   const [content, setContent] = useState('');
-  const contentRef = useRef('');
-  const documentRef = useRef(null);
+  const contentRef = useRef('');  // Ref pentru conținut, folosit pentru a evita closure-uri în useEffect și SignalR
+  const documentRef = useRef(null);// Ref pentru document, similar pentru referință stabilă
   const [role, setRole] = useState(null);
-  const connectionRef = useRef(null);
-  const typingTimeoutRef = useRef(null);
-  const isTypingRef = useRef(false);
+  const connectionRef = useRef(null);  // Ref pentru conexiunea SignalR, să putem accesa conexiunea în afara hook-urilor
+  const typingTimeoutRef = useRef(null);  // Ref pentru timeout-ul folosit la detectarea când utilizatorul "a încetat să tasteze"
+  const isTypingRef = useRef(false);  // Flag pentru a marca dacă utilizatorul tastează momentan (ca să nu suprascriem conținutul în timpul editării)
+
 
   useEffect(() => {
     documentRef.current = document;
   }, [document]);
 
-  // Load document & role on mount
   useEffect(() => {
     const load = async () => {
       const jwt = cookies.get('JWT');
-
-      // fetch document
+      // Cerem conținutul documentului asociat grupului
       const resDoc = await fetch(`https://localhost:7242/api/Document/group/${groupId}`, {
         headers: { Authorization: jwt }
       });
@@ -36,13 +35,11 @@ export default function GroupDocument() {
         setContent(data.content || '');
         contentRef.current = data.content || '';
       } else if (resDoc.status === 404) {
-        // no document found
         setDocument(null);
         setContent('');
         contentRef.current = '';
       }
-
-      // fetch user role
+      // Cerem rolul curentului utilizator pentru acest grup
       const resRole = await fetch(`https://localhost:7242/api/Groups/role?id=${groupId}`, {
         headers: { Authorization: jwt }
       });
@@ -56,14 +53,14 @@ export default function GroupDocument() {
     load();
   }, [groupId]);
 
-  // Initialize SignalR
+ // Inițializăm conexiunea SignalR pentru comunicare în timp real
   useEffect(() => {
     const jwt = cookies.get('JWT');
     const connection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:7242/documentHub', {
         accessTokenFactory: () => jwt
       })
-      .withAutomaticReconnect()
+      .withAutomaticReconnect()// reconectare automată în caz de pierdere conexiune
       .build();
 
     connection.on('ReceiveDocumentUpdate', (newContent) => {
@@ -72,7 +69,7 @@ export default function GroupDocument() {
         contentRef.current = newContent;
       }
     });
-
+    // Pornim conexiunea și ne alăturăm grupului SignalR corespunzător documentului
     connection.start()
       .then(() => {
         connection.invoke('JoinDocument', groupId);
@@ -85,7 +82,7 @@ export default function GroupDocument() {
     };
   }, [groupId]);
 
-  // Auto-save every 2 seconds
+  // Auto-save la cate 2 secunde
   useEffect(() => {
     const interval = setInterval(async () => {
       if (documentRef.current && documentRef.current.id) {
@@ -109,7 +106,7 @@ export default function GroupDocument() {
 
     return () => clearInterval(interval);
   }, []);
-
+  // Când utilizatorul modifică conținutul, actualizăm starea locală și trimitem update către SignalR după 300ms
   const handleChange = (e) => {
     const newText = e.target.value;
     setContent(newText);
@@ -131,7 +128,7 @@ export default function GroupDocument() {
   const canEdit = role !== null && role !== 'None';
   const isAdmin = role === 'Admin';
 
-  // Create new document
+  // Funcție pentru crearea unui nou document (disponibilă doar adminilor)
   const createDocument = async () => {
     try {
       const jwt = cookies.get('JWT');
@@ -161,6 +158,7 @@ export default function GroupDocument() {
       alert('Error creating document.');
     }
   };
+  // Funcție pentru ștergerea documentului curent (disponibilă doar adminilor)
 
   const deleteDocument = async () => {
     if (!window.confirm('Are you sure you want to delete this document?')) return;

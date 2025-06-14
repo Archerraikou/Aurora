@@ -7,16 +7,20 @@ const NotificationDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const cookies = new Cookies();
+  
+  // Funcție async pentru a prelua detaliile notificării de la backend
 
   useEffect(() => {
     const fetchNotification = async () => {
-      try {
+      try {    
+        // Luăm tokenul JWT din cookie-uri
+
         const token = cookies.get('JWT');
         if (!token) {
           console.error('No JWT token found');
-          return;
+          return;// dacă nu există token, nu continuăm
         }
-
+        // Facem request GET către API pentru notificarea cu id-ul din URL
         const response = await fetch(`https://localhost:7242/api/notifications/${id}`, {
           method: 'GET',
           headers: {
@@ -29,7 +33,7 @@ const NotificationDetailPage = () => {
           console.error('Failed to fetch notification');
           return;
         }
-
+        // Parsăm răspunsul JSON și salvăm notificarea în stare
         const data = await response.json();
         setNotification(data);
       } catch (error) {
@@ -44,7 +48,7 @@ const NotificationDetailPage = () => {
 
   if (loading) return <div>Loading...</div>;
   if (!notification) return <div>Notification not found</div>;
-
+  // Dacă există notificarea, afișăm detaliile acesteia
   return (
     <div>
       <h1>{notification.type}</h1>
