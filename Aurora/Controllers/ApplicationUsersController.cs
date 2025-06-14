@@ -144,9 +144,13 @@ namespace Aurora.Controllers
             // Delete all the entries of this user from all ICollections that they were in
             var interests = db.CategoryUsers.Where(x => x.UserId == user.Id);
             db.CategoryUsers.RemoveRange(interests);
-            var privateConversations = db.PrivateConversations.Where(x => x.User1 == user.Id || x.User2 == user.Id);
-            db.PrivateConversations.RemoveRange(privateConversations);
-
+            var privateConversations = db.PrivateConversations.Include("Messages").Where(x => x.User1 == user.Id || x.User2 == user.Id);
+            foreach (var privateConversation in privateConversations)
+            {
+                db.Messages.RemoveRange(privateConversation.Messages);
+            }
+            var messages = db.Messages.Where(m => m.UserId == userId);
+            db.Messages.RemoveRange(messages);
             var notifications = db.Notifications.Where(x => x.UserId == user.Id);
             db.Notifications.RemoveRange(notifications);
 
