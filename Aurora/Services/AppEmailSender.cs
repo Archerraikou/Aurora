@@ -9,6 +9,8 @@ namespace Aurora.Services
     {
         private readonly IConfiguration _configuration;
 
+        // Constructor care primește configurația aplicației (de exemplu, din appsettings.json)
+
         public AppEmailSender(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -16,14 +18,14 @@ namespace Aurora.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string htmlMessage)
         {
-            // Fetch config values with null checks
+            // Preluăm din configurație parametrii necesari pentru SMTP (server, port, user, parolă, email expeditor)
             var smtpHost = _configuration["EmailSettings:SmtpHost"];
             var smtpPortStr = _configuration["EmailSettings:SmtpPort"];
             var smtpUser = _configuration["EmailSettings:SmtpUser"];
             var smtpPass = _configuration["EmailSettings:SmtpPass"];
             var fromEmail = _configuration["EmailSettings:FromEmail"];
 
-            // Validate required settings
+            // Verificăm dacă toate setările sunt prezente; dacă lipsește vreuna, aruncăm excepție
             if (string.IsNullOrWhiteSpace(smtpHost) ||
                 string.IsNullOrWhiteSpace(smtpPortStr) ||
                 string.IsNullOrWhiteSpace(smtpUser) ||
@@ -37,7 +39,7 @@ namespace Aurora.Services
             {
                 throw new Exception("Invalid SMTP port number in configuration.");
             }
-
+            // Construim obiectul MailMessage cu datele email-ului
             var mail = new MailMessage
             {
                 From = new MailAddress(fromEmail),
@@ -47,12 +49,13 @@ namespace Aurora.Services
             };
             mail.To.Add(toEmail);
 
+            // Configurăm clientul SMTP pentru trimiterea email-ului
             using var smtp = new SmtpClient(smtpHost, smtpPort)
             {
                 Credentials = new NetworkCredential(smtpUser, smtpPass),
                 EnableSsl = true
             };
-
+            // Trimiterea efectivă a email-ului, asincron
             await smtp.SendMailAsync(mail);
         }
 

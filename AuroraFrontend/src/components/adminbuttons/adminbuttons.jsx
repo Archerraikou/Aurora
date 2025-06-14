@@ -48,6 +48,7 @@ function AdminButtons({ userInfo }) {
                     {userInfo.role === 'Admin' ? 'Demote' : 'Promote'}
                 </button>
             )}
+
         </div>
     );
 }

@@ -142,6 +142,8 @@ function MembersBar() {
         <button onClick={joinCall}>Join Call</button>
         {<button onClick={()=>{navigate(`/Group/Show?id=${groupId}`)}}>Show group</button>}
         <button className="leaveButton" onClick={leaveGroup}>Leave group</button>
+        <button onClick={() => navigate(`/GroupDocument?id=${groupId}`)}>Open Document</button>
+
       </div>
     </div>
   );

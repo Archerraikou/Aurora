@@ -18,7 +18,8 @@ namespace Aurora.Controllers
             _context = context;
         }
 
-        // Fetch notifications for a logged-in user
+        // Obține notificările pentru utilizatorul autentificat
+        // Parametrul unreadOnly filtrează doar notificările necitite, dacă e true
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetNotifications(bool unreadOnly = false)
@@ -41,7 +42,7 @@ namespace Aurora.Controllers
             }
         }
 
-        // Get and mark a single notification as read
+        // Obține o notificare specifică după ID și o marchează ca citită
         [HttpGet("showNotification")]
         [Authorize]
         public async Task<IActionResult> ShowNotification([FromQuery] int id)
@@ -63,13 +64,13 @@ namespace Aurora.Controllers
             return Ok(notification);
         }
 
-        // Mark all notifications as read
+        // Marchează toate notificările utilizatorului ca fiind citite
         [HttpPut("mark-all-read")]
         [Authorize]
         public async Task<IActionResult> MarkAllAsRead()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+            // Găsește toate notificările necitite ale utilizatorului   
             var unreadNotifications = await _context.Notifications
                 .Where(n => n.UserId == userId && !n.IsRead)
                 .ToListAsync();
@@ -84,7 +85,7 @@ namespace Aurora.Controllers
             return NoContent();
         }
 
-        // Delete a single notification
+        // Șterge o notificare specifică după ID, dacă aparține utilizatorului
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteNotification(int id)
@@ -96,7 +97,7 @@ namespace Aurora.Controllers
 
             if (notification == null)
             {
-                return NotFound();
+                return NotFound();// Notificarea nu există sau nu aparține utilizatorului
             }
 
             _context.Notifications.Remove(notification);

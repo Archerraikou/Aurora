@@ -5,7 +5,8 @@ import './NotificationsPage.css';
 
 Modal.setAppElement('#root');
 
-const NotificationsPage = () => {
+const NotificationsPage = () => {  
+  // Stări pentru notificări, loading, eroare, paginare și notificarea selectată
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,6 +15,8 @@ const NotificationsPage = () => {
   const cookies = new Cookies();
 
   const notificationsPerPage = 3;
+  
+  // Fetch pentru lista de notificări
 
   const fetchNotifications = async () => {
     const token = cookies.get('JWT');
@@ -37,6 +40,7 @@ const NotificationsPage = () => {
       }
 
       const data = await response.json();
+      // Asigurăm că fiecare notificare are proprietățile isHandled și isRead
       const updatedNotifications = data.map(notification => ({
         ...notification,
         isHandled: notification.isHandled || false,
@@ -53,6 +57,8 @@ const NotificationsPage = () => {
   useEffect(() => {
     fetchNotifications();
   }, []);
+  
+  // Când se dă click pe o notificare, încărcăm detalii și o marcăm ca citită
 
   const handleNotificationClick = async (notificationId) => {
     const token = cookies.get('JWT');
@@ -81,11 +87,12 @@ const NotificationsPage = () => {
       console.error('Error fetching notification details:', error);
     }
   };
+  // Închidem modalul de detalii notificare
 
   const handleModalClose = () => {
     setSelectedNotification(null);
   };
-
+  // Tratarea cererilor de intrare in grup (accept/reject)
   const handleRequestDecision = async (notificationId, groupId, userEmail, isApproved) => {
     const token = cookies.get('JWT');
     const adminResponse = window.prompt('Please enter a response for the user:');
@@ -109,7 +116,7 @@ const NotificationsPage = () => {
       if (!response.ok) {
         throw new Error('Failed to process request');
       }
-
+      // Actualizăm notificarea local, marcând-o ca procesată și adăugând răspunsul adminului
       setNotifications((prevNotifications) =>
         prevNotifications.map(notification =>
           notification.id === notificationId
@@ -123,13 +130,14 @@ const NotificationsPage = () => {
       );
 
       alert(`User has been ${isApproved ? 'approved' : 'rejected'} successfully!`);
+      // Reîncărcăm notificările
       fetchNotifications();
     } catch (error) {
       console.error(error);
       alert('Something went wrong.');
     }
   };
-
+  // Ștergerea unei notificări
   const handleDeleteNotification = async (notificationId) => {
     const token = cookies.get('JWT');
 
@@ -152,12 +160,14 @@ const NotificationsPage = () => {
       console.error('Error deleting notification:', error);
     }
   };
+  // Calculăm indexurile pentru pagina curentă și extragem notificările afișate
 
   const indexOfLastNotification = currentPage * notificationsPerPage;
   const indexOfFirstNotification = indexOfLastNotification - notificationsPerPage;
   const currentNotifications = notifications.slice(indexOfFirstNotification, indexOfLastNotification);
   const totalPages = Math.ceil(notifications.length / notificationsPerPage);
 
+  // Navigare paginare
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
@@ -179,13 +189,13 @@ const NotificationsPage = () => {
     const match = content.match(/\(ID: (\d+)\)/);
     return match ? parseInt(match[1], 10) : null;
   };
-
+  // Determinăm statusul cererii în funcție de textul notificării
   const getRequestStatus = (content) => {
     if (content.includes('approved')) return 'Approved';
     if (content.includes('rejected')) return 'Rejected';
     return 'New';
   };
-
+  // Randăm o notificare, cu butoane specifice pentru cereri de aderare la grup
   const renderNotification = (notification) => {
     const isGroupJoinRequest = notification.type === 'Group Join Request';
     const groupId = extractGroupId(notification.notificationContent);

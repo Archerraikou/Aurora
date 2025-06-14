@@ -32,36 +32,28 @@ namespace Aurora.Controllers
         }
         private async Task SendNotification(string adminUserId, string userEmail, int groupId, string notificationMessage, string adminResponse = null)
         {
-            // Find the user by email
+            // Găsește utilizatorul după e-mail
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 return;
             }
 
-            // Create a new notification
+            // Creează o nouă notificare
             var notification = new Notification
             {
-                // Set the UserId to the recipient user's Id
                 UserId = user.Id,
-
-                // Set the SentId to the admin's Id (who is sending the notification)
                 SentId = adminUserId,
 
-                // Define the type of notification (e.g., "Group Request Approval")
-                Type = "Group Request Approval",  // You can make this dynamic based on the action
+                Type = "Group Request Approval",
 
-                // Set the message for the notification
                 NotificationContent = $"{notificationMessage} Admin's response: {adminResponse}",
 
-                // Set the notification date to the current time
                 NotificationDate = DateTime.UtcNow,
-
-                // Set the notification as unread by default
+                // Notificarea e necitită inițial
                 IsRead = false
             };
 
-            // Save the notification to the database
             db.Notifications.Add(notification);
             await db.SaveChangesAsync();
         }
@@ -87,7 +79,7 @@ namespace Aurora.Controllers
                 if (usId != null)
                 {
                     var inGroup = db.UserGroups.Where(ug => ug.GroupId == g.Id && ug.UserId == usId).FirstOrDefault();
-                    if (inGroup != null && inGroup.IsApproved==true) continue;
+                    if (inGroup != null && inGroup.IsApproved == true) continue;
                 }
                 var admin = await _userManager.FindByIdAsync(g.UserId);
                 var categs = new List<int>();
@@ -279,7 +271,7 @@ namespace Aurora.Controllers
         {
             var group = await db.Groups.Where(g => g.Id == id).FirstAsync();
             var admin = await _userManager.FindByIdAsync(group.UserId);
-            var adminsId = await  db.UserGroups.Where(ug => ug.GroupId == group.Id && ug.IsAdmin == true).ToListAsync();
+            var adminsId = await db.UserGroups.Where(ug => ug.GroupId == group.Id && ug.IsAdmin == true).ToListAsync();
             var admins = new List<ApplicationUser>();
             foreach (var ad in adminsId)
             {
@@ -296,7 +288,7 @@ namespace Aurora.Controllers
             var userGroups = await db.UserGroups.Where(ug => ug.GroupId == group.Id).ToListAsync();
             var groupCategs = await db.CategoryGroups.Where(cg => cg.GroupId == group.Id).ToListAsync();
             var messages = await db.GroupMessages.Where(m => m.GroupId == group.Id).ToListAsync();
-            var events = await db.Events.Where(e=> e.GroupId== group.Id).ToListAsync();
+            var events = await db.Events.Where(e => e.GroupId == group.Id).ToListAsync();
             foreach (var categs in groupCategs)
             {
                 db.CategoryGroups.Remove(categs);
@@ -309,9 +301,10 @@ namespace Aurora.Controllers
             {
                 db.GroupMessages.Remove(msg);
             }
-            foreach (var ev in events){
-                var userEvents= await  db.UserEvents.Where(ue=> ue.EventId== ev.Id).ToListAsync();
-                foreach(var userEvent in userEvents)
+            foreach (var ev in events)
+            {
+                var userEvents = await db.UserEvents.Where(ue => ue.EventId == ev.Id).ToListAsync();
+                foreach (var userEvent in userEvents)
                 {
                     db.UserEvents.Remove(userEvent);
                 }
@@ -366,8 +359,8 @@ namespace Aurora.Controllers
                 UserId = userId,
                 GroupId = group.Id,
                 IsAdmin = true,
-                IsApproved= true,
-                IsRequested= false
+                IsApproved = true,
+                IsRequested = false
             };
             group.Users = new List<UserGroup>();
             group.Users.Add(user1);
@@ -391,8 +384,8 @@ namespace Aurora.Controllers
             {
                 GroupId = id,
                 UserId = userId,
-                IsApproved= true,
-                IsRequested=false
+                IsApproved = true,
+                IsRequested = false
             };
             db.UserGroups.Add(ug);
             if (user.UserGroups == null)
@@ -415,8 +408,8 @@ namespace Aurora.Controllers
             Group group = db.Groups.Where(g => g.Id == id).First();
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
-            var userGroup = db.UserGroups.Where(ug=>ug.GroupId == id && ug.UserId == userId).FirstOrDefault();
-            if (userGroup != null && group.UserId!=userId)
+            var userGroup = db.UserGroups.Where(ug => ug.GroupId == id && ug.UserId == userId).FirstOrDefault();
+            if (userGroup != null && group.UserId != userId)
             {
                 db.UserGroups.Remove(userGroup);
                 db.SaveChanges();
@@ -425,9 +418,10 @@ namespace Aurora.Controllers
             return BadRequest(405);
         }
         [Authorize]
+
         [HttpGet("request")]
         public async Task<IActionResult> Request(int id)
-        {
+        {// Obține ID-ul utilizatorului curent autentificat
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var group = await db.Groups.FindAsync(id);
 
@@ -437,14 +431,12 @@ namespace Aurora.Controllers
             if (!group.IsPrivate.HasValue || !group.IsPrivate.Value)
                 return BadRequest("This group is not private.");
 
-            // Check if the user has already requested to join
             var existingRequest = await db.UserGroups
                 .FirstOrDefaultAsync(ug => ug.UserId == userId && ug.GroupId == id && ug.IsRequested);
 
             if (existingRequest != null)
                 return BadRequest("You have already requested to join this group.");
 
-            // Create the request
             var userGroupRequest = new UserGroup
             {
                 UserId = userId,
@@ -456,7 +448,7 @@ namespace Aurora.Controllers
             db.UserGroups.Add(userGroupRequest);
             await db.SaveChangesAsync();
 
-            // NOW send a notification to all admins
+            // Trimite notificări tuturor adminilor grupului
             var admins = await db.UserGroups
                 .Where(ug => ug.GroupId == id && ug.IsAdmin == true)
                 .Select(ug => ug.UserId)
@@ -466,8 +458,8 @@ namespace Aurora.Controllers
             {
                 var notification = new Notification
                 {
-                    UserId = adminId, // Admin is the receiver
-                    SentId = userId,  // Requesting user is the sender
+                    UserId = adminId,
+                    SentId = userId,
                     Type = "Group Join Request",
                     NotificationContent = $"User {User.Identity.Name} requested to join your group (ID: {id}).",
                     NotificationDate = DateTime.UtcNow,
@@ -488,7 +480,7 @@ namespace Aurora.Controllers
         [Authorize]
         public async Task<IActionResult> ApproveRequest(int groupId, string userEmail, bool isApproved, string adminResponse)
         {
-            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the admin's userId
+            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var group = await db.Groups.FindAsync(groupId);
             if (group == null)
@@ -496,14 +488,14 @@ namespace Aurora.Controllers
                 return BadRequest("Group not found.");
             }
 
-            // Ensure the user is an admin of the group
+            // Verifică dacă utilizatorul curent este admin al grupului
             var isAdmin = await db.UserGroups.AnyAsync(ug => ug.UserId == adminUserId && ug.GroupId == groupId && ug.IsAdmin == true);
             if (!isAdmin)
             {
                 return BadRequest("You do not have permission to approve or reject requests for this group.");
             }
 
-            // Find the request by user email
+            // Găsește utilizatorul care a trimis cererea
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
@@ -517,15 +509,13 @@ namespace Aurora.Controllers
             {
                 return BadRequest("No request found for this user.");
             }
+            // Actualizează starea cererii (aprobat sau respins)
 
-            // Approve or reject the request
             userGroupRequest.IsApproved = isApproved;
-            userGroupRequest.IsRequested = false; // Remove the pending request status
+            userGroupRequest.IsRequested = false;
 
-            // Save changes to the database
             await db.SaveChangesAsync();
 
-            // Send notification to the user
             var notificationMessage = isApproved ? "Your request to join the group has been approved." : "Your request to join the group has been rejected.";
             await SendNotification(adminUserId, userEmail, groupId, notificationMessage, adminResponse);
 
@@ -533,12 +523,11 @@ namespace Aurora.Controllers
         }
 
 
-        // Reject a group request
         [HttpPost("rejectRequest")]
         [Authorize]
         public async Task<IActionResult> RejectRequest(int groupId, string userEmail, string adminResponse)
         {
-            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the admin's userId
+            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var group = await db.Groups.FindAsync(groupId);
             if (group == null)
@@ -546,16 +535,16 @@ namespace Aurora.Controllers
                 return BadRequest("Group not found.");
             }
 
-            // Ensure the user is an admin of the group
-            var user = await _userManager.FindByIdAsync(adminUserId); // Get the admin user
+            // Verifică dacă user-ul are dreptul de a respinge cereri
+            var user = await _userManager.FindByIdAsync(adminUserId);
 
-            var isAdmin = await db.UserGroups.AnyAsync(ug => ug.UserId == user.Id && ug.GroupId == groupId && ug.IsAdmin == true); // Check if the admin has permission
+            var isAdmin = await db.UserGroups.AnyAsync(ug => ug.UserId == user.Id && ug.GroupId == groupId && ug.IsAdmin == true);
             if (!isAdmin)
             {
                 return BadRequest("You do not have permission to approve or reject requests for this group.");
             }
 
-            // Find the request by user email
+            // Găsește utilizatorul care a trimis cererea
             var userToReject = await _userManager.FindByEmailAsync(userEmail);
             if (userToReject == null)
             {
@@ -569,14 +558,12 @@ namespace Aurora.Controllers
                 return BadRequest("No request found for this user.");
             }
 
-            // Reject the request (no need to approve)
+            // Respingerea cererii (fără aprobare)
             userGroupRequest.IsApproved = false;
-            userGroupRequest.IsRequested = false; // Remove the pending request status
+            userGroupRequest.IsRequested = false;
 
-            // Save changes to the database
             await db.SaveChangesAsync();
 
-            // Send notification to the user
             await SendNotification(adminUserId, userEmail, groupId, "Your request to join the group has been rejected.", adminResponse);
 
             return Ok(new { message = "Request rejected." });
@@ -586,7 +573,7 @@ namespace Aurora.Controllers
         [Authorize]
         [HttpGet("search")]
 
-        public async Task<IActionResult> Search(string ?search, int param = 0)
+        public async Task<IActionResult> Search(string? search, int param = 0)
         {
             if (search == null) return await Index();
             var groupsId = new List<int?>();

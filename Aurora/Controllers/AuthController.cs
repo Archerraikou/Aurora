@@ -26,6 +26,7 @@ namespace Aurora.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
+        // Injectarea serviciilor necesare: manageri de utilizatori, configurare, logare, trimitere email, etc. 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
@@ -52,16 +53,23 @@ namespace Aurora.Controllers
             _emailSender = emailSender;
             _environment = environment;
             _roleManager = roleManager;
+<<<<<<< HEAD
             _httpClientFactory = factory;
             _config = config;
+=======
+>>>>>>> Radu
         }
+       
+        // Endpoint pentru înregistrarea unui nou utilizator
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel formUser)
         {
             try
-            {
-                if(formUser == null)
+            {  
+                // Validare câmpuri lipsă
+
+                if (formUser == null)
                 {
                     return BadRequest("All fields are required");
                 }
@@ -69,11 +77,12 @@ namespace Aurora.Controllers
                 string email = formUser.Email;
                 string password = formUser.Password;
                 var errors = new List<string>();
-
+                // Validare email și parolă
                 if (string.IsNullOrWhiteSpace(email))
                     errors.Add("Email is required.");
                 else if (!new EmailAddressAttribute().IsValid(email))
                     errors.Add("Please enter a valid email address.");
+                
 
                 if (string.IsNullOrWhiteSpace(password))
                     errors.Add("Password is required.");
@@ -89,7 +98,7 @@ namespace Aurora.Controllers
                     });
                 }
 
-                // Check if user already exists
+                // Verificare dacă utilizatorul există deja
                 var existingUser = await _userManager.FindByEmailAsync(email);
                 if (existingUser != null)
                 {
@@ -100,7 +109,7 @@ namespace Aurora.Controllers
                     });
                 }
                 var basePath = Path.GetFullPath(Path.Combine("wwwroot\\images\\defaultpp.jpg"));
-                // Create new user
+                // Creare utilizator nou
                 var user = new ApplicationUser
                 {
                     UserName = email,
@@ -121,7 +130,7 @@ namespace Aurora.Controllers
                     });
                 }
 
-                // Assign default role with error handling
+                // Atribuire rol implicit
                 try
                 {
                     if (_userManager.Users.Count() == 1)
@@ -139,11 +148,11 @@ namespace Aurora.Controllers
                     _logger.LogWarning(roleEx, "Failed to assign default role to user");
                 }
 
-                // Generate and send confirmation email
+                // Generare și trimitere email de confirmare
                 try
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var encodedToken = WebUtility.UrlEncode(token);
+                    var encodedToken = WebUtility.UrlEncode(token);  // codifică tokenul pentru a putea fi transmis în URL
 
                     var apiUrl = _configuration["AppSettings:ApiUrl"] ?? $"{Request.Scheme}://{Request.Host}";
                     var confirmationLink = $"{apiUrl}/api/auth/confirm-email?userId={user.Id}&token={encodedToken}";
@@ -158,15 +167,13 @@ namespace Aurora.Controllers
                         Success = true,
                         Message = "Registration successful! Please check your email to confirm your account.",
                         UserId = user.Id,
-                        // Only include in development
-                        ConfirmationLink = _environment.IsDevelopment() ? confirmationLink : null // Modified line
+                        ConfirmationLink = _environment.IsDevelopment() ? confirmationLink : null 
                     });
                 }
                 catch (Exception emailEx)
                 {
                     _logger.LogError(emailEx, "Failed to send confirmation email");
 
-                    // User was created but email failed - allow them to request another email
                     return Ok(new
                     {
                         Success = true,
@@ -186,6 +193,7 @@ namespace Aurora.Controllers
             }
         }
 
+        // Endpoint pentru confirmarea emailului prin token
 
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -204,6 +212,7 @@ namespace Aurora.Controllers
 
             return Ok("Email confirmed successfully. You can now login.");
         }
+        // Verifică dacă utilizatorul are emailul confirmat
 
         [Authorize]
         [HttpGet("check-email-status")]
@@ -229,6 +238,7 @@ namespace Aurora.Controllers
 
             return Ok(emailStatus);
         }
+        // Retrimiterea emailului de confirmare
 
         [HttpPost("resendConfirmationEmail")]
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationRequestModel request)
@@ -252,6 +262,7 @@ namespace Aurora.Controllers
 
             return Ok("Confirmation email resent.");
         }
+        // Test pentru trimiterea emailurilor
 
         [HttpGet("test-email")]
         public async Task<IActionResult> TestEmail()
@@ -266,6 +277,7 @@ namespace Aurora.Controllers
                 return StatusCode(500, $"Failed to send email: {ex}");
             }
         }
+        // Returnează rolurile utilizatorului curent
 
         [Authorize]
         [HttpGet("roles")]
@@ -280,11 +292,17 @@ namespace Aurora.Controllers
             };
             return Ok(rolesJson);
         }
+        // Șterge contul utilizatorului curent
 
         [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccount()
         {
+<<<<<<< HEAD
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+=======
+            _logger.LogInformation("Delete account endpoint hit");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);// extrage ID-ul utilizatorului autentificat din JWT claims
+>>>>>>> Radu
             if (string.IsNullOrEmpty(userId))
             {
                 _logger.LogWarning("Delete account failed: User ID claim not found");
