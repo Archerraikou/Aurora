@@ -184,11 +184,11 @@ function EditUserPage()
                 {
                     throw new Error(`HTTP Error! status: ${response.status}`);
                 }
-                cookies.set(path='/',"JWT",null)
-                cookies.set(path='/',"ExpirationDate",null)
-                cookies.set(path='/',"JWTRefresh",null)
-                cookies.set(path='/',"Roles",null)
-                cookies.set(path='/',"UserId",null)
+                cookies.set('JWT', null, { path: '/' });
+                cookies.set('ExpirationDate', null, { path: '/' });
+                cookies.set('JWTRefresh', null, { path: '/' });
+                cookies.set('Roles', null, { path: '/' });
+                cookies.set('UserId', null, { path: '/' });
                 navigate("/")
                 location.reload()
             }
