@@ -40,6 +40,7 @@ function MembersBar() {
         <button onClick={handleCreateEvent}>Create Event</button>
         <button onClick={joinCall}>Join Call</button>
         {<button onClick={()=>{navigate(`/Group/Show?id=${groupId}`)}}>Show group</button>}
+        <button onClick={() => navigate(`/GroupDocument?id=${groupId}`)}>Open Document</button>
       </div>
     </div>
   );

@@ -127,6 +127,9 @@ namespace Aurora.Controllers
         public async Task<IActionResult> EjectUser(string userId, int groupId)
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Verifică dacă utilizatorul curent este admin în grupul specificat
+            
             var currentUserGroup = await db.UserGroups.FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == id && ug.IsAdmin == true);
             if (currentUserGroup == null)
             {
@@ -138,29 +141,39 @@ namespace Aurora.Controllers
                 return NotFound(new { message = "There is no such user in the group or there is no such group." });
             }
             var user = await db.ApplicationUsers.Include("UserGroups").Where(u => u.Id == userId).FirstAsync();
+
+            // Elimină relația utilizator-grup pentru a-l scoate din grup
+
             user.UserGroups.Remove(userGroup);
+
+
+            // Încarcă grupul împreună cu lista utilizatorilor (Users)
+
             var group = await db.Groups.Include("Users").Where(g => g.Id == groupId).FirstAsync();
             group.Users.Remove(userGroup);
             if (user != null)
             {
+                // Trimite notificare către utilizatorul eliminat
+
                 await SendNotification(
                     adminUserId: id,
                     userEmail: user.Email,
-                    groupId: groupId, // Now passing a non-nullable int
+                    groupId: groupId,
                     message: $"You have been removed from the group with ID '{group.Id}' by an administrator."
                 );
             }
 
-            // Save changes to the database
             await db.SaveChangesAsync();
                 
             return Ok(new { message = "User has been ejected from the group." });
          }
-
+        // Funcție privată pentru trimiterea unei notificări către utilizator
         private async Task SendNotification(string adminUserId, string userEmail, int groupId, string message)
-        {
+        {    // Găsește utilizatorul după email
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null) return;
+
+            // Creează o nouă notificare cu detalii
 
             var notification = new Notification
             {
@@ -171,8 +184,12 @@ namespace Aurora.Controllers
                 NotificationDate = DateTime.UtcNow,
                 IsRead = false
             };
+            // Adaugă notificarea în baza de date
 
             db.Notifications.Add(notification);
+
+            // Salvează modificările
+
             await db.SaveChangesAsync();
         }
 

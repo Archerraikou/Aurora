@@ -32,36 +32,28 @@ namespace Aurora.Controllers
         }
         private async Task SendNotification(string adminUserId, string userEmail, int groupId, string notificationMessage, string adminResponse = null)
         {
-            // Find the user by email
+            // Găsește utilizatorul după e-mail
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 return;
             }
 
-            // Create a new notification
+            // Creează o nouă notificare
             var notification = new Notification
             {
-                // Set the UserId to the recipient user's Id
                 UserId = user.Id,
-
-                // Set the SentId to the admin's Id (who is sending the notification)
                 SentId = adminUserId,
 
-                // Define the type of notification (e.g., "Group Request Approval")
-                Type = "Group Request Approval",  // You can make this dynamic based on the action
+                Type = "Group Request Approval", 
 
-                // Set the message for the notification
                 NotificationContent = $"{notificationMessage} Admin's response: {adminResponse}",
 
-                // Set the notification date to the current time
                 NotificationDate = DateTime.UtcNow,
-
-                // Set the notification as unread by default
+                // Notificarea e necitită inițial
                 IsRead = false
             };
 
-            // Save the notification to the database
             db.Notifications.Add(notification);
             await db.SaveChangesAsync();
         }
@@ -402,7 +394,7 @@ namespace Aurora.Controllers
         [Authorize]
         [HttpGet("request")]
         public async Task<IActionResult> Request(int id)
-        {
+        {// Obține ID-ul utilizatorului curent autentificat
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var group = await db.Groups.FindAsync(id);
 
@@ -412,14 +404,12 @@ namespace Aurora.Controllers
             if (!group.IsPrivate.HasValue || !group.IsPrivate.Value)
                 return BadRequest("This group is not private.");
 
-            // Check if the user has already requested to join
             var existingRequest = await db.UserGroups
                 .FirstOrDefaultAsync(ug => ug.UserId == userId && ug.GroupId == id && ug.IsRequested);
 
             if (existingRequest != null)
                 return BadRequest("You have already requested to join this group.");
 
-            // Create the request
             var userGroupRequest = new UserGroup
             {
                 UserId = userId,
@@ -431,7 +421,7 @@ namespace Aurora.Controllers
             db.UserGroups.Add(userGroupRequest);
             await db.SaveChangesAsync();
 
-            // NOW send a notification to all admins
+            // Trimite notificări tuturor adminilor grupului
             var admins = await db.UserGroups
                 .Where(ug => ug.GroupId == id && ug.IsAdmin == true)
                 .Select(ug => ug.UserId)
@@ -441,8 +431,8 @@ namespace Aurora.Controllers
             {
                 var notification = new Notification
                 {
-                    UserId = adminId, // Admin is the receiver
-                    SentId = userId,  // Requesting user is the sender
+                    UserId = adminId,
+                    SentId = userId, 
                     Type = "Group Join Request",
                     NotificationContent = $"User {User.Identity.Name} requested to join your group (ID: {id}).",
                     NotificationDate = DateTime.UtcNow,
@@ -463,7 +453,7 @@ namespace Aurora.Controllers
         [Authorize]
         public async Task<IActionResult> ApproveRequest(int groupId, string userEmail, bool isApproved, string adminResponse)
         {
-            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the admin's userId
+            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
 
             var group = await db.Groups.FindAsync(groupId);
             if (group == null)
@@ -471,14 +461,14 @@ namespace Aurora.Controllers
                 return BadRequest("Group not found.");
             }
 
-            // Ensure the user is an admin of the group
+            // Verifică dacă utilizatorul curent este admin al grupului
             var isAdmin = await db.UserGroups.AnyAsync(ug => ug.UserId == adminUserId && ug.GroupId == groupId && ug.IsAdmin == true);
             if (!isAdmin)
             {
                 return BadRequest("You do not have permission to approve or reject requests for this group.");
             }
 
-            // Find the request by user email
+            // Găsește utilizatorul care a trimis cererea
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
@@ -492,15 +482,13 @@ namespace Aurora.Controllers
             {
                 return BadRequest("No request found for this user.");
             }
-
-            // Approve or reject the request
+            // Actualizează starea cererii (aprobat sau respins)
+    
             userGroupRequest.IsApproved = isApproved;
-            userGroupRequest.IsRequested = false; // Remove the pending request status
+            userGroupRequest.IsRequested = false; 
 
-            // Save changes to the database
             await db.SaveChangesAsync();
 
-            // Send notification to the user
             var notificationMessage = isApproved ? "Your request to join the group has been approved." : "Your request to join the group has been rejected.";
             await SendNotification(adminUserId, userEmail, groupId, notificationMessage, adminResponse);
 
@@ -508,12 +496,11 @@ namespace Aurora.Controllers
         }
 
 
-        // Reject a group request
         [HttpPost("rejectRequest")]
         [Authorize]
         public async Task<IActionResult> RejectRequest(int groupId, string userEmail, string adminResponse)
         {
-            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the admin's userId
+            var adminUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var group = await db.Groups.FindAsync(groupId);
             if (group == null)
@@ -521,16 +508,16 @@ namespace Aurora.Controllers
                 return BadRequest("Group not found.");
             }
 
-            // Ensure the user is an admin of the group
-            var user = await _userManager.FindByIdAsync(adminUserId); // Get the admin user
+            // Verifică dacă user-ul are dreptul de a respinge cereri
+            var user = await _userManager.FindByIdAsync(adminUserId);
 
-            var isAdmin = await db.UserGroups.AnyAsync(ug => ug.UserId == user.Id && ug.GroupId == groupId && ug.IsAdmin == true); // Check if the admin has permission
+            var isAdmin = await db.UserGroups.AnyAsync(ug => ug.UserId == user.Id && ug.GroupId == groupId && ug.IsAdmin == true); 
             if (!isAdmin)
             {
                 return BadRequest("You do not have permission to approve or reject requests for this group.");
             }
 
-            // Find the request by user email
+            // Găsește utilizatorul care a trimis cererea
             var userToReject = await _userManager.FindByEmailAsync(userEmail);
             if (userToReject == null)
             {
@@ -544,14 +531,12 @@ namespace Aurora.Controllers
                 return BadRequest("No request found for this user.");
             }
 
-            // Reject the request (no need to approve)
+            // Respingerea cererii (fără aprobare)
             userGroupRequest.IsApproved = false;
-            userGroupRequest.IsRequested = false; // Remove the pending request status
+            userGroupRequest.IsRequested = false;
 
-            // Save changes to the database
             await db.SaveChangesAsync();
 
-            // Send notification to the user
             await SendNotification(adminUserId, userEmail, groupId, "Your request to join the group has been rejected.", adminResponse);
 
             return Ok(new { message = "Request rejected." });
