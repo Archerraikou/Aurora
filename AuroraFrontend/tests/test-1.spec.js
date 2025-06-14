@@ -58,8 +58,8 @@ test.describe('Setup', () => {
 
     // Create Group
     await page.goto('https://localhost:5173/Group/Create');
-    await page.fill('input[name= "groupName"]', 'Test Group');
-    await page.fill('textarea[name= "groupDescription"]', 'This is a testing description for the Test Group!')
+    await page.fill('input[name= "groupName"]', `Test Group ${testEmail1}`);
+    await page.fill('textarea[name= "groupDescription"]', `This is a testing description for the Test Group ${testEmail1}!`)
     await Promise.all([
       page.waitForResponse(res => 
         res.url().includes('/api/Groups/newGroup') && 
@@ -120,13 +120,13 @@ test.describe('Setup', () => {
 
     // Joining Group
     await page.goto('https://localhost:5173');
-    await page.locator('div.group:has(p.group-name:has-text("Test Group"))').click();
+    await page.locator(`div.group:has(p.group-name:has-text("Test Group ${testEmail1}"))`).click();
     await page.locator('button.join-button').click();
     await page.waitForTimeout(1000);
     
     // Entering Group Menu
     await page.goto('https://localhost:5173');
-    await page.locator(`.sidebar-list a >> text=Test Group`).first().click();
+    await page.locator(`.sidebar-list a >> text=Test Group ${testEmail1}`).first().click();
     await page.waitForURL(/\/Group\/Menu/);
     const urlShow = page.url();
     const urlPartsShow = urlShow.split('/');
@@ -198,7 +198,7 @@ test.describe('Setup', () => {
     await page.waitForTimeout(1000);
 
     // Delete Group
-    await page.locator(`.sidebar-list a >> text=Test Group`).first().click();
+    await page.locator(`.sidebar-list a >> text=Test Group ${testEmail1}`).first().click();
     await page.waitForURL(/\/Group\/Menu/);
     const url = page.url();
     const urlParts = url.split('/');
