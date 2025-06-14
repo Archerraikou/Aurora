@@ -301,6 +301,11 @@ namespace Aurora.Controllers
             {
                 db.GroupMessages.Remove(msg);
             }
+            var documents = await db.Documents.Where(d => d.GroupId == group.Id).ToListAsync();
+            foreach (var document in documents)
+            {
+                db.Documents.Remove(document);
+            }
             foreach (var ev in events)
             {
                 var userEvents = await db.UserEvents.Where(ue => ue.EventId == ev.Id).ToListAsync();

@@ -53,11 +53,8 @@ namespace Aurora.Controllers
             _emailSender = emailSender;
             _environment = environment;
             _roleManager = roleManager;
-<<<<<<< HEAD
             _httpClientFactory = factory;
             _config = config;
-=======
->>>>>>> Radu
         }
        
         // Endpoint pentru înregistrarea unui nou utilizator
@@ -297,12 +294,8 @@ namespace Aurora.Controllers
         [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccount()
         {
-<<<<<<< HEAD
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-=======
             _logger.LogInformation("Delete account endpoint hit");
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);// extrage ID-ul utilizatorului autentificat din JWT claims
->>>>>>> Radu
             if (string.IsNullOrEmpty(userId))
             {
                 _logger.LogWarning("Delete account failed: User ID claim not found");

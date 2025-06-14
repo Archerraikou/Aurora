@@ -39,7 +39,7 @@ function EditUserPage()
     const [userInterests, setUsersInterests] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const navigate = useNavigate()
     const handleSubmit = (e)=>{
         e.preventDefault();
         const formData = new FormData(e.target)
@@ -184,6 +184,13 @@ function EditUserPage()
                 {
                     throw new Error(`HTTP Error! status: ${response.status}`);
                 }
+                cookies.set(path='/',"JWT",null)
+                cookies.set(path='/',"ExpirationDate",null)
+                cookies.set(path='/',"JWTRefresh",null)
+                cookies.set(path='/',"Roles",null)
+                cookies.set(path='/',"UserId",null)
+                navigate("/")
+                location.reload()
             }
             catch (error)
             {

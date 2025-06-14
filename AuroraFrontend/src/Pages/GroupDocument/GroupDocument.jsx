@@ -205,7 +205,7 @@ export default function GroupDocument() {
             <div className="button-container" style={{ marginTop: '10px' }}>
               <button
                 onClick={deleteDocument}
-                style={{ backgroundColor: 'red', color: 'white' }}
+                className='deleteButton'
               >
                 Delete Document
               </button>

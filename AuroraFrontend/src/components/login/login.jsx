@@ -53,7 +53,7 @@ function Login({ closeModal }) {
  // Creăm un obiect Cookies pentru a salva token-urile și alte informații
       const cookies = new Cookies();
 
-      const { accessToken, refreshToken, expiration } = loginData;
+      const { accessToken, refreshToken, expiresIn } = loginData;
  // Creăm un obiect Cookies pentru a salva token-urile și alte informații
       cookies.set('JWT', 'Bearer ' + accessToken, { path: '/' });
       cookies.set('JWTRefresh', refreshToken, { path: '/' });
