@@ -27,6 +27,7 @@ export default function Quiz( questions ) {
         <div key={qIndex} className={`question-block ${submitted ? 'submitted' : ''}`}>
           <p className="question-text">{qIndex + 1}. {q.question}</p>
           <ul className="options-list">
+            {/*Forumul pentru quiz*/}
             {q.options.map((option, oIndex) => {
               const isCorrect = submitted && oIndex === q.correct;
               const isSelected = answers[qIndex] === oIndex;

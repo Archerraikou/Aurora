@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function OAuth(){
     const navigate = useNavigate()
     const queryParams = new URLSearchParams(location.search);
+    //Luam token-urile din query parameters si facem procesul de login
     useEffect(()=>{
         async function login(){
             try{

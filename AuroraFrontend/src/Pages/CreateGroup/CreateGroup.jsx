@@ -14,6 +14,7 @@ function CreateGroup(){
     const navigate = useNavigate();
     const [passRequirements,setPassRequirements] = useState([]);
     var auxPassRequirements = []
+    //Luam categoriile
     useEffect(() => {
       const fetchData = async () => {
           const categs = await fetchCategories();
@@ -22,6 +23,7 @@ function CreateGroup(){
   
       fetchData();
     }, []);  
+    //Updatam valorile cand se schimba input-urile din forms
       const handleChange = (event) => {
         const { name, value, type, files, checked } = event.target;
       
@@ -42,6 +44,7 @@ function CreateGroup(){
           }));
         }
       };
+      //Facem fetch pentru a creea grupul nou
     const handleSubmit = async (e) => {
         e.preventDefault();
         var IsPrivate = isPrivate

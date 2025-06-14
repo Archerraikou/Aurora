@@ -4,6 +4,7 @@ import "./EditUserPage.css"
 import AdminUserInfo from "../../components/adminuserinfo/adminuserinfo.jsx"
 import Cookies from "universal-cookie";
 import fetchCategories from "../../utils/utils.jsx";
+//Pentru fiecare categorie creem un checkbox si il marcam daca user-ul deja o are selectata
 function InterestCheckbox({key, name, interestList})
 {
     console.log("name: ")
@@ -45,6 +46,7 @@ function EditUserPage()
         const formData = new FormData(e.target)
         submitData(formData);
     }
+    //Editam user-ul
     function submitData(initialFormData)
     {
         const interestRegex = new RegExp("interest_*")
@@ -55,7 +57,6 @@ function EditUserPage()
         formInfo.append("Email", initialFormData.get("email"));
         formInfo.append("ProfilePicture", initialFormData.get("image"));
         formInfo.append("ProfileDescription",initialFormData.get("profileDescription"));
-        // TODO: Sa facem categoriile normale
         var selectedInterests = [];
         for(const key of initialFormData.keys()) 
         {
@@ -97,12 +98,11 @@ function EditUserPage()
         updateUser(formInfo)
         navigate("/")
     } 
-
+    //Luam informatiile user-ului
     useEffect(()=>{
         const fetchData = async () =>{
             try
             {
-                // nu merge cu ApplicationsUsers, moment il las cu metoda din controllerul celalalt ca ala merge, probabil o problem cu autorizatiile pe care nu pot sa o rezolv
                 const response = await fetch(`https://localhost:7242/api/ApplicationUsers/${userId}`,{ 
                     method: 'GET',
                     headers: {
@@ -125,7 +125,7 @@ function EditUserPage()
         };
         fetchData();
     },[userId]);
-
+    //Luam toate categoriile
     useEffect(()=>{
         const getInterests = async ()=>{
             try{
@@ -138,7 +138,7 @@ function EditUserPage()
         }
         getInterests();
     },[])
-
+    //Luam interesele user-ului
     useEffect(()=>{
         const fetchUserInterests = async () =>{
             try{
@@ -198,7 +198,6 @@ function EditUserPage()
                 setError(error.message);
             }
         }
-//TODO: momentan si ce interse are userul sunt hardcodate si ce posibile interese sunt hardcodate
     return (
         <div>
             <hr></hr>

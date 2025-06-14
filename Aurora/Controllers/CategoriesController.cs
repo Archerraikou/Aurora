@@ -45,6 +45,7 @@ namespace Aurora.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var category = db.Categorys.FirstOrDefault(c => c.Id == id);
+            //Stergem FK-urile
             var groupCategs = db.CategoryGroups.Where(cg => cg.CategoryId == id);
             foreach(var cg in groupCategs)
             {
@@ -55,6 +56,7 @@ namespace Aurora.Controllers
             {
                 db.CategoryUsers.Remove(cu);
             }
+            //Stergem categoria
             db.Categorys.Remove(category);
             db.SaveChanges();
             return Ok();
@@ -63,6 +65,7 @@ namespace Aurora.Controllers
         [HttpGet("getCategories")]
         public async Task<ActionResult<Category>> GetCategories()
         {
+            //Luam toate categoriile
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var categs = db.Categorys.Include(c=>c.Users);
             var results = new List<Category>();           

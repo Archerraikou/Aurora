@@ -6,6 +6,7 @@ import {useState, useEffect} from 'react';
 function Navbar() {
   const cookies = new Cookies();
     const [groups,setGroups] = useState([])
+    //Luam grupurile din care face parte utilizatorul
     useEffect(() => {
         const fetchGroupInfo = async () => {
             try {

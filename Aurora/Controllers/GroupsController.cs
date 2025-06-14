@@ -63,6 +63,7 @@ namespace Aurora.Controllers
         {
             var groups = await db.Groups.Include("GroupCategory").ToListAsync();
             var usId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //Daca utilizatorul este logat, vom lua doar grupurile in care nu face parte
             if (usId != null)
             {
                 var us = await db.ApplicationUsers.Include(u => u.Interests).Where(u => u.Id == usId).FirstAsync();
@@ -73,7 +74,7 @@ namespace Aurora.Controllers
                 groups = newGroups;
             }
             var result = new List<object>();
-
+            //Pentru fiecare grup luam doar informatiile care ne intereseaza
             foreach (var g in groups)
             {
                 if (usId != null)
@@ -104,6 +105,8 @@ namespace Aurora.Controllers
             }
             return Ok(result);
         }
+        //Metoda asemanatoare cu index, dar care ia toate grupurile din care face parte utilizatorul
+        //daca acesta este logat
         [HttpGet("notIndex")]
         public async Task<IActionResult> NotIndex()
         {
@@ -173,6 +176,7 @@ namespace Aurora.Controllers
                     categs.Add((int)cg.CategoryId);
                 }
             }
+            //Luam doar informatiile care ne intereseaza
             var result = new
             {
                 Id = group.Id,
@@ -189,6 +193,7 @@ namespace Aurora.Controllers
         }
         [Authorize]
         [HttpGet("role")]
+        //Metoda care returneaza rolul unui utilizator dintr-un grup
         public async Task<IActionResult> GetRole(int id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -223,6 +228,7 @@ namespace Aurora.Controllers
             var admin = await _userManager.FindByIdAsync(group.UserId);
             var adminsId = db.UserGroups.Where(ug => ug.GroupId == group.Id && ug.IsAdmin == true).ToList();
             var admins = new List<ApplicationUser>();
+            //Daca nu are poza o punem pe cea default
             if (Picture == null || Picture.Length == 0)
             {
                 groupModel.GroupPicture = "wwwroot/images/group-pictures/default.jpg";
@@ -235,6 +241,7 @@ namespace Aurora.Controllers
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
+            //Daca user-ul care incearca sa editeze nu este admin nu are voie sa editeze
             if (user != admin && admins.IndexOf(user) == -1)
             {
                 return StatusCode(401);
@@ -285,6 +292,7 @@ namespace Aurora.Controllers
             {
                 return StatusCode(401);
             }
+            //Stergem toate obiectele care depind de grup
             var userGroups = await db.UserGroups.Where(ug => ug.GroupId == group.Id).ToListAsync();
             var groupCategs = await db.CategoryGroups.Where(cg => cg.GroupId == group.Id).ToListAsync();
             var messages = await db.GroupMessages.Where(m => m.GroupId == group.Id).ToListAsync();
@@ -327,6 +335,7 @@ namespace Aurora.Controllers
             {
                 return BadRequest("Group data is required");
             }
+            //Daca nu trimitem poza o punem pe cea default
             if (Picture == null || Picture.Length == 0)
             {
                 groupModel.GroupPicture = "https://localhost:7242/images/defaultgp.jpg";
@@ -358,6 +367,7 @@ namespace Aurora.Controllers
             group.UserId = userId;
             db.Groups.Add(group);
             await db.SaveChangesAsync();
+            //Adaugam utilizatorul care a facut grupul in grup
             group = db.Groups.Where(g => g.CreatedDate == group.CreatedDate && g.GroupName == group.GroupName).FirstOrDefault();
             UserGroup user1 = new UserGroup
             {
@@ -376,6 +386,7 @@ namespace Aurora.Controllers
         }
         [Authorize]
         [HttpGet("join")]
+        //Metoda care adauga un utilizator in grup
         public async Task<IActionResult> Join(int id)
         {
             Group group = db.Groups.Where(g => g.Id == id).First();
@@ -408,6 +419,7 @@ namespace Aurora.Controllers
         }
         [Authorize]
         [HttpDelete("leave")]
+        //Metoda care scoate un utilizator din grup
         public async Task<IActionResult> Leave(int id)
         {
             Group group = db.Groups.Where(g => g.Id == id).First();
@@ -583,10 +595,12 @@ namespace Aurora.Controllers
             if (search == null) return await Index();
             var groupsId = new List<int?>();
             var result = new List<object>();
+            //Cautam dupa grupuri daca param==0
             if (param == 0)
             {
                 groupsId = db.Groups.Where(g => g.GroupName.Contains(search) || g.GroupDescription.Contains(search)).Select(g => g.Id).ToList();
             }
+            //Altfel cautam dupa categorii
             else
             {
                 var categoryIds = db.Categorys.Where(c => c.CategoryName.Contains(search) || c.CategoryDescription.Contains(search)).Select(c => c.Id).ToList();
@@ -605,6 +619,7 @@ namespace Aurora.Controllers
                 {
                     categs.Add((int)cg.CategoryId);
                 }
+                //Returnam informatiile importante
                 result.Add(new
                 {
                     Id = g.Id,
@@ -627,6 +642,7 @@ namespace Aurora.Controllers
             }
             if (file == null || file.Length == 0)
                 throw new Exception("No file uploaded");
+            //Punem poza si salvam path-ul catre ea
             var fileExtension = Path.GetExtension(file.FileName);
             var fileName = $"{Guid.NewGuid()}{fileExtension}";
             var filePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"), fileName);

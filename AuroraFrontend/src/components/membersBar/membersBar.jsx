@@ -13,6 +13,7 @@ function MembersBar() {
   const [groupInfo, setGroupInfo] = useState(null)
   const [members, setMembers] = useState(null)
   const [loading, setLoading] = useState(true)
+  //Luam informatiile despre grup
   useEffect(()=>{
     const getGroupInfo = async () =>{
       const response = await fetch(`https://localhost:7242/api/Groups/showGroup?Id=${groupId}`,{
@@ -29,7 +30,7 @@ function MembersBar() {
       const data = await response.json();
       setGroupInfo(data);
     }
-
+    //Luam membrii grupului
     const getMembers = async () =>{
       const response = await fetch(`https://localhost:7242/api/UserGroups?groupId=${groupId}`,{
           method: 'GET',
@@ -54,7 +55,6 @@ function MembersBar() {
       console.log(e.message)
     }
   },[groupId])
-
   useEffect(()=>
   {
     if(groupInfo && members)
@@ -69,6 +69,7 @@ function MembersBar() {
   const joinCall = () => {
     navigate(`/Call/${groupId}`);
   };
+  //Pentru iesirea din grup
   const leaveGroup=async ()=>{
       try {
           const response = await fetch(`https://localhost:7242/api/Groups/leave?id=${groupId}`, {

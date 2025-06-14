@@ -35,12 +35,6 @@ namespace Aurora.Controllers
 
                 newPMessage.Content = mes.Content;
                 newPMessage.Date = DateTime.UtcNow;
-                // O sa adaug un path la fisier in modelul de mesaje, dar trebuie vorbit
-                // also trebuie facuta o metoda care sa uploadeze fisierele care nu sunt imagini
-                // if(attachment != null)
-                // {
-                // newMessage.AttachmentPath = uploadFile(attachment);
-                // }
                 newPMessage.WasEdited = false;
                 newPMessage.pmId = mes.PMId;
 
@@ -94,7 +88,6 @@ namespace Aurora.Controllers
         [HttpGet("Show/{messageId}")]
         public async Task<ActionResult<GroupMessage>> GetMessage(int messageId)
         {
-            //maybe this will work when we actually have everything sorted out for now its commented
             var message = await _context.GroupMessages.Where(m => m.Id == messageId).Include("User").FirstOrDefaultAsync();
 
 
@@ -113,7 +106,6 @@ namespace Aurora.Controllers
         [HttpGet("privateShow/{messageId}")]
         public async Task<ActionResult<PrivateMessage>> PrivateGetMessage(int messageId)
         {
-            //maybe this will work when we actually have everything sorted out for now its commented
             var message = await _context.PrivateMessages.Where(m => m.Id == messageId).Include("User").FirstOrDefaultAsync();
 
 

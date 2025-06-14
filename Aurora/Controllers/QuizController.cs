@@ -22,6 +22,7 @@ public class QuizController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GenerateQuiz([FromBody] QuizModel request)
     {
+        //Prompt-ul care ii dam AI-ului
         var prompt = "You are an API generating quiz questions for a web app.Return between 10-15 multiple choice questions in this strict JSON format:[  {   \"question\": \"<text>\",    \"options\": [\"<option1>\", \"<option2>\", \"<option3>\", \"<option4>\"],    \"correct\": <index_of_correct_option>  },  ...]Do not include any text before or after the JSON array.The topic is: " + request.Topic + ". Keep each question short and factual. Make incredibly sure the answers are correct";
 
         var requestBody = new
@@ -61,7 +62,7 @@ public class QuizController : ControllerBase
                 return BadRequest("The model returned an empty response.");
             }
 
-            // Try to extract the array manually
+            // Luam informatiile din raspuns
             var start = raw.IndexOf('[');
             var end = raw.LastIndexOf(']');
             if (start == -1 || end == -1 || end <= start)

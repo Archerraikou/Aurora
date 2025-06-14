@@ -21,6 +21,7 @@ function Registration() {
             [name]: value
         }));
     };
+    //Creem user-ul
     const handleSubmit = async (e) => {
         e.preventDefault();
         setPassRequirements([]);
@@ -33,9 +34,8 @@ function Registration() {
             });
     
             const data = await response.json();
-            console.log("Registration response:", data); // Debug logging
             if (!response.ok) {
-                // Handle different error formats
+                // Vedem ce erori am primit, mai ales erori de validare
                 const errors = data.errors || data.Errors || [data.message || "Registration failed"];
                 setPassRequirements(errors);
                 return;

@@ -1,7 +1,7 @@
 import MainPage from "./Pages/MainPage/MainPage.jsx";
 import Navbar from "./components/navbar/navbar.jsx";
 import SearchBar from "./components/searchBar/searchBar.jsx";
-import Auth from "./pages/Authentification/auth.jsx";
+import Auth from "./pages/Authentification/Auth.jsx";
 import GroupPage from "./Pages/GroupPage/GroupPage.jsx";
 import CreateEvent from "./Pages/CreateEvent/CreateEvent.jsx";
 import PrivateMessage from "./Pages/PrivateMessage/PrivateMessage.jsx"
@@ -99,7 +99,6 @@ function App() {
         <Route path="/Group/Show" element={<ViewGroup />} />
         <Route path="/Group/Menu/*" element={<GroupPage />} />
         <Route path="/GroupDocument" element={<GroupDocument />} />
-
         <Route path="/Call/*" element={<Call />}></Route>
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/notification/:id" element={<NotificationDetailPage />} />

@@ -19,7 +19,7 @@ function ViewGroup() {
         admin: "",
         groupCategory: []
     });
-    const [isMember, setIsMember] = useState(false);  // <-- New state to track membership
+    const [isMember, setIsMember] = useState(false);
     const cookies = new Cookies();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
@@ -33,7 +33,7 @@ function ViewGroup() {
         fetchRole();
     }, [id]);
 
-    // New effect to check membership using /api/Groups/notIndex
+    // Vedem daca user-ul face parte din grup
     useEffect(() => {
         const checkMembership = async () => {
             try {
@@ -45,7 +45,6 @@ function ViewGroup() {
                 });
                 if (response.ok) {
                     const groups = await response.json();
-                    // Check if current group id exists in user's groups
                     const member = groups.some(group => group.id === parseInt(id));
                     setIsMember(member);
                 } else {
@@ -62,7 +61,7 @@ function ViewGroup() {
             checkMembership();
         }
     }, [id, cookies]);
-
+    //Trimitem request-ul de join sau direct join-ul daca grupul nu este privat
     const handleJoin = async () => {
         const url = formFields.isPrivate
             ? `https://localhost:7242/api/Groups/request?id=${id}`
@@ -92,7 +91,7 @@ function ViewGroup() {
             alert("An error occurred. Please try again.");
         }
     };
-
+    //Luam toate categoriile
     useEffect(() => {
         const fetchData = async () => {
             const categories = await fetchCategories();
@@ -100,7 +99,7 @@ function ViewGroup() {
         };
         fetchData();
     }, []);
-
+    //Vedem categoriile grupului
     useEffect(() => {
         const updatedGroupCategories = [];
         for (const category of categories) {
@@ -112,7 +111,7 @@ function ViewGroup() {
         }
         setGroupCategories(updatedGroupCategories);
     }, [categories, formFields.groupCategory]);
-
+    //Luam informatiile grupului
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const id = queryParams.get('id');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './QuizGenerate.css';
-import Quiz from '../../components/Quiz/Quiz.jsx'
+import Quiz from '../../components/quiz/quiz.jsx'
 import Cookies from 'universal-cookie';
 
 function QuizGenerate() {

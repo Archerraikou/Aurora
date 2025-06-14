@@ -34,6 +34,7 @@ function InfoCategory( categorie ){
         </div>
         <div className="small-box">
           <span className="text">{categorie.categoryName}</span>
+          {/* Butonul de delete doar daca suntem admin*/}
           {role=='Admin'&&<button className="close-btn" onClick={handleDelete}>×</button>}
         </div>
       </div>

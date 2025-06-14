@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 function MainPage() {
   const cookies = new Cookies();
   const [groups,setGroups] = useState([])
+  //Luam toate grupurile, sau cele din care user-ul nu face parte daca este logat
   useEffect(() => {
       const fetchGroupInfo = async () => {
           try {
@@ -27,7 +28,6 @@ function MainPage() {
       };
         fetchGroupInfo();
   }, [location.search]);
-  // Cand voi avea la ce sa dau fetch, atunci voi comenta
   return (
     <div className="main-container">
       <div className="group-list overflow">
