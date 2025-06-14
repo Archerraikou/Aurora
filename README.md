@@ -3,6 +3,9 @@ Aurora este o platformă web dedicată învățării colaborative. Utilizatorii 
 Odată conectați, aceștia pot comunica în timp real prin chat sau apeluri video, edita împreună documente și genera automat întrebări pentru quiz-uri pe baza acestora, folosind inteligență artificială.
 Platforma oferă, de asemenea, funcționalități avansate pentru organizarea învățării: utilizatorii pot programa sesiuni de studiu, vizualiza un calendar personal, crea sau se pot alătura grupurilor de studiu și primi sugestii de grupuri relevante.
 
+## Demo
+[Link catre demo](https://youtu.be/dJv7U8e9XXA)
+
 ## User stories
 User stories-urile se gasesc pe pagina de GitHub Projects. https://github.com/users/Archerraikou/projects/1
 
