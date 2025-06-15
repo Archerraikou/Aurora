@@ -25,7 +25,7 @@ Avem bug-ul raportat (https://github.com/Archerraikou/Aurora/issues/2#issue-3138
 Avem un fisier text despre code standard-urile folosite. Codul este comentat in majoritate.
 
 ## Design patter
-Am folosit design patterns-uri specifice ASP .NET Core 8 precum dependency injection, enitity framework etc.
+Am folosit design patterns-uri specifice ASP .NET Core 8 precum dependency injection, entity framework etc.
 
 ## Prompt engineering
 Am utilizat tool-uri de AI in principal pe partea de frontend pentru a ne ajuta cu design-ul paginiilor, pentru debugging, si le-am mai folosit si pentru a ne da unele idei.
