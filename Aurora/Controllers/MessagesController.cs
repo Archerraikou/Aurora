@@ -18,9 +18,9 @@ namespace Aurora.Controllers
         {
             _context = context;
         }
+        // Metoda de trimitere a mesajelor in conversatii private
         [Authorize]
         [HttpPost("privateSend")]
-
         public async Task<ActionResult<int>> SendPrivateMessage([FromForm] PrivateMessageModel mes, IFormFile? attachment)
         {
             PrivateMessage newPMessage = new();
@@ -51,6 +51,7 @@ namespace Aurora.Controllers
         }
         [Authorize]
         [HttpPost("send")]
+        // Metoda prin care se trimit mesaje pe grupuri
         public async Task<ActionResult<int>> SendMessage([FromForm] MessageModel mes, IFormFile? attachment)
         {
             GroupMessage newMessage = new();
@@ -120,6 +121,7 @@ namespace Aurora.Controllers
             }
 
         }
+        // Primesc o pagina de mesaje, setat la 30 de mesaje pe pagina
         [Authorize]
         [HttpGet("getPage")]
         public async Task<ActionResult<List<int>>> GetPage(int groupId, int pageNumber)
@@ -130,6 +132,7 @@ namespace Aurora.Controllers
 
         }
 
+        // Ditto doar ca pentru conversatii private 
         [Authorize]
         [HttpGet("privateGetPage")]
         public async Task<ActionResult<List<int>>> PrivateGetPage(int PmId, int pageNumber)
@@ -141,6 +144,7 @@ namespace Aurora.Controllers
         }
 
 
+        // Returneaza string cu data la care s-a trimis mesajul (pentru timestamps)
         [Authorize]
         [HttpGet("GetMessageTime/{messageId}")]
         public async Task<ActionResult<string>> GetMessageTime(int messageId, int TimeZoneOffset)

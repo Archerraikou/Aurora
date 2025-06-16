@@ -32,7 +32,7 @@ namespace Aurora.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
+        // Metoda care verifica daca exista o conversatie intre doi utilizatori
         [HttpGet("checkPM")]
         public async Task<ActionResult<int>> PMExists(string userId1, string userId2)
         {
@@ -79,6 +79,7 @@ namespace Aurora.Controllers
             return Ok(pmId[0]);
         }
 
+        // Metoda care creaza o conversatie privata intre doi useri
         [HttpPost("new")]
         public async Task<ActionResult<int>> NewPM(string userId1, string userId2)
         {

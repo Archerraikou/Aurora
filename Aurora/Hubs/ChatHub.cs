@@ -9,15 +9,18 @@ namespace SignalRChat.Hubs
         {
             _logger = logger;
         }
+        // Metoda de conectare la grup
         public async Task JoinGroup(string groupId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
         }
 
+        // Metode de iesire din grup
         public async Task LeaveGroup(string groupId)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
         }
+        // Metoda prin care se trimit mesaje
         public async Task SendMessageToGroup(string groupId,string message)
         {
             if(message!=null && groupId !=null)
